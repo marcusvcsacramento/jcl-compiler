@@ -1,0 +1,6 @@
+[zos]
+host = zosdev
+port = 21
+[zos.ftp]
+user = TE89323
+password = 1983ms
