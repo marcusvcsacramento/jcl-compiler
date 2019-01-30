@@ -1,6 +1,30 @@
-[zos]
+[JAZZ]
+url = https://clm.caixaseguros.intranet/ccm
+user = usuário
+password= senha
+fonte=arquivos/fonte
+workspace=JENKINS.DEV.COBOL
+[ZOS.DEV]
 host = zosdev
 port = 21
-[zos.ftp]
-user = TE89323
-password = 1983ms
+[ZOS.FTP.DEV]
+user = usuário
+password = senha
+[ZOS.HOM]
+host = zoshom
+port = 21
+[ZOS.FTP.HOM]
+user = usuário
+password = senha
+[SIAS.DEV]
+lib_batch=VERTQS.GE.A.PGMLIB.COB2.JV1
+lib_booklib=VERTQS.GE.A.PGMLIB.COB2.JV1
+lib_cics=VERTQS.GE.A.PGMLIB.COB2.JV1
+[SIAS.HOM]
+lib_batch=HOM.GE.A.PGMLIB.COB2H
+lib_booklib=SHRHOM.GE.A.JV1.BOOKLIB
+lib_cics=VERTQS.GE.A.PGMLIB.COB2.JV1
+[SIAS.HOM2]
+lib_batch=HOM.GE.A.PGMLIB.COB2H.JV1
+lib_booklib=SHRHOM.GE.A.JV1.BOOKLIB
+lib_cics=VERTQS.GE.A.PGMLIB.COB2.JV1

@@ -1,0 +1,13 @@
+//JDGEDCMJ JOB (,PN),'DES1-MVS',CLASS=A,MSGCLASS=J,MSGLEVEL=(1,1),
+//         NOTIFY=&SYSUID,TIME=1,REGION=0M
+//*
+//JCL JCLLIB ORDER=VERTQS.GE.A.PGMLIB.COB2.TE62253
+//*
+//********************************************************************/
+//* SP -> (0) SO COBOL    (1) DB2    (2) EH SP                       */
+//********************************************************************/
+//HUSNIEXE  EXEC  PROCPJV1,SP=1,MEM=GEJVSERR,PWLM='DES_SPBGE001',
+// FONTELIB='VERTQS.GE.A.PGMLIB.COB2.JV1'
+//* FONTELIB='SISIDZ1D.COBOL'
+//*
+//
