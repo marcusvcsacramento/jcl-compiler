@@ -11,8 +11,11 @@ from package.rtc_controller.rtc_controller import *
 config = configparser.ConfigParser()
 config.read('arquivos/properties')
 
-sistema=sys.argv[0]
-ambiente=sys.argv[1]
+sistema=sys.argv[1]
+ambiente=sys.argv[2]
+
+print(sistema+'-'+ambiente)
+
 diretorio_fonte=config.get('JAZZ','fonte')
 workspace=config.get('JAZZ','workspace')
 
@@ -28,10 +31,11 @@ lib_batch=config.get(sistema+'.'+ambiente,'lib_batch')
 lib_booklib=config.get(sistema+'.'+ambiente,'lib_booklib')
 lib_cics=config.get(sistema+'.'+ambiente,'lib_cics')
 
+arquivo_job=open('arquivos/JOBS','w')
+arquivo_submeter=open('arquivos/SUBMETER','w')
 saida = open(arquivolog,'w')
 saida.write('######################  Carregamento de fontes ######################\n')
 saida.write(carrega_workspace(workspace,diretorio_fonte).decode('latin-1')+'\n')
-
 saida.write('######################  Upload de código fonte ######################\n')
 with open('arquivos/PROGRAMAS', 'rt') as f:
     result=''
@@ -41,8 +45,9 @@ with open('arquivos/PROGRAMAS', 'rt') as f:
         compilacao = linha.split(';')
         programa = compilacao[0]
         classe  = compilacao[1]
-        try:
-            if(classe=='BATCH'):
+        if(classe=='BATCH'):
+            tipo = compilacao[2]
+            try:
                 job=open(diretorio_fonte+'/COBOL.GCS/BATCH/'+programa+'.cbl','rb')
                 ftp = ftplib.FTP()
                 ftp.connect(hostname, port)
@@ -54,8 +59,13 @@ with open('arquivos/PROGRAMAS', 'rt') as f:
                 ftp.cwd(lib_batch)
                 result = ftp.storlines('STOR '+programa,job)
                 ftp.close()
-            if(classe=='CICS'):
-                job=open(diretorio_fonte+'/COBOL.GCS/BATCH/'+programa+'.cbl','rb')
+                arquivo_submeter.write('{};{};{}\n'.format(programa,classe,tipo))
+            except:
+                saida.write("{};{}\n".format(programa,sys.exc_info()[1]))
+        if(classe=='CICS'):
+            tipo = compilacao[2]
+            try:
+                job=open(diretorio_fonte+'/COBOL.GCS/CICS/'+programa+'.cbl','rb')
                 ftp = ftplib.FTP()
                 ftp.connect(hostname, port)
                 ftp.set_debuglevel(0)
@@ -66,7 +76,11 @@ with open('arquivos/PROGRAMAS', 'rt') as f:
                 ftp.cwd(lib_cics)
                 result = ftp.storlines('STOR '+programa,job)
                 ftp.close()
-            if(classe=='BOOKLIB'):
+                arquivo_submeter.write('{};{};{}\n'.format(programa,classe,tipo))
+            except:
+                saida.write("{};{}\n".format(programa,sys.exc_info()[1]))
+        if(classe=='BOOKLIB'):
+            try:
                 job=open(diretorio_fonte+'/COBOL.GCS/BOOKLIB/'+programa+'.bkl','rb')
                 ftp = ftplib.FTP()
                 ftp.connect(hostname, port)
@@ -78,10 +92,10 @@ with open('arquivos/PROGRAMAS', 'rt') as f:
                 ftp.cwd(lib_booklib)
                 result = ftp.storlines('STOR '+programa,job)
                 ftp.close()
-            saida.write("{};{}\n".format(programa,result))
-        except:
-            saida.write("{};{}\n".format(programa,sys.exc_info()[1]))
-        f.close()
+            except:
+                saida.write("{};{}\n".format(programa,result))
+    arquivo_submeter.close()
+    f.close()
 
 ftp = ftplib.FTP()
 ftp.connect(hostname, port)
@@ -90,7 +104,7 @@ ftp.login(ftp_user, ftp_pass)
 ftp.voidcmd('site filetype=jes')
 
 saida.write('######################     SUBMISSÃO DE JOBS   ######################\n')
-with open('arquivos/PROGRAMAS', 'rt') as f:
+with open('arquivos/SUBMETER', 'rt') as f:
     for linha in f.read().split('\n'):
         if len(linha)==0:
             continue
@@ -109,8 +123,10 @@ with open('arquivos/PROGRAMAS', 'rt') as f:
             job_number= re.search(r'(JOB[0-9]{5})',result)
             if job_number:
                 saida.write("{};{}\n".format(programa,job_number.group(1)))
+                arquivo_job.write("{};{}\n".format(programa,job_number.group(1)))
             else:
                 saida.write("{};{}\n".format(programa,'Erro submissão'))
+arquivo_job.close()
 saida.write('###################### Encerramento compilação  ######################\n')
 saida.close()
 ftp.quit()

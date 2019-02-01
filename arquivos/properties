@@ -1,30 +1,48 @@
 [JAZZ]
 url = https://clm.caixaseguros.intranet/ccm
-user = usuário
-password= senha
-fonte=arquivos/fonte
-workspace=JENKINS.DEV.COBOL
+user =
+password =
+fonte = arquivos/fonte
+workspace = JENKINS.DEV.COBOL
 [ZOS.DEV]
 host = zosdev
 port = 21
 [ZOS.FTP.DEV]
-user = usuário
-password = senha
+user =
+password =
 [ZOS.HOM]
 host = zoshom
 port = 21
 [ZOS.FTP.HOM]
-user = usuário
-password = senha
+user =
+password =
+[ZOS.HOM2]
+host = zoshom
+port = 21
+[ZOS.FTP.HOM2]
+user =
+password =
+[ZOS.PRD]
+host = zosprd
+port = 21
+tom=TOM.PRD1
+[ZOS.FTP.PRD]
+user =
+password =
 [SIAS.DEV]
-lib_batch=VERTQS.GE.A.PGMLIB.COB2.JV1
-lib_booklib=VERTQS.GE.A.PGMLIB.COB2.JV1
-lib_cics=VERTQS.GE.A.PGMLIB.COB2.JV1
+lib_batch = VERTQS.GE.A.PGMLIB.COB2.JV1
+lib_booklib = VERTQS.GE.A.PGMLIB.COB2.JV1
+lib_cics = VERTQS.GE.A.PGMLIB.COB2.JV1
 [SIAS.HOM]
-lib_batch=HOM.GE.A.PGMLIB.COB2H
-lib_booklib=SHRHOM.GE.A.JV1.BOOKLIB
-lib_cics=VERTQS.GE.A.PGMLIB.COB2.JV1
+lib_batch = HOM.GE.A.PGMLIB.COB2H
+lib_booklib = SHRHOM.GE.A.JV1.BOOKLIB
+lib_cics = VERTQS.GE.A.PGMLIB.COB2.JV1
 [SIAS.HOM2]
-lib_batch=HOM.GE.A.PGMLIB.COB2H.JV1
-lib_booklib=SHRHOM.GE.A.JV1.BOOKLIB
-lib_cics=VERTQS.GE.A.PGMLIB.COB2.JV1
+lib_batch = HOM.GE.A.PGMLIB.COB2H.JV1
+lib_booklib = SHRHOM.GE.A.JV1.BOOKLIB
+lib_cics = VERTQS.GE.A.PGMLIB.COB2.JV1
+lib_load = HOM.JV1.LOAD
+[SMART.DEV]
+lib_batch = SHRDES.GE.A.NEWSEG.PGMLIB.COB2.SMART
+lib_booklib = SHRDES.GE.A.NEWSEG.BOOKLIB
+lib_cics = SHRDES.GE.A.NEWSEG.PGMLIB.COB2.SMART

@@ -1,41 +1,53 @@
-
 import os
 import ftplib
 import re
 import datetime
 import codecs
+import configparser
+import sys
 
-hostname = "zosdev"
-port = 21
+config = configparser.ConfigParser()
+config.read('arquivos/properties')
+ambiente=sys.argv[1]
+data_execucao = datetime.datetime.now().strftime("%y%m%d")
+hostname = config.get('ZOS.'+ambiente,'host')
+port = int(config.get('ZOS.'+ambiente,'port'))
+ftp_user = config.get('ZOS.FTP.'+ambiente,'user')
+ftp_pass = config.get('ZOS.FTP.'+ambiente,'password')
+tom = config.get('ZOS.'+ambiente,'tom')
+tom_directory= 'arquivos/tom'
+
 arquivolog = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M")
-count_programa=0
-response = os.system("ping -n 1 " + hostname)
-if response == 0:
-    saida = open(arquivolog+'_LOAD.log','w')
-    print(hostname +' esta acessivel!')
-    ftp = ftplib.FTP()
-    ftp.connect(hostname, port)
-    ftp.set_debuglevel(0)
-    ftp.login("TE89323", "1983mv")
-    ftp.set_pasv(False)
-    ftp.voidcmd('site filetype=seq')
-    ftp.cwd('..')
-    ftp.cwd('DES.V01.LOAD')
-    with open('PROGRAMAS', 'rt') as f:
-        for programa in f.read().split('\n'):
-            if len(programa)==0:
-                continue
-            with open('load/'+programa,'w') as arquivo:
-                try:
-                    ftp.retrlines('RETR ' + programa,arquivo.write)
-                    arquivo.close()
-                    texto_arquivo =  codecs.open('load/'+programa, "r", "latin-1")
-                    texto = texto_arquivo.read()
-                    texto_arquivo.close
-                    load = re.search(r'(20181224[0-9]{4})',texto)
-                    if load:
-                        saida.write("{};{}\n".format(programa,load.group(1)))
-                except:
-                    saida.write("{};{}\n".format(programa,'Nao encontrada LOAD'))
-    ftp.quit()
-print("executou")
+saida = open('arquivos/log/'+arquivolog+'_TOM.log','w')
+arquivo_jobs = 'arquivos/JOBS'
+ftp = ftplib.FTP()
+ftp.connect(hostname, port)
+ftp.set_debuglevel(0)
+ftp.login(ftp_user, ftp_pass)
+ftp.set_pasv(False)
+ftp.voidcmd('site filetype=seq')
+ftp.cwd('..')
+
+with open(arquivo_jobs,'r') as job:
+    for linha in job.read().split('\n'):
+        if len(linha)==0:
+            continue
+        compilacao = linha.split(';')
+        programa = compilacao[0]
+        jobnumber = compilacao[1]
+        print(tom+'.F'+data_execucao+'.JHDEVOPS.'+jobnumber)
+        with open(tom_directory+'/'+programa+'-'+jobnumber,'w') as arquivo:
+            ftp.retrlines('RETR '+tom+'.F'+data_execucao+'.JHDEVOPS.'+jobnumber,arquivo.write)
+        arquivo.close()
+        with open(tom_directory+'/'+programa+'-'+jobnumber,'r') as arquivo:
+            for linha in arquivo.read().split('\n'):
+                if len(linha)==0:
+                    continue
+            max_rc = re.search(r'JHDEVOPS ENDED.*RC=([0-9]{4})',linha)
+            jcl_error = re.search(r'(JCL ERROR)',linha)
+            if max_rc:
+                saida.write("{};{};{}\n".format(programa,jobnumber,load.group(1)))
+            if jcl_error:
+                saida.write("{};{};{}\n".format(programa,jobnumber,jcl_error.group(1)))
+ftp.quit()
+saida.close()
