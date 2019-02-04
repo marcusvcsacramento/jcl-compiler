@@ -1,0 +1,50 @@
+//JHIFRSS JOB (,PN),'RDZ',CLASS=A,MSGCLASS=T,MSGLEVEL=(1,1), 
+//      REGION=0M                              
+//*PROGRAM: ID_PROGRAMA ----------------------------------------------
+/*ROUTE PRINT JES2PRD1                                             
+//ID_PROGRAMA  EXEC DB2SUBML,MEM=ID_PROGRAMA,                        
+//         FONTELIB='HOM.GE.A.PGMLIB.COB2H'                   
+//LKED.SYLMOD DD DISP=SHR,DSN=HOM.V01.LOAD                    
+//STEP2    EXEC BINDHOM                                       
+//SYSTSIN  DD *                                               
+ DSN SYSTEM(DB2M)                                             
+ BIND PACKAGE(SIASBAT) OWNER(SEGUROS) QUALIFIER(SEGUROS) +    
+      MEMBER(ID_PROGRAMA) LIB('HOM.SIA.V00.DBRMLIB.DATA') +      
+      DEGREE(1) ENABLE(BATCH) EXPLAIN(NO) ISOLATION(CS) +     
+      RELEASE(COMMIT) VALIDATE(BIND) ACT(REP)                 
+ END                                                          
+/*                                                            
+//STEP3   EXEC BINDHOM                                        
+//SYSTSIN  DD *                                               
+ DSN SYSTEM(DB2M)                                             
+ BIND PACKAGE(NULLID) OWNER(SEGUROS) QUALIFIER(SEGUROS) +     
+      MEMBER(ID_PROGRAMA) LIB('HOM.SIA.V00.DBRMLIB.DATA') +      
+      DEGREE(ANY) ENABLE(REMOTE) EXPLAIN(NO) ISOLATION(CS) +  
+      RELEASE(COMMIT) VALIDATE(BIND) ACT(REP)                 
+ END    
+//STEP4    EXEC BINDHOM                                       
+//SYSTSIN  DD *                                               
+ DSN SYSTEM(DB2M)                                             
+ BIND PACKAGE(FCAPONL) OWNER(SEGUROS) QUALIFIER(SEGUROS) +    
+      MEMBER(ID_PROGRAMA) LIB('HOM.SIA.V00.DBRMLIB.DATA') +      
+      DEGREE(1) ENABLE(BATCH) EXPLAIN(NO) ISOLATION(CS) +     
+      RELEASE(COMMIT) VALIDATE(BIND) ACT(REP)                 
+ END                                                          
+/*                                                            
+//STEP5   EXEC BINDHOM                                        
+//SYSTSIN  DD *                                               
+ DSN SYSTEM(DB2M)                                             
+ BIND PACKAGE(SIASONL) OWNER(SEGUROS) QUALIFIER(SEGUROS) +     
+      MEMBER(ID_PROGRAMA) LIB('HOM.SIA.V00.DBRMLIB.DATA') +      
+      DEGREE(ANY) ENABLE(REMOTE) EXPLAIN(NO) ISOLATION(CS) +  
+      RELEASE(COMMIT) VALIDATE(BIND) ACT(REP)                 
+ END  
+/STEP5   EXEC BINDHOM                                        
+//SYSTSIN  DD *                                               
+ DSN SYSTEM(DB2M)                                             
+ BIND PACKAGE(SLONL) OWNER(SEGUROS) QUALIFIER(SEGUROS) +     
+      MEMBER(ID_PROGRAMA) LIB('HOM.SIA.V00.DBRMLIB.DATA') +      
+      DEGREE(ANY) ENABLE(REMOTE) EXPLAIN(NO) ISOLATION(CS) +  
+      RELEASE(COMMIT) VALIDATE(BIND) ACT(REP)                 
+ END  
+/*  
