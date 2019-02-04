@@ -1,0 +1,21 @@
+//JHIFCOMP JOB (,PN),'RDZ',CLASS=S,MSGCLASS=T,MSGLEVEL=(1,1),
+//      REGION=0M,NOTIFY=&SYSUID                             
+//*PROGRAM: ID_PROGRAMA ---------------------------------       
+//ID_PROGRAMA EXEC VERCOB2S,MEM=ID_PROGRAMA,REGION=0M              
+//LKED.SYSIN    DD *                                         
+   INCLUDE SYSLIB(DFHEAI,DSNCLI)                             
+   NAME ID_PROGRAMA(R)                                          
+/*                                                           
+//BIND     EXEC VERBIONL,COND=(4,LT)                         
+//SYSTSIN  DD *                                              
+ DSN SYSTEM(DB2M)                                            
+ BIND PACKAGE(SIASONL)      +                                
+ MEMBER(ID_PROGRAMA)                +                           
+/*                                                           
+//BINDFREE EXEC VERBIONL,COND=(4,LT)                         
+//SYSTSIN  DD *                                              
+ DSN SYSTEM(DB2M)                                            
+ FREE PACKAGE(SIASONL.ID_PROGRAMA)   
+ BIND PACKAGE(SIASONL)      +     
+ MEMBER(ID_PROGRAMA)                +
+/*                                
