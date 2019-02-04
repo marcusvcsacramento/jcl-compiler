@@ -31,21 +31,40 @@ class Changeset(object):
 
 
 def carrega_workspace(workspace,diretorio_local):
+    """Carrega o worspace JAZZ para um diretório local
+
+    Parâmetros:
+    workspace -- Workspace Jazz criado para a matrícula que executa o comando (default Definido no arquivo properties)
+    diretorio_local -- Diretório onde será manipulado o repositório JAZZ (default Definido no arquivo properties)
+    """
     if not os.path.exists(diretorio_local):
         os.makedirs(diretorio_local)
-    cmd='lscm load --all '+workspace+' -d '+diretorio_local+' --allow -u '+user+' -P '+password+' -r '+jazz_url
+    cmd='lscm load -f -s --all '+workspace+' -d '+diretorio_local+' --allow -u '+user+' -P '+password+' -r '+jazz_url
     process = subprocess.Popen(shlex.split(cmd), stdout=subprocess.PIPE, shell=True)
     out, err = process.communicate()
     print(out)
     return out
 
 def descarrega_workspace(workspace,diretorio_local):
+    """Descarrega o worspace JAZZ para um diretório local. Não realiza o delete do repositório, apenas desconecta do workspace
+
+    Parâmetros:
+    workspace -- Workspace Jazz criado para a matrícula que executa o comando (default Definido no arquivo properties)
+    diretorio_local -- Diretório onde será manipulado o repositório JAZZ (default Definido no arquivo properties)
+    """
     cmd='lscm unload --all '+workspace+' -d '+diretorio_local+' -u '+user+' -P '+password+' -r '+jazz_url
     process = subprocess.Popen(shlex.split(cmd), stdout=subprocess.PIPE, shell=True)
     out, err = process.communicate()
     return out
 
 def lista_changes(workspace,diretorio_local,change):
+    """Lista os arquivos alterados e os WorkItens no repositório para um determinado changeset no worspace JAZZ para um diretório local
+
+    Parâmetros:
+    workspace -- Workspace Jazz criado para a matrícula que executa o comando (default Definido no arquivo properties)
+    diretorio_local -- Diretório onde será manipulado o repositório JAZZ (default Definido no arquivo properties)
+    change -- ID da mudança obtido pelo lista_changesets
+    """
     cmd='lscm ls changes -w '+workspace+' '+change+' -u '+user+' -P '+password+' -r '+jazz_url
     process = subprocess.Popen(shlex.split(cmd), stdout=subprocess.PIPE, shell=True)
     out, err = process.communicate()
@@ -66,8 +85,13 @@ def lista_changes(workspace,diretorio_local,change):
 
     return out
 
-def lista_changesets(diretorio):
-    cmd='lscm show status -d '+diretorio
+def lista_changesets(diretorio_local):
+    """Lista as mudanças pendentes no repositório para um determinado changeset no worspace JAZZ para um diretório local. Precisa ser atualizado com o carrega_workspace
+
+    Parâmetros:
+    diretorio_local -- Diretório onde será manipulado o repositório JAZZ (default Definido no arquivo properties)
+    """
+    cmd='lscm show status -d '+diretorio_local
     changes_result = []
 
     process = subprocess.Popen(shlex.split(cmd), stdout=subprocess.PIPE, shell=True)

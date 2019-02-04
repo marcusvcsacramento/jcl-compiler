@@ -10,34 +10,40 @@ from package.rtc_controller.rtc_controller import *
 
 config = configparser.ConfigParser()
 config.read('arquivos/properties')
+"""Carrega configurações do arquivo properties"""
 
 sistema=sys.argv[1]
 ambiente=sys.argv[2]
-
+"""Carrega parâmetros passados na linha de comando"""
 print(sistema+'-'+ambiente)
 
 diretorio_fonte=config.get('JAZZ','fonte')
 workspace=config.get('JAZZ','workspace')
-
-
 hostname = config.get('ZOS.'+ambiente,'host')
 port = int(config.get('ZOS.'+ambiente,'port'))
 ftp_user = config.get('ZOS.FTP.'+ambiente,'user')
 ftp_pass = config.get('ZOS.FTP.'+ambiente,'password')
 
 arquivolog = 'arquivos/log/'+datetime.datetime.now().strftime("%Y-%m-%d_%H-%M")+'.log'
+"""Determina o arquivo de log geral"""
 id_executor = 'MS'+datetime.datetime.now().strftime("%y%m%d")
 lib_batch=config.get(sistema+'.'+ambiente,'lib_batch')
 lib_booklib=config.get(sistema+'.'+ambiente,'lib_booklib')
 lib_cics=config.get(sistema+'.'+ambiente,'lib_cics')
 
-arquivo_job=open('arquivos/JOBS','w')
 arquivo_submeter=open('arquivos/SUBMETER','w')
+"""Determina o arquivo onde será gravado o Programa a que será submetido após o upload para o PDS Mainframe"""
+arquivo_job=open('arquivos/JOBS','w')
+"""Determina o arquivo onde serão gravados os JOB ID's após a submissão do JCL"""
 saida = open(arquivolog,'w')
 saida.write('######################  Carregamento de fontes ######################\n')
+print('######################  Carregamento de fontes ######################\n')
 saida.write(carrega_workspace(workspace,diretorio_fonte).decode('latin-1')+'\n')
 saida.write('######################  Upload de código fonte ######################\n')
+print('######################  Upload de código fonte ######################\n')
+
 with open('arquivos/PROGRAMAS', 'rt') as f:
+    """Itera o arquivo PROGRAMAS para identificar o PROGRAMA ou BOOKLIB e o formato de compilação"""
     result=''
     for linha in f.read().split('\n'):
         if len(linha)==0:
@@ -104,7 +110,9 @@ ftp.login(ftp_user, ftp_pass)
 ftp.voidcmd('site filetype=jes')
 
 saida.write('######################     SUBMISSÃO DE JOBS   ######################\n')
+print('######################     SUBMISSÃO DE JOBS   ######################\n')
 with open('arquivos/SUBMETER', 'rt') as f:
+    """ Itera o arquivo com os programas que deram sucesso no Upload para o PDS Maiframe """
     for linha in f.read().split('\n'):
         if len(linha)==0:
             continue
@@ -128,5 +136,6 @@ with open('arquivos/SUBMETER', 'rt') as f:
                 saida.write("{};{}\n".format(programa,'Erro submissão'))
 arquivo_job.close()
 saida.write('###################### Encerramento compilação  ######################\n')
+print('###################### Encerramento compilação  ######################\n')
 saida.close()
 ftp.quit()

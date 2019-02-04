@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import os
 import ftplib
 import re
@@ -26,6 +28,7 @@ ftp.set_debuglevel(0)
 ftp.login(ftp_user, ftp_pass)
 ftp.set_pasv(False)
 ftp.voidcmd('site filetype=seq')
+ftp.sendcmd("site sbd=(IBM-1047,ISO8859-1)")
 ftp.cwd('..')
 
 with open(arquivo_jobs,'r') as job:
@@ -36,7 +39,7 @@ with open(arquivo_jobs,'r') as job:
         programa = compilacao[0]
         jobnumber = compilacao[1]
         print(tom+'.F'+data_execucao+'.JHDEVOPS.'+jobnumber)
-        with open(tom_directory+'/'+programa+'-'+jobnumber,'w') as arquivo:
+        with open(tom_directory+'/'+programa+'-'+jobnumber,'w', encoding="utf-8") as arquivo:
             ftp.retrlines('RETR '+tom+'.F'+data_execucao+'.JHDEVOPS.'+jobnumber,arquivo.write)
         arquivo.close()
         with open(tom_directory+'/'+programa+'-'+jobnumber,'r') as arquivo:
@@ -46,7 +49,7 @@ with open(arquivo_jobs,'r') as job:
             max_rc = re.search(r'JHDEVOPS ENDED.*RC=([0-9]{4})',linha)
             jcl_error = re.search(r'(JCL ERROR)',linha)
             if max_rc:
-                saida.write("{};{};{}\n".format(programa,jobnumber,load.group(1)))
+                saida.write("{};{};{}\n".format(programa,jobnumber,max_rc.group(1)))
             if jcl_error:
                 saida.write("{};{};{}\n".format(programa,jobnumber,jcl_error.group(1)))
 ftp.quit()

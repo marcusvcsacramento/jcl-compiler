@@ -6,8 +6,13 @@
 
 *.log
 arquivos/cartao/SMART/dev/JDSZCOMP
-arquivos/cartao/SMART/dev/*.tmp
+arquivos/cartao/**/*.tmp
 arquivos/cartao/SMART/dev/*old
+arquivos/JOBS
+arquivos/SUBMETER
+arquivos/PROGRAMAS
+arquivos/fonte
+
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
