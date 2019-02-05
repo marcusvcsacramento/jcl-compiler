@@ -39,7 +39,7 @@ with open(arquivo_jobs,'r') as job:
         programa = compilacao[0]
         jobnumber = compilacao[1]
         print(tom+'.F'+data_execucao+'.JHDEVOPS.'+jobnumber)
-        with open(tom_directory+'/'+programa+'-'+jobnumber,'w', encoding="utf-8") as arquivo:
+        with open(tom_directory+'/'+programa+'-'+jobnumber,'w', encoding="latin-1") as arquivo:
             ftp.retrlines('RETR '+tom+'.F'+data_execucao+'.JHDEVOPS.'+jobnumber,arquivo.write)
         arquivo.close()
         with open(tom_directory+'/'+programa+'-'+jobnumber,'r') as arquivo:
@@ -48,9 +48,13 @@ with open(arquivo_jobs,'r') as job:
                     continue
             max_rc = re.search(r'JHDEVOPS ENDED.*RC=([0-9]{4})',linha)
             jcl_error = re.search(r'(JCL ERROR)',linha)
+            abend = re.search(r'(ABEND=[A-Z0-9]{3,5})',linha)
             if max_rc:
                 saida.write("{};{};{}\n".format(programa,jobnumber,max_rc.group(1)))
             if jcl_error:
                 saida.write("{};{};{}\n".format(programa,jobnumber,jcl_error.group(1)))
+            if abend:
+                saida.write("{};{};{}\n".format(programa,jobnumber,abend.group(1)))
+
 ftp.quit()
 saida.close()
