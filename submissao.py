@@ -3,6 +3,7 @@ import re
 import datetime
 import configparser
 import sys
+import io
 
 from package.util.util import *
 from package.rtc_controller.rtc_controller import *
@@ -38,7 +39,7 @@ arquivo_job=open('arquivos/JOBS','w')
 saida = open(arquivolog,'w')
 saida.write('######################  Carregamento de fontes ######################\n')
 print('######################  Carregamento de fontes ######################\n')
-saida.write(carrega_workspace(workspace,diretorio_fonte).decode('latin-1')+'\n')
+##saida.write(carrega_workspace(workspace,diretorio_fonte).decode('latin-1')+'\n')
 saida.write('######################  Upload de código fonte ######################\n')
 print('######################  Upload de código fonte ######################\n')
 
@@ -54,31 +55,37 @@ with open('arquivos/PROGRAMAS', 'rt') as f:
         if(classe=='BATCH'):
             tipo = compilacao[2]
             try:
-                job=open(diretorio_fonte+'/COBOL.GCS/BATCH/'+programa+'.cbl','rb')
+                fp=open(diretorio_fonte+'/COBOL.GCS/BATCH/'+programa+'.cbl','r',encoding='utf-8')
+                job=io.BytesIO(fp.read().encode('latin-1'))
                 ftp = ftplib.FTP()
                 ftp.connect(hostname, port)
+                ftp.encoding='latin-1'
                 ftp.set_debuglevel(0)
                 ftp.login(ftp_user, ftp_pass)
                 ftp.voidcmd('site filetype=seq')
                 ftp.pwd()
                 ftp.cwd('..')
                 ftp.cwd(lib_batch)
-                result = ftp.storlines('STOR '+programa,job)
+                print(type(job))
+                result = ftp.storlines('STOR '+programa, job)
                 ftp.close()
                 print('{};{};{}\n'.format(programa,classe,tipo))
                 arquivo_submeter.write('{};{};{}\n'.format(programa,classe,tipo))
             except:
-                print("{};{}\n".format(programa,sys.exc_info()[1]))
+                print("{};{}\n".format(programa,sys.exc_info()))
                 saida.write("{};{}\n".format(programa,sys.exc_info()[1]))
         if(classe=='CICS'):
             tipo = compilacao[2]
             try:
-                job=open(diretorio_fonte+'/COBOL.GCS/CICS/'+programa+'.cbl','rb')
+                job=open(diretorio_fonte+'/COBOL.GCS/CICS/'+programa+'.cbl','r',encoding='utf-8')
+                job=io.BytesIO(fp.read().encode('latin-1'))
                 ftp = ftplib.FTP()
                 ftp.connect(hostname, port)
+                ftp.encoding='latin-1'
                 ftp.set_debuglevel(0)
                 ftp.login(ftp_user, ftp_pass)
                 ftp.voidcmd('site filetype=seq')
+                ftp.sendcmd("site sbd=(IBM-1047,ISO8859-1)")
                 ftp.pwd()
                 ftp.cwd('..')
                 ftp.cwd(lib_cics)
@@ -91,12 +98,15 @@ with open('arquivos/PROGRAMAS', 'rt') as f:
                 saida.write("{};{}\n".format(programa,sys.exc_info()[1]))
         if(classe=='BOOKLIB'):
             try:
-                job=open(diretorio_fonte+'/COBOL.GCS/BOOKLIB/'+programa+'.bkl','rb')
+                job=open(diretorio_fonte+'/COBOL.GCS/BOOKLIB/'+programa+'.bkl','r',encoding='utf-8')
+                job=io.BytesIO(fp.read().encode('latin-1'))
                 ftp = ftplib.FTP()
                 ftp.connect(hostname, port)
+                ftp.encoding='latin-1'
                 ftp.set_debuglevel(0)
                 ftp.login(ftp_user, ftp_pass)
                 ftp.voidcmd('site filetype=seq')
+                ftp.sendcmd("site sbd=(IBM-1047,ISO8859-1)")
                 ftp.pwd()
                 ftp.cwd('..')
                 ftp.cwd(lib_booklib)
