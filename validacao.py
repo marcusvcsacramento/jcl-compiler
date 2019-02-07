@@ -38,23 +38,31 @@ with open(arquivo_jobs,'r') as job:
         compilacao = linha.split(';')
         programa = compilacao[0]
         jobnumber = compilacao[1]
-        print(tom+'.F'+data_execucao+'.JHDEVOPS.'+jobnumber)
-        with open(tom_directory+'/'+programa+'-'+jobnumber,'w', encoding="latin-1") as arquivo:
-            ftp.retrlines('RETR '+tom+'.F'+data_execucao+'.JHDEVOPS.'+jobnumber,arquivo.write)
-        arquivo.close()
-        with open(tom_directory+'/'+programa+'-'+jobnumber,'r') as arquivo:
-            for linha in arquivo.read().split('\n'):
-                if len(linha)==0:
-                    continue
-            max_rc = re.search(r'JHDEVOPS ENDED.*RC=([0-9]{4})',linha)
-            jcl_error = re.search(r'(JCL ERROR)',linha)
-            abend = re.search(r'(ABEND=[A-Z0-9]{3,5})',linha)
-            if max_rc:
-                saida.write("{};{};{}\n".format(programa,jobnumber,max_rc.group(1)))
-            if jcl_error:
-                saida.write("{};{};{}\n".format(programa,jobnumber,jcl_error.group(1)))
-            if abend:
-                saida.write("{};{};{}\n".format(programa,jobnumber,abend.group(1)))
+        try:
+            print(tom+'.F'+data_execucao+'.JHDEVOPS.'+jobnumber)
+            with open(tom_directory+'/'+programa+'-'+jobnumber,'w', encoding="latin-1") as arquivo:
+                ftp.retrlines('RETR '+tom+'.F'+data_execucao+'.JHDEVOPS.'+jobnumber,arquivo.write)
+            arquivo.close()
+            with open(tom_directory+'/'+programa+'-'+jobnumber,'r', encoding="latin-1") as arquivo:
+                for linha in arquivo.read().split('\n'):
+                    if len(linha)==0:
+                        continue
+                max_rc = re.search(r'JHDEVOPS ENDED.*RC=([0-9]{4})',linha)
+                jcl_error = re.search(r'(JCL ERROR)',linha)
+                abend = re.search(r'(ABEND=[A-Z0-9]{3,5})',linha)
+                if max_rc:
+                    print("{};{};{}\n".format(programa,jobnumber,max_rc.group(1)))
+                    saida.write("{};{};{}\n".format(programa,jobnumber,max_rc.group(1)))
+                if jcl_error:
+                    print("{};{};{}\n".format(programa,jobnumber,jcl_error.group(1)))
+                    saida.write("{};{};{}\n".format(programa,jobnumber,jcl_error.group(1)))
+                if abend:
+                    print("{};{};{}\n".format(programa,jobnumber,abend.group(1)))
+                    saida.write("{};{};{}\n".format(programa,jobnumber,abend.group(1)))
+        except:
+            print("{};{};{}\n".format(programa,jobnumber,"Não encontrado SYSOUT"))
+            saida.write("{};{};{}\n".format(programa,jobnumber,"Não encontrado SYSOUT"))
+
 
 ftp.quit()
 saida.close()

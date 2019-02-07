@@ -65,8 +65,10 @@ with open('arquivos/PROGRAMAS', 'rt') as f:
                 ftp.cwd(lib_batch)
                 result = ftp.storlines('STOR '+programa,job)
                 ftp.close()
+                print('{};{};{}\n'.format(programa,classe,tipo))
                 arquivo_submeter.write('{};{};{}\n'.format(programa,classe,tipo))
             except:
+                print("{};{}\n".format(programa,sys.exc_info()[1]))
                 saida.write("{};{}\n".format(programa,sys.exc_info()[1]))
         if(classe=='CICS'):
             tipo = compilacao[2]
@@ -82,8 +84,10 @@ with open('arquivos/PROGRAMAS', 'rt') as f:
                 ftp.cwd(lib_cics)
                 result = ftp.storlines('STOR '+programa,job)
                 ftp.close()
+                print('{};{};{}\n'.format(programa,classe,tipo))
                 arquivo_submeter.write('{};{};{}\n'.format(programa,classe,tipo))
             except:
+                print("{};{}\n".format(programa,sys.exc_info()[1]))
                 saida.write("{};{}\n".format(programa,sys.exc_info()[1]))
         if(classe=='BOOKLIB'):
             try:
@@ -98,7 +102,9 @@ with open('arquivos/PROGRAMAS', 'rt') as f:
                 ftp.cwd(lib_booklib)
                 result = ftp.storlines('STOR '+programa,job)
                 ftp.close()
+                print('{};{}\n'.format(programa,classe))
             except:
+                print("{};{}\n".format(programa,sys.exc_info()[1]))
                 saida.write("{};{}\n".format(programa,result))
     arquivo_submeter.close()
     f.close()
@@ -130,9 +136,11 @@ with open('arquivos/SUBMETER', 'rt') as f:
             result = ftp.storlines('STOR JOB'+sistema,job)
             job_number= re.search(r'(JOB[0-9]{5})',result)
             if job_number:
+                print("{};{}\n".format(programa,job_number.group(1)))
                 saida.write("{};{}\n".format(programa,job_number.group(1)))
                 arquivo_job.write("{};{}\n".format(programa,job_number.group(1)))
             else:
+                print("{};{}\n".format(programa,'Erro submissão'))
                 saida.write("{};{}\n".format(programa,'Erro submissão'))
 arquivo_job.close()
 saida.write('###################### Encerramento compilação  ######################\n')
