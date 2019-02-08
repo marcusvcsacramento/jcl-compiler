@@ -71,12 +71,12 @@ with open('arquivos/PROGRAMAS', 'rt') as f:
                 print('{};{};{}\n'.format(programa,classe,tipo))
                 arquivo_submeter.write('{};{};{}\n'.format(programa,classe,tipo))
             except:
-                print("{};{}\n".format(programa,sys.exc_info()))
+                print("{};{}\n".format(programa,sys.exc_info()[1]))
                 saida.write("{};{}\n".format(programa,sys.exc_info()[1]))
         if(classe=='CICS'):
             tipo = compilacao[2]
             try:
-                job=open(diretorio_fonte+'/COBOL.GCS/CICS/'+programa+'.cbl','r',encoding='utf-8')
+                fp=open(diretorio_fonte+'/COBOL.GCS/CICS/'+programa+'.cbl','r',encoding='utf-8')
                 job=io.BytesIO(fp.read().encode('latin-1'))
                 ftp = ftplib.FTP()
                 ftp.connect(hostname, port)
@@ -97,7 +97,7 @@ with open('arquivos/PROGRAMAS', 'rt') as f:
                 saida.write("{};{}\n".format(programa,sys.exc_info()[1]))
         if(classe=='BOOKLIB'):
             try:
-                job=open(diretorio_fonte+'/COBOL.GCS/BOOKLIB/'+programa+'.bkl','r',encoding='utf-8')
+                fp=open(diretorio_fonte+'/COBOL.GCS/BOOKLIB/'+programa+'.bkl','r',encoding='utf-8')
                 job=io.BytesIO(fp.read().encode('latin-1'))
                 ftp = ftplib.FTP()
                 ftp.connect(hostname, port)
