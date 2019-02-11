@@ -8,7 +8,7 @@ import io
 from package.util.util import *
 from package.rtc_controller.rtc_controller import *
 
-
+print("Início da Execução:"+datetime.datetime.now().strftime("%Y-%m-%d_%H-%M"))
 config = configparser.ConfigParser()
 config.read('arquivos/properties')
 """Carrega configurações do arquivo properties"""
@@ -156,3 +156,4 @@ saida.write('###################### Encerramento compilação  #################
 print('###################### Encerramento compilação  ######################\n')
 saida.close()
 ftp.quit()
+print("Fim da Execução:"+datetime.datetime.now().strftime("%Y-%m-%d_%H-%M"))

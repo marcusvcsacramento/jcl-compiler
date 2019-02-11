@@ -86,9 +86,12 @@ with open(arquivo_jobs,'r') as job:
                 print("{};{};{};{}\n".format(programa,jobnumber,abend.group(1),load_result))
                 saida.write("{};{};{};{}\n".format(programa,jobnumber,abend.group(1),load_result))
         except:
-            print("{};{};{};{}\n".format(programa,jobnumber,"Não encontrado SYSOUT",load_result))
-            saida.write("{};{};{};{}\n".format(programa,jobnumber,"Não encontrado SYSOUT",load_result))
-        for x in load_lib.split('.'):
-            ftp.cwd('..')
+            print("{};{};{};{}\n".format(programa,jobnumber,sys.exc_info()[1],load_result))
+            saida.write("{};{};{};{}\n".format(programa,jobnumber,sys.exc_info()[1],load_result))
+        try:
+            for x in load_lib.split('.'):
+                ftp.cwd('..')
+        except:
+            print("")
 saida.close()
 ftp.close()
