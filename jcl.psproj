@@ -64,10 +64,14 @@ FileName=$[Project-Path]submissao.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node3]
 ClassName=TProjectFileNode
+FileName=$[Project-Path]teste.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node4]
+ClassName=TProjectFileNode
 FileName=$[Project-Path]validacao.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes]
-Count=4
+Count=5
 
 [Project\ChildNodes\Node0\ChildNodes]
 Count=1
@@ -145,8 +149,31 @@ WorkingDirectory=$[ActiveScript-Dir]
 ShortCut=0
 MessagesFormat=$[FileName] $[LineNumber]
 
+[Project\ChildNodes\Node1\ChildNodes\Node3]
+ClassName=TProjectRunConfiguationNode
+Name=SMART.TESTE
+
+[Project\ChildNodes\Node1\ChildNodes\Node3\RunConfig]
+ScriptName=D:\JCL\teste.py
+EngineType=peRemote
+ReinitializeBeforeRun=TRUE
+Parameters=SMART HOM 151229
+WorkingDir=$[ActiveScript-Dir]
+WriteOutputToFile=FALSE
+OutputFileName=$[ActiveScript-NoExt].log
+AppendToFile=FALSE
+
+[Project\ChildNodes\Node1\ChildNodes\Node3\RunConfig\ExternalRun]
+Caption=External Run
+Description=Run script using an external Python Interpreter
+ApplicationName=$[PythonExe-Short]
+Parameters=$[ActiveScript-Short]
+WorkingDirectory=$[ActiveScript-Dir]
+ShortCut=0
+MessagesFormat=$[FileName] $[LineNumber]
+
 [Project\ChildNodes\Node1\ChildNodes]
-Count=3
+Count=4
 
 [Project\ChildNodes]
 Count=2

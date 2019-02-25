@@ -25,7 +25,7 @@ port = int(config.get('ZOS.'+ambiente,'port'))
 ftp_user = config.get('ZOS.FTP.'+ambiente,'user')
 ftp_pass = config.get('ZOS.FTP.'+ambiente,'password')
 
-arquivolog = 'arquivos/log/'+datetime.datetime.now().strftime("%Y-%m-%d_%H-%M")+'.log'
+arquivolog = 'arquivos/log/'+datetime.datetime.now().strftime("%Y-%m-%d_%H-%M")+'.'+sistema+'.'+ambiente+'.log'
 """Determina o arquivo de log geral"""
 id_executor = 'MS'+datetime.datetime.now().strftime("%y%m%d")
 lib_batch=config.get(sistema+'.'+ambiente,'lib_batch')
@@ -151,6 +151,7 @@ with open('arquivos/SUBMETER', 'rt') as f:
             else:
                 print("{};{}\n".format(programa,'Erro submissão'))
                 saida.write("{};{}\n".format(programa,'Erro submissão'))
+            saida.flush()
 arquivo_job.close()
 saida.write('###################### Encerramento compilação  ######################\n')
 print('###################### Encerramento compilação  ######################\n')

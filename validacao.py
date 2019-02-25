@@ -15,19 +15,27 @@ ambiente=sys.argv[2]
 ambiente_tom=sys.argv[3]
 
 data_execucao = datetime.datetime.now().strftime("%y%m%d")
+# data_execucao = '190221'
 data_load = datetime.datetime.now().strftime("%Y%m%d")
+# data_load = '20190221'
 
 hostname = config.get('ZOS.'+ambiente_tom,'host')
 port = int(config.get('ZOS.'+ambiente_tom,'port'))
 ftp_user = config.get('ZOS.FTP.'+ambiente_tom,'user')
 ftp_pass = config.get('ZOS.FTP.'+ambiente_tom,'password')
+
+hostname_load = config.get('ZOS.'+ambiente,'host')
+port_load = int(config.get('ZOS.'+ambiente,'port'))
+ftp_user_load = config.get('ZOS.FTP.'+ambiente,'user')
+ftp_pass_load = config.get('ZOS.FTP.'+ambiente,'password')
+
 load_lib = config.get(sistema+'.'+ambiente,'lib_load')
 tom = config.get('ZOS.'+ambiente_tom,'tom')
 tom_directory= 'arquivos/tom'
 load_directory= 'arquivos/load'
 
 arquivolog = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M")
-saida = open('arquivos/log/'+arquivolog+'_TOM.log','w')
+saida = open('arquivos/log/'+arquivolog+'.'+sistema+'.'+ambiente+'.RESULTADO.log','w')
 arquivo_jobs = 'arquivos/JOBS'
 ftp = ftplib.FTP()
 ftp.connect(hostname, port)
@@ -49,6 +57,7 @@ with open(arquivo_jobs,'r') as job:
         jcl_error=''
         abend=''
         load_result=''
+        load_value=''
         try:
             print(tom+'.F'+data_execucao+'.JHDEVOPS.'+jobnumber)
             with open(tom_directory+'/'+programa+'-'+jobnumber,'w', encoding="latin-1") as arquivo:
@@ -63,35 +72,44 @@ with open(arquivo_jobs,'r') as job:
                 max_rc = re.search(r'JHDEVOPS ENDED.*RC=([0-9]{4})',linha)
                 jcl_error = re.search(r'(JCL ERROR)',linha)
                 abend = re.search(r'(ABEND=[A-Z0-9]{3,5})',linha)
-            ftp.cwd(load_lib)
-            ftp.voidcmd('site filetype=seq')
             try:
-                with open(load_directory+'/'+programa,'w', encoding="latin-1") as arquivo:
-                    ftp.retrlines('RETR '+programa,arquivo.write)
-                arquivo.close()
+                ftp_load = ftplib.FTP()
+                ftp_load.connect(hostname_load, port_load)
+                ftp_load.set_debuglevel(0)
+                ftp_load.login(ftp_user_load, ftp_pass_load)
+                ftp_load.set_pasv(False)
+                ftp_load.voidcmd('site filetype=seq')
+                ftp_load.sendcmd("site sbd=(IBM-1047,ISO8859-1)")
+                ftp_load.cwd('..')
+                ftp_load.cwd(load_lib)
+                with open(load_directory+'/'+programa,'w', encoding="latin-1") as arquivo_load:
+                    ftp_load.retrlines('RETR '+programa,arquivo_load.write)
+                arquivo_load.close()
+                ftp_load.close()
 
-                with open(load_directory+'/'+programa,'r', encoding="latin-1") as arquivo:
-                    load_result=re.search(r'('+data_load+'[0-9]{4})',linha)
-                arquivo.close()
+                with open(load_directory+'/'+programa,'r', encoding="latin-1") as arquivo_load:
+                    for linha_load in arquivo_load.read().split('\n'):
+                        if len(linha_load)==0:
+                            continue
+                        load_result=re.search(r'('+data_load+'[0-9]{4})',linha_load)
+                arquivo_load.close()
+                if load_result:
+                    load_value = load_result.group(1)
             except:
                 load_result=''
 
             if max_rc:
-                print("{};{};{};{}\n".format(programa,jobnumber,max_rc.group(1),load_result))
-                saida.write("{};{};{};{}\n".format(programa,jobnumber,max_rc.group(1),load_result))
+                print("{};{};{};{}\n".format(programa,jobnumber,max_rc.group(1),load_value))
+                saida.write("{};{};{};{}\n".format(programa,jobnumber,max_rc.group(1),load_value))
             if jcl_error:
-                print("{};{};{};{}\n".format(programa,jobnumber,jcl_error.group(1),load_result))
-                saida.write("{};{};{};{}\n".format(programa,jobnumber,jcl_error.group(1),load_result))
+                print("{};{};{};{}\n".format(programa,jobnumber,jcl_error.group(1),load_value))
+                saida.write("{};{};{};{}\n".format(programa,jobnumber,jcl_error.group(1),load_value))
             if abend:
-                print("{};{};{};{}\n".format(programa,jobnumber,abend.group(1),load_result))
-                saida.write("{};{};{};{}\n".format(programa,jobnumber,abend.group(1),load_result))
+                print("{};{};{};{}\n".format(programa,jobnumber,abend.group(1),load_value))
+                saida.write("{};{};{};{}\n".format(programa,jobnumber,abend.group(1),load_value))
+            saida.flush()
         except:
-            print("{};{};{};{}\n".format(programa,jobnumber,sys.exc_info()[1],load_result))
-            saida.write("{};{};{};{}\n".format(programa,jobnumber,sys.exc_info()[1],load_result))
-        try:
-            for x in load_lib.split('.'):
-                ftp.cwd('..')
-        except:
-            print("")
+            print("{};{};{};{}\n".format(programa,jobnumber,sys.exc_info()[1],load_value))
+            saida.write("{};{};{};{}\n".format(programa,jobnumber,sys.exc_info()[1],load_value))
 saida.close()
 ftp.close()
