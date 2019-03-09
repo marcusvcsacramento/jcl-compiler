@@ -15,6 +15,7 @@ config.read('arquivos/properties')
 
 sistema=sys.argv[1]
 ambiente=sys.argv[2]
+job_name=sys.argv[3]
 """Carrega parâmetros passados na linha de comando"""
 print(sistema+'-'+ambiente)
 
@@ -55,7 +56,7 @@ with open('arquivos/PROGRAMAS', 'rt') as f:
         if(classe=='BATCH'):
             tipo = compilacao[2]
             try:
-                fp=open(diretorio_fonte+'/COBOL.GCS/BATCH/'+programa+'.cbl','r',encoding='utf-8')
+                fp=open(diretorio_fonte+'/COBOL.GCS/BATCH/'+programa+'.cbl','r',encoding='latin-1',errors="ignore")
                 job=io.BytesIO(fp.read().encode('latin-1'))
                 ftp = ftplib.FTP()
                 ftp.connect(hostname, port)
@@ -140,7 +141,8 @@ with open('arquivos/SUBMETER', 'rt') as f:
             job_final='arquivos/cartao/'+sistema+'/JOB'+sistema+tipo
             sub_string_file(job_modelo,'arquivos/cartao/'+sistema+'/'+ambiente+'/JOBJCL.tmp','ID_PROGRAMA',programa)
             sub_string_file('arquivos/cartao/'+sistema+'/'+ambiente+'/JOBJCL.tmp','arquivos/cartao/'+sistema+'/'+ambiente+'/JOBJCLI.tmp','ID_EXECUTOR',id_executor)
-            sub_string_file('arquivos/cartao/'+sistema+'/'+ambiente+'/JOBJCLI.tmp',job_final,'WLM_PROGRAMA','DES_SP'+programa[:4]+'01')
+            sub_string_file('arquivos/cartao/'+sistema+'/'+ambiente+'/JOBJCLI.tmp','arquivos/cartao/'+sistema+'/'+ambiente+'/JOBJCLII.tmp','JOB_NAME',job_name)
+            sub_string_file('arquivos/cartao/'+sistema+'/'+ambiente+'/JOBJCLII.tmp',job_final,'WLM_PROGRAMA','DES_SP'+programa[:4]+'01')
             job=open(job_final,'rb')
             result = ftp.storlines('STOR JOB'+sistema,job)
             job_number= re.search(r'(JOB[0-9]{5})',result)

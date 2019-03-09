@@ -60,11 +60,11 @@ FileName=$[Project-Path]__init__.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]submissao.py
+FileName=$[Project-Path]diaria.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node3]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]teste.py
+FileName=$[Project-Path]submissao.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node4]
 ClassName=TProjectFileNode
@@ -154,10 +154,10 @@ ClassName=TProjectRunConfiguationNode
 Name=SMART.TESTE
 
 [Project\ChildNodes\Node1\ChildNodes\Node3\RunConfig]
-ScriptName=D:\JCL\teste.py
+ScriptName=D:\JCL\diaria.py
 EngineType=peRemote
 ReinitializeBeforeRun=TRUE
-Parameters=SMART HOM 151229
+Parameters=SMART DIARIA_HOM 181231 2019-02-062019-01-31
 WorkingDir=$[ActiveScript-Dir]
 WriteOutputToFile=FALSE
 OutputFileName=$[ActiveScript-NoExt].log

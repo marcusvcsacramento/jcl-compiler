@@ -29,8 +29,16 @@ Aplicação para compilação e deploy de código fonte Mainframe
     * CLASSE pode ser **BATCH** ou **BOOKLIB**
     * TIPO COMPILACAO deve correspondere ao nome do arquivo model no diretório _arquivos/cartao_: se houver _**VA4002B;BATCH;SUB_ONLINE**_ deve haver um cartão de nome **SUB_ONLINE.model**
 
-Executar em linha de comando: `python submissao.py «SISTEMA» «AMBIENTE»`
+Executar em linha de comando: `python submissao.py «SISTEMA» «AMBIENTE» «JOBNAME»`
 
 #### Validação
 
-Após a execução dos Jobs basta executar em linha de comando:`python validacao.py TOM PRD`
+Após a execução dos Jobs basta executar em linha de comando:`python validacao.py «SISTEMA» «AMBIENTE» PRD «JOBNAME»`
+
+#### Cartões de diária ou testes
+
+1. No arquivo **DIARIA** deve ser informado o programa seguindo o padrão:
+  1. «NOME_JOB»
+    * Deve correspondere ao nome do arquivo model no diretório _arquivos/cartao_
+
+Executar em linha de comando: `python submissao.py «SISTEMA» «DIARIA_AMBIENTE» «DATA_MOVIMENTO» «PERIODO_MOVIMENTO»`

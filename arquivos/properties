@@ -1,0 +1,96 @@
+## Configura��o do Jazz para Carregamento de Reposit�rio
+[JAZZ]
+url = https://clm.caixaseguros.intranet/ccm
+user = TER89323
+password= #9COnk8F
+## Local onde os arquivos do Worspace ser�o carregados. Deve ser criado antes da execu��o do programa
+fonte=arquivos/fonte
+## Nome do Workspace pessoal criado no IDZ
+workspace=TER89323.GCS.DEV.JV1
+#workspace=SCRIPT.DEV.COBOL
+
+## Configura��o do ZOS de desenvolvimento
+[ZOS.DEV]
+host = zosdev
+port = 21
+
+## Configura��o do FTP no ZOS de desenvolvimento
+[ZOS.FTP.DEV]
+user = TE89323
+password = 1983cs
+
+## Configura��o do ZOS de Homologa��o
+[ZOS.HOM]
+host = zoshom
+port = 21
+
+## Configura��o do FTP no ZOS de Homologa��o
+[ZOS.FTP.HOM]
+user = RSSDPLY
+password = 1212QW
+
+## Configura��o do ZOS de Homologa��o2(SIAS)
+[ZOS.HOM2]
+host = zoshom
+port = 21
+
+## Configura��o do FTP no ZOS de Homologa��o2(SIAS)
+[ZOS.FTP.HOM2]
+user = RSSDPLY
+password = 1212QW
+
+## Configura��o do ZOS de Produ��o
+[ZOS.PRD]
+host = zosprd
+port = 21
+## In�cio do PDS para o TOM
+tom=TOM.PRD1
+
+## Configura��o do FTP no ZOS de Produ��o
+[ZOS.FTP.PRD]
+user = te00479
+password = 1212dez
+
+# Configura��o do ZOS de execução de diária em Homologa��o
+[ZOS.DIARIA_HOM]
+host = zoshom
+port = 21
+
+## Configura��o do FTP no ZOS de execução de diária emHomologa��o2(SIAS)
+[ZOS.FTP.DIARIA_HOM]
+user = RSSDPLY
+password = 1212QW
+
+###### Configura��es para Upload de c�digo para os PDS's Mainframe ######
+
+## PDS e libs para o ambiente de Desenvolvimento do SIAS
+[SIAS.DEV]
+lib_batch=VERTQS.GE.A.PGMLIB.COB2.JV1
+lib_booklib=VERTQS.GE.A.PGMLIB.COB2.JV1
+lib_cics=VERTQS.GE.A.PGMLIB.COB2.JV1
+
+## PDS e libs para o ambiente de Homologa��o do SIAS
+[SIAS.HOM]
+lib_batch=HOM.GE.A.PGMLIB.COB2H
+lib_booklib=SHRHOM.GE.A.BOOKLIB
+lib_cics=VERTQS.GE.A.PGMLIB.COB2.JV1
+lib_load=HOM.V01.LOAD
+
+## PDS e libs para o ambiente de Homologa��o2 do SIAS
+[SIAS.HOM2]
+lib_batch=HOM.GE.A.PGMLIB.COB2H.JV1
+lib_booklib=SHRHOM.GE.A.JV1.BOOKLIB
+lib_cics=HOM.JV1.GE.A.PGMLIB.COB2H.CICS
+lib_load=HOM.JV1.LOAD
+
+## PDS e libs para o ambiente de Desenvolvimento do SMART
+[SMART.DEV]
+lib_batch=SHRDES.GE.A.NEWSEG.PGMLIB.COB2.SMART
+lib_booklib=SHRDES.GE.A.NEWSEG.BOOKLIB
+lib_cics=SHRDES.GE.A.NEWSEG.PGMLIB.COB2.SMART
+
+[SMART.HOM]
+lib_batch=HOM.GE.A.PGMLIB.COB2H
+lib_booklib=SHRHOM.GE.A.BOOKLIB
+lib_cics=VERTQS.GE.A.PGMLIB.COB2.JV1
+lib_load=HOM.V01.LOAD

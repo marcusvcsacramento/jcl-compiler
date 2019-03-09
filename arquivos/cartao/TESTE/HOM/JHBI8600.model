@@ -1,0 +1,45 @@
+//JHBI8600 JOB (00,PN),'PRODUCAO-MVS',TIME=1440,                                
+//         CLASS=A,MSGCLASS=T,MSGLEVEL=(1,1)                                    
+//*  
+/*ROUTE PRINT JES2PRD1
+//*                                                                         
+//JOBLIB     DD DISP=SHR,DSN=DSNC10.DB2M.SDSNLOAD                               
+//           DD DISP=SHR,DSN=HOM.V01.LOAD                                       
+//*
+//E021BR14 EXEC PGM=IEFBR14                                                     
+//SYSOUT   DD SYSOUT=*                                                          
+//SYSPRINT DD SYSOUT=*                                                          
+//DELETE01 DD DSN=HOM.REL.D190228.BI8600B.L1VZ6,                                
+//         DISP=(MOD,DELETE,DELETE),                                            
+//         UNIT=SYSALLDA,SPACE=(TRK,(1,1))                                      
+//*                                                                             
+//E0208600 EXEC PGM=IKJEFT01,DYNAMNBR=20                                        
+//SYSTSPRT DD SYSOUT=*                                                          
+//SYSPRINT DD SYSOUT=*                                                          
+//SYSUDUMP DD SYSOUT=Z                                                          
+//SYSOUT   DD SYSOUT=*                                                          
+//MOVSIGAT DD DISP=SHR,                                                     
+//         DSN=HOM.PF.D190225.PF0110B.ARQCRESC                                  
+//*                                                                             
+//RBI8600B DD DSN=HOM.REL.D190228.BI8600B.L1VZ6,                                
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),SPACE=(TRK,(50,150),RLSE),           
+//         DCB=(RECFM=FB,LRECL=133,BLKSIZE=0,DSORG=PS)                          
+//SYSDBOUT DD SYSOUT=*                                                          
+//SYSABOUT DD SYSOUT=*                                                          
+//SYSTSIN  DD   *                                                               
+   DSN SYSTEM(DB2M)                                                             
+   RUN PROGRAM(BI8600B) PLAN(SIASBAT) LIB('HOM.V01.LOAD')                       
+//SYSIN    DD DUMMY                                                             
+//*     
+//E006GET  EXEC PGM=FTP,REGION=4M,PARM='10.100.2.144'   
+//STEPLIB  DD DSN=TCPIP.SEZALOAD,DISP=SHR               
+//SYSTCPD  DD DSN=HOM1.TCPPARMS(TCPDATA),DISP=SHR       
+//SYSFTPD  DD DSN=HOM1.TCPPARMS(FTPSDATA),DISP=SHR      
+//SYSMDUMP DD SYSOUT=Z                                  
+//SYSOUT   DD SYSOUT=*                                  
+//SYSPRINT DD SYSOUT=*                                  
+//INPUT    DD *                                         
+USERPROD USRPRD                                                                     
+PUT   'HOM.REL.D190228.BI8600B' +
+       /UPLOAD/ANA_CLARA/ARQUIVOS/HOM.REL.D190228.BI8600B.L1VZ6.TXT    
+QUIT                                                                                                                           

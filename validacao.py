@@ -13,11 +13,12 @@ config.read('arquivos/properties')
 sistema=sys.argv[1]
 ambiente=sys.argv[2]
 ambiente_tom=sys.argv[3]
+job_name=sys.argv[4]
 
 data_execucao = datetime.datetime.now().strftime("%y%m%d")
-# data_execucao = '190221'
+#data_execucao = '190307'
 data_load = datetime.datetime.now().strftime("%Y%m%d")
-# data_load = '20190221'
+#data_load = '20190307'
 
 hostname = config.get('ZOS.'+ambiente_tom,'host')
 port = int(config.get('ZOS.'+ambiente_tom,'port'))
@@ -59,17 +60,17 @@ with open(arquivo_jobs,'r') as job:
         load_result=''
         load_value=''
         try:
-            print(tom+'.F'+data_execucao+'.JHDEVOPS.'+jobnumber)
+            print(tom+'.F'+data_execucao+'.'+job_name+'.'+jobnumber)
             with open(tom_directory+'/'+programa+'-'+jobnumber,'w', encoding="latin-1") as arquivo:
                 ##ftp.retrlines('RETR '+tom+'.F'+data_execucao+'.JHDEVOPS.'+jobnumber,lambda s: arquivo.write(re.sub('[ \r]+$','\n',s )))
-                ftp.retrlines('RETR '+tom+'.F'+data_execucao+'.JHDEVOPS.'+jobnumber,arquivo.write)
+                ftp.retrlines('RETR '+tom+'.F'+data_execucao+'.'+job_name+'.'+jobnumber,arquivo.write)
             arquivo.close()
 
             with open(tom_directory+'/'+programa+'-'+jobnumber,'r', encoding="latin-1") as arquivo:
                 for linha in arquivo.read().split('\n'):
                     if len(linha)==0:
                         continue
-                max_rc = re.search(r'JHDEVOPS ENDED.*RC=([0-9]{4})',linha)
+                max_rc = re.search(r''+job_name+' ENDED.*RC=([0-9]{4})',linha)
                 jcl_error = re.search(r'(JCL ERROR)',linha)
                 abend = re.search(r'(ABEND=[A-Z0-9]{3,5})',linha)
             try:
@@ -109,7 +110,11 @@ with open(arquivo_jobs,'r') as job:
                 saida.write("{};{};{};{}\n".format(programa,jobnumber,abend.group(1),load_value))
             saida.flush()
         except:
-            print("{};{};{};{}\n".format(programa,jobnumber,sys.exc_info()[1],load_value))
-            saida.write("{};{};{};{}\n".format(programa,jobnumber,sys.exc_info()[1],load_value))
+            error_text = ''
+            if str(sys.exc_info()[1]).find('not found') is not -1:
+                error_text='Sem SYSOUT'
+
+            print("{};{};{};{}\n".format(programa,jobnumber,error_text,load_value))
+            saida.write("{};{};{};{}\n".format(programa,jobnumber,error_text,load_value))
 saida.close()
 ftp.close()
