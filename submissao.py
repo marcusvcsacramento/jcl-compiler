@@ -9,29 +9,33 @@ from package.util.util import *
 from package.rtc_controller.rtc_controller import *
 
 print("Início da Execução:"+datetime.datetime.now().strftime("%Y-%m-%d_%H-%M"))
-config = configparser.ConfigParser()
-config.read('arquivos/properties')
-"""Carrega configurações do arquivo properties"""
+try:
+    config = configparser.ConfigParser()
+    config.read('arquivos/properties')
+    """Carrega configurações do arquivo properties"""
 
-sistema=sys.argv[1]
-ambiente=sys.argv[2]
-job_name=sys.argv[3]
-"""Carrega parâmetros passados na linha de comando"""
-print(sistema+'-'+ambiente)
+    sistema=sys.argv[1]
+    ambiente=sys.argv[2]
+    job_name=sys.argv[3]
+    """Carrega parâmetros passados na linha de comando"""
+    print(sistema+'-'+ambiente)
 
-diretorio_fonte=config.get('JAZZ','fonte')
-workspace=config.get('JAZZ','workspace')
-hostname = config.get('ZOS.'+ambiente,'host')
-port = int(config.get('ZOS.'+ambiente,'port'))
-ftp_user = config.get('ZOS.FTP.'+ambiente,'user')
-ftp_pass = config.get('ZOS.FTP.'+ambiente,'password')
+    diretorio_fonte=config.get('JAZZ','fonte')
+    workspace=config.get('JAZZ','workspace')
+    hostname = config.get('ZOS.'+ambiente,'host')
+    port = int(config.get('ZOS.'+ambiente,'port'))
+    ftp_user = config.get('ZOS.FTP.'+ambiente,'user')
+    ftp_pass = config.get('ZOS.FTP.'+ambiente,'password')
 
-arquivolog = 'arquivos/log/'+datetime.datetime.now().strftime("%Y-%m-%d_%H-%M")+'.'+sistema+'.'+ambiente+'.log'
-"""Determina o arquivo de log geral"""
-id_executor = 'MS'+datetime.datetime.now().strftime("%y%m%d")
-lib_batch=config.get(sistema+'.'+ambiente,'lib_batch')
-lib_booklib=config.get(sistema+'.'+ambiente,'lib_booklib')
-lib_cics=config.get(sistema+'.'+ambiente,'lib_cics')
+    arquivolog = 'arquivos/log/'+datetime.datetime.now().strftime("%Y-%m-%d_%H-%M")+'.'+sistema+'.'+ambiente+'.log'
+    """Determina o arquivo de log geral"""
+    id_executor = 'MS'+datetime.datetime.now().strftime("%y%m%d")
+    lib_batch=config.get(sistema+'.'+ambiente,'lib_batch')
+    lib_booklib=config.get(sistema+'.'+ambiente,'lib_booklib')
+    lib_cics=config.get(sistema+'.'+ambiente,'lib_cics')
+
+except:
+    print("\n\n\033[101mParâmetros inválidos ou não encontrados no arquivo arquivos/properties\n\n\tFavor ler o README.md do projeto\033[0m \n\n")
 
 arquivo_submeter=open('arquivos/SUBMETER','w')
 """Determina o arquivo onde será gravado o Programa a que será submetido após o upload para o PDS Mainframe"""
@@ -77,7 +81,7 @@ with open('arquivos/PROGRAMAS', 'rt') as f:
         if(classe=='CICS'):
             tipo = compilacao[2]
             try:
-                fp=open(diretorio_fonte+'/COBOL.GCS/CICS/'+programa+'.cbl','r',encoding='utf-8')
+                fp=open(diretorio_fonte+'/COBOL.GCS/CICS/'+programa+'.cbl','r',encoding='latin-1')
                 job=io.BytesIO(fp.read().encode('latin-1'))
                 ftp = ftplib.FTP()
                 ftp.connect(hostname, port)

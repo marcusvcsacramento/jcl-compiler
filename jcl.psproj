@@ -157,7 +157,7 @@ Name=SMART.TESTE
 ScriptName=D:\JCL\diaria.py
 EngineType=peRemote
 ReinitializeBeforeRun=TRUE
-Parameters=SMART DIARIA_HOM 181231 2019-02-062019-01-31
+Parameters=SIAS DIARIA_HOM2 190225 2019-02-062019-01-31
 WorkingDir=$[ActiveScript-Dir]
 WriteOutputToFile=FALSE
 OutputFileName=$[ActiveScript-NoExt].log
@@ -172,8 +172,31 @@ WorkingDirectory=$[ActiveScript-Dir]
 ShortCut=0
 MessagesFormat=$[FileName] $[LineNumber]
 
+[Project\ChildNodes\Node1\ChildNodes\Node4]
+ClassName=TProjectRunConfiguationNode
+Name=RECUPERAJOBSIAS
+
+[Project\ChildNodes\Node1\ChildNodes\Node4\RunConfig]
+ScriptName=D:\JCL\validacao-job.py
+EngineType=peRemote
+ReinitializeBeforeRun=TRUE
+Parameters=SIAS DIARIA_HOM2 PRD NENHUM
+WorkingDir=$[ActiveScript-Dir]
+WriteOutputToFile=FALSE
+OutputFileName=$[ActiveScript-NoExt].log
+AppendToFile=FALSE
+
+[Project\ChildNodes\Node1\ChildNodes\Node4\RunConfig\ExternalRun]
+Caption=External Run
+Description=Run script using an external Python Interpreter
+ApplicationName=$[PythonExe-Short]
+Parameters=$[ActiveScript-Short]
+WorkingDirectory=$[ActiveScript-Dir]
+ShortCut=0
+MessagesFormat=$[FileName] $[LineNumber]
+
 [Project\ChildNodes\Node1\ChildNodes]
-Count=4
+Count=5
 
 [Project\ChildNodes]
 Count=2

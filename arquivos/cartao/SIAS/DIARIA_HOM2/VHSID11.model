@@ -1,0 +1,220 @@
+//VHSID11  JOB (00,PN),'ID_EXECUTOR',TIME=1440,
+//         CLASS=A,MSGCLASS=T,MSGLEVEL=(1,1)
+/*ROUTE PRINT JES2PRD1
+//*
+//JOBLIB   DD DISP=SHR,DSN=DSNC10.DB2H.SDSNLOAD
+//         DD DISP=SHR,DSN=HOM.JV1.LOAD
+//*
+//********************************************************************* 00000560
+//* ROTINA PARA PAGAMENTO DOS SINISTROS DO PAR -                      * 00000560
+//* PROGRAMA DE ARRENDAMENTO RESIDENCIAL                              * 00000560
+//* FARA PAGAMENTO SOMENTE DOS SINISTROS COM COBERTURA DE MIP PARA O  * 00000560
+//* PRODUTO 6807                                                      * 00000560
+//* EXECUCAO DA ROTINA: DIARIA APOS A ROTINA SID07                    * 00000560
+//*===================================================================* 00000560
+//*  CNT.SI.DAAMMDD.SINISTRO.PAR  - ARQUIVO é ENVIADO PELO REROP/BR   * 00000560
+//*  FORMA DO SORT: SORT FIELDS=(3,30,CH,A,1,2,CH,A)                  * 00000560
+//*===================================================================* 00000560
+//*
+//E001LIST EXEC  PGM=IKJEFT01,
+//         PARM=('PRDEXIST  CNT.SI.DANOMES_MOVIMENTO01.SINISTRO.PAR')
+//SYSPROC  DD DSN=HOM.JV1.CLIST,DISP=SHR
+//SYSTSIN  DD DUMMY
+//SYSPRINT DD SYSOUT=*
+//SYSTSPRT DD SYSOUT=*
+//*
+//         IF E001LIST.RC = 00 THEN
+//E002SORT EXEC PGM=SORT
+//SYSPRINT DD SYSOUT=*                                                  00000160
+//SORTMSG  DD SYSOUT=*
+//SYSOUT   DD SYSOUT=*
+//*
+//SORTIN   DD DISP=SHR,                                                 00000070
+//         DSN=CNT.SI.DANOMES_MOVIMENTO01.SINISTRO.PAR                           00000070
+//*
+//SORTOUT  DD DSN=HOM.SI.DDATA_MOVIMENTO.MOVSIPAR.SORT,                       00000070
+//         DISP=(NEW,CATLG,DELETE),UNIT=3390,
+//         DCB=*.SORTIN,DSORG=PS,
+//         SPACE=(TRK,(900,1500),RLSE)
+//SORTWK01 DD UNIT=SYSDA,SPACE=(TRK,(150,150),RLSE)
+//SORTWK02 DD UNIT=SYSDA,SPACE=(TRK,(150,150),RLSE)
+//SORTWK03 DD UNIT=SYSDA,SPACE=(TRK,(150,150),RLSE)
+//SORTWK04 DD UNIT=SYSDA,SPACE=(TRK,(150,150),RLSE)
+//SYSIN    DD *
+  SORT FIELDS=(3,30,CH,A,1,2,CH,A),FORMAT=CH
+  END
+/*
+//  ENDIF
+//*
+//*===================================================================* 00000560
+//* PROGRAMA SI3021B - LE ARQUIVO DE MOVIMENTO DE PAGAMENTOS DE INDE- * 00000560
+//* NIZACAO PAR E VERIFICA SE EXISTE REGISTRO 01 PARA O REGISTRO 02   * 00000560
+//*===================================================================* 00000560
+//        IF E001LIST.RC = 00 AND  E002SORT.RC = 00 THEN
+//E0033021 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//*
+//MOVSIPAR DD DISP=SHR,
+//         DSN=HOM.SI.DDATA_MOVIMENTO.MOVSIPAR.SORT
+//*
+//SORT3021 DD DSN=HOM.SI.DDATA_MOVIMENTO.SI3021B.SORT3021,
+//         DISP=(,CATLG),SPACE=(TRK,(2500,500),RLSE),UNIT=3390,
+//         DCB=(RECFM=FB,LRECL=600,BLKSIZE=0,DSORG=PS)
+//*
+//ERRO3021 DD DSN=HOM.DEL.SI.SI3021B.ERRO3021,DISP=MOD
+//*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(SI3021B),DISP=SHR
+//SYSIN    DD DUMMY
+// ENDIF
+//*===================================================================* 00000020
+//* PROGRAMA SI3020B - PROCESSA ARQUIVO DE MOVIMENTO DOS PAGAMENTOS   * 00000560
+//* DE INDENIZACAO DO PRODUTO 6807 - MIP                              *
+//*===================================================================* 00000020
+//*
+//         IF E0033021.RC = 00 THEN                                     00000560
+//E0043020 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//*
+//SORT3021 DD DISP=SHR,
+//         DSN=HOM.SI.DDATA_MOVIMENTO.SI3021B.SORT3021
+//*
+//ERRO3020 DD DSN=HOM.DEL.SI.SI3020B.ERRO3020,DISP=MOD
+//*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(SI3020B),DISP=SHR
+//SYSIN    DD DUMMY
+//  ENDIF
+//*
+//*===================================================================* 00000020
+//* PROGRAMA SI3022B - EMITIR RELACAO DE PAGAMENTOS DE INDENIZACAO DOS* 00000560
+//* SINISTROS PRODUTO PAR - 6807                                      *
+//*===================================================================* 00000020
+//*                                                                     00000090
+//E0053022 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//PRINTER  DD DSN=HOM.REL.DDATA_MOVIMENTO.SI3022B.L1VZ6,
+//         DISP=(,CATLG),SPACE=(TRK,(50,1500),RLSE),UNIT=3390,
+//         DCB=(RECFM=FB,LRECL=133,BLKSIZE=0,DSORG=PS)
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(SI3022B),DISP=SHR
+//SYSIN    DD DUMMY
+//*                                                                     00000090
+//*===================================================================* 00000020
+//* PROGRAMA SI3023B - EMITIR AUTORIZACAO DE PAGAMENTOS DE INDENIZACAO* 00000560
+//* DOS SINISTROS PRODUTO PAR - 6807                                  *
+//*===================================================================* 00000020
+//*                                                                     00000090
+//E0073023 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//PRINTER  DD DSN=HOM.REL.DDATA_MOVIMENTO.SI3023B.L1VZ6,
+//         DISP=(,CATLG),SPACE=(TRK,(50,50),RLSE),UNIT=3390,
+//         DCB=(RECFM=FB,LRECL=133,BLKSIZE=0,DSORG=PS)
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(SI3023B),DISP=SHR
+//SYSIN    DD DUMMY
+//*
+//*===================================================================* 00000020
+//* PROGRAMA SI3026B - GERAR ARQUIVO DE RETORNO COM OS MOVIMENTOS DE  * 00000560
+//* INDENIZACOES PAGAS DO PRODUTO PAR - 6807                          *
+//*===================================================================* 00000020
+//*
+//E0093026 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//MVRETPAR DD DSN=HOM.SI.DDATA_MOVIMENTO.SI3026B.MVRETPAR,
+//         DISP=(,CATLG),SPACE=(TRK,(1,50),RLSE),UNIT=3390,
+//         DCB=(RECFM=FB,LRECL=600,BLKSIZE=0,DSORG=PS)
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(SI3026B),DISP=SHR
+//SYSIN    DD DUMMY
+//*
+//*====================================================================*
+//*  PROGRAMA SI0168B - GERAR ARQUIVO COM OS SINISTROS DO HABITACIONAL *
+//*  CAUSADOS POR TERCEIROS, PARA QUE A GEPOC POSSA ENTRAR COM O PEDIDO*
+//*  DE RESSARCIMENTO DA INDENIZAÇÃO                                   *
+//*  NOME DO ARQUIVO SAIDA...: "SINITERC"                              *
+//*  ENVIO DOS ARQUIVOS SAIDA: DISPONIBILIZAR O ARQUIVOS NA            *
+//*                            PASTA DA GEPOC NTSERVERCPD\HABIT        *
+//*                            DAAMMDD.SINISTRO.POR.TERCEIROS.TXT      *
+//*  CASO DE ABEND...........: PASSAR PARA O ESTEPE POSTERIOR          *
+//*====================================================================*
+//*
+//E0100168 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//SINITERC DD DSN=HOM.SI.DDATA_MOVIMENTO.SI0168B.SINITERC,
+//         DISP=(,CATLG),SPACE=(TRK,(50,500),RLSE),UNIT=3390,
+//         DCB=(RECFM=FBA,LRECL=300,BLKSIZE=0,DSORG=PS)
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSIN    DD DUMMY
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(SI0168B),DISP=SHR
+//*
+//****************************************************************
+//**   VERIFICA SE CHEGOU O ARQUIVO DO MES E ENVIA EMAIL         *
+//**   CNT.SI.DANOMES_MOVIMENTO*.SINISTRO.PAR                             *
+//****************************************************************
+//*
+//         IF E001LIST.RC = 00 THEN
+//E011DSSU EXEC PGM=ADRDSSU,REGION=0M
+//SYSPRINT DD SYSOUT=*
+//O        DD DUMMY
+//SYSIN    DD  *
+    DUMP           -
+         OUTDD(O)  -
+         DS(INCL(  -
+         CNT.SI.DANOMES_MOVIMENTO01.SINISTRO.PAR -
+         ))                             -
+    ALLDATA(*) ALLEXCP TOL(ENQF)
+//  ENDIF
+//*
+//****************************************************************
+//**   ENVIA EMAIL OU JEFF E HEIDER SOBRE O SISNISTRO.PAR        *
+//****************************************************************
+//*
+//*********************************************************************
+//*        CASO ABEND SUSPENDER - JEFFERSON 19/03/2010                *
+//*********************************************************************
+//*
+//E0130180 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//ARQSAIDA DD DSN=HOM.SI.DDATA_MOVIMENTO.SI0180B.KPMG,
+//         UNIT=3390,DISP=(,CATLG),SPACE=(TRK,(25000,1500),RLSE),
+//         DCB=(RECFM=FB,LRECL=260,BLKSIZE=0,DSORG=PS)
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(SI0180B),DISP=SHR
+//SYSIN    DD DUMMY
+//*
+//*********************************************************************
+//** STEP DE ENVIO DE MENSAGEM SOBRE JOB COM  ERRO NO ZEKE.          **
+//*********************************************************************
+//  IF (ABEND | RC EQ 99 | RC EQ 09 | RC EQ 08 | RC EQ 12) THEN
+//ABEND EXEC PPSEND,N=VHSID11
+//  ENDIF
+//*

@@ -1,0 +1,45 @@
+//VHSID00  JOB (00,PN),'ID_EXECUTOR',TIME=1440,
+//         CLASS=A,MSGCLASS=T,MSGLEVEL=(1,1)
+/*ROUTE PRINT JES2PRD1
+//*
+//*********************************************************************
+//JOBLIB   DD DISP=SHR,DSN=DSNC10.DB2H.SDSNLOAD
+//         DD DISP=SHR,DSN=HOM.JV1.LOAD
+//*********************************************************************
+//**- ALTERA O CAMPO :
+//**- COLOCA O STATUS DO SISTEMA DE SINISTROS BLOQUEADO
+//**- CASO ABEND : AS ROTINAS DO SINISTRO NAO DEVEM EXECUTAR
+//**- ACIONAR WANGER OU HEIDER COM URGENCIA.
+//*******************************************************************
+//E001UPD  EXEC PGM=IKJEFT01,DYNAMNBR=50
+//SYSTSPRT DD  SYSOUT=*
+//SYSPRINT DD  SYSOUT=*
+//SYSUDUMP DD  SYSOUT=*
+//SYSTSIN  DD  *
+  DSN SYSTEM(DB2H)
+  RUN PROGRAM(DSNTEP2) PLAN(DSNTEP12) LIB('DSNC10.DB2M.RUNLIB.LOAD')
+//SYSIN    DD  *
+ UPDATE SEGUROS.SISTEMAS
+ SET STA_SISTEMA = 'B'
+ WHERE IDE_SISTEMA = 'SI'
+//*
+//*********************************************************************
+//E002UPD  EXEC PGM=IKJEFT01,DYNAMNBR=50
+//SYSTSPRT DD  SYSOUT=*
+//SYSPRINT DD  SYSOUT=*
+//SYSUDUMP DD  SYSOUT=*
+//SYSTSIN  DD  *
+  DSN SYSTEM(DB2H)
+  RUN PROGRAM(DSNTEP2) PLAN(DSNTEP12) LIB('DSNC10.DB2M.RUNLIB.LOAD')
+//SYSIN    DD  *
+ UPDATE SEGUROS.SISTEMAS
+ SET STA_SISTEMA = 'A'
+ WHERE IDE_SISTEMA = 'PE'
+//*
+//*********************************************************************
+//** STEP DE ENVIO DE MENSAGEM SOBRE JOB COM  ERRO NO ZEKE.          **
+//*********************************************************************
+//  IF (ABEND | RC EQ 99 | RC EQ 09 | RC EQ 08 | RC EQ 12) THEN
+//ABEND EXEC PPSEND,N=JPSID00
+//  ENDIF
+//*

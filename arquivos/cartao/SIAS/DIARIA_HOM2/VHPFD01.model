@@ -1,0 +1,134 @@
+//VHPFD01  JOB (00,PN),'ID_EXECUTOR',TIME=1440,
+//         CLASS=A,MSGCLASS=T,MSGLEVEL=(1,1)
+/*ROUTE PRINT JES2PRD1
+//*
+//*********************************************
+//JOBLIB     DD DISP=SHR,DSN=DSNC10.DB2H.SDSNLOAD
+//           DD DISP=SHR,DSN=HOM.JV1.LOAD
+//*********************************************
+//*
+//*******************************************************************
+//*        DELECAO   DO HOM.PF.DDATA_MOVIMENTO.PF0630B.PARAMEO
+//*******************************************************************
+//DELMVSTA EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//DELECAO1 DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0630B.PARAMEO,
+//         DISP=(MOD,DELETE,DELETE),UNIT=SYSALLDA,SPACE=(TRK,(1,1))
+//*******************************************************************
+//* EXECUCAO DO PF0630                                              *
+//* STEP 1, 2, 3, 4 E 5  LIBERADO APARTIR DE 30/09/2004             *
+//* CONFORME NOTA DO SR. LUIZ CARLOS                                *
+//*******************************************************************
+//E0010630 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//PARAMEI  DD DSN=HOM.DEL.PARAME,DISP=SHR
+//PARAMEO  DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0630B.PARAMEO,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(250,150),RLSE),
+//         DCB=(RECFM=FB,LRECL=200,BLKSIZE=0,DSORG=PS)
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(PF0630B),DISP=SHR
+//SYSIN    DD DUMMY
+//*
+//*******************************************************************
+//* TESTA SE A SAIDA DO PF0630B - TEM MOVIMENTO
+//* ARQUIVO = HOM.PF.DDATA_MOVIMENTO.PF0630B.PARAMEO
+//*******************************************************************
+//E002VZ01 EXEC PGM=ACMVZ01
+//TRANS    DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0630B.PARAMEO,DISP=SHR
+//*
+//*******************************************************************
+//*   EFETUA A LIMPEZA DE DADOS DO ARQUIVO HOM.DEL.PARAME
+//*   CASO O HOM.PF.DDATA_MOVIMENTO.PF0630B.PARAMEO TENHA CONTEUDO
+//*******************************************************************
+//E003D045 EXEC PGM=PPRD045,
+//         COND=((00,NE,E002VZ01),(00,NE,E0010630))
+//STEPLIB  DD DISP=SHR,DSN=HOM.DEL.PPP.LINKLIB
+//SYSRST01 DD DISP=OLD,DSN=HOM.DEL.PARAME
+//*
+//*******************************************************************
+//* EXECUTA  COPIA DO HOM.PF.DDATA_MOVIMENTO.PF0630B.PARAMEO PARA O
+//* HOM.DEL.PARAME CASO O PARAMEO TENHA DADOS
+//*******************************************************************
+//E004ENER EXEC  PGM=ICEGENER,
+//         COND=((00,NE,E002VZ01),(00,NE,E0010630))
+//SYSUT1   DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0630B.PARAMEO,DISP=SHR
+//SYSUT2   DD DSN=HOM.DEL.PARAME,DISP=SHR
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD DUMMY
+//*
+//*******************************************************************
+//* EXECUTA O PF0613B COM O ARQUIVO HOM.PF.DDATA_MOVIMENTO.PF0630B.PARAMEO
+//* POIS ELE CONTEM DADOS
+//*******************************************************************
+//E0050613 EXEC PGM=IKJEFT01,DYNAMNBR=20,
+//         COND=((00,NE,E002VZ01),(00,NE,E0010630))
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SUDUMP   DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//SLCPARAM DD DSN=HOM.GPF.SLCPARAM.D190314,DISP=SHR
+//PARAME   DD DSN=HOM.DEL.PARAME,DISP=SHR
+//PARAMS   DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0613B.MVPARAM,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(250,150),RLSE),
+//         DCB=(RECFM=FB,LRECL=200,BLKSIZE=0,DSORG=PS)
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(PF0613B),DISP=SHR
+//SYSIN    DD DUMMY
+//*
+//*******************************************************************
+//* EXECUTA O PF0613B COM O ARQUIVO HOM.DEL.PARAME
+//* POIS O ARQUIVO HOM.PF.DDATA_MOVIMENTO.PF0630B.PARAMEO
+//* NAO CONTEM DADOS
+//*******************************************************************
+//E0070613 EXEC PGM=IKJEFT01,DYNAMNBR=20,
+//         COND=(00,EQ,E002VZ01)
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//SLCPARAM DD DSN=HOM.GPF.SLCPARAM.D190314,DISP=SHR
+//PARAME   DD DSN=HOM.DEL.PARAME,DISP=SHR
+//PARAMS   DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0613B.MVPARAM,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(250,150),RLSE),
+//         DCB=(RECFM=FB,LRECL=200,BLKSIZE=0,DSORG=PS)
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(PF0613B),DISP=SHR
+//SYSIN    DD DUMMY
+//*
+//********************************************************************
+//E0080139 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//ARQCE1   DD DSN=HOM.PF.DDATA_MOVIMENTO.CB0139B.MVARQCRP,
+//         DISP=(,CATLG,DELETE),UNIT=SYSDA,
+//         SPACE=(TRK,(01,100),RLSE),
+//         DCB=(RECFM=FB,LRECL=150,BLKSIZE=0,DSORG=PS)
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(CB0139B),DISP=SHR
+//SYSIN    DD DUMMY
+//SORTCNTL DD DSN=HOM.JV1.SYSIN(SORTCNTL),DISP=SHR
+//ARQSORT  DD UNIT=SYSALLDA,SPACE=(CYL,(15,15),RLSE)
+//SORTWK01 DD UNIT=SYSALLDA,SPACE=(CYL,(15,15),RLSE)
+//SORTWK02 DD UNIT=SYSALLDA,SPACE=(CYL,(15,15),RLSE)
+//SORTWK03 DD UNIT=SYSALLDA,SPACE=(CYL,(15,15),RLSE)
+//*
+//*********************************************************************
+//** STEP DE ENVIO DE MENSAGEM SOBRE JOB COM  ERRO NO ZEKE.          **
+//*********************************************************************
+//  IF (ABEND | RC EQ 99 | RC EQ 09 | RC EQ 08 | RC EQ 12) THEN
+//ABEND EXEC PPSEND,N=JPPFD01
+//  ENDIF
+//*

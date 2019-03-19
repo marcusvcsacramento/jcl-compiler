@@ -8,32 +8,35 @@ import codecs
 import configparser
 import sys
 
-config = configparser.ConfigParser()
-config.read('arquivos/properties')
-sistema=sys.argv[1]
-ambiente=sys.argv[2]
-ambiente_tom=sys.argv[3]
-job_name=sys.argv[4]
+try:
+    config = configparser.ConfigParser()
+    config.read('arquivos/properties')
+    sistema=sys.argv[1]
+    ambiente=sys.argv[2]
+    ambiente_tom=sys.argv[3]
+    job_name=sys.argv[4]
 
-data_execucao = datetime.datetime.now().strftime("%y%m%d")
-#data_execucao = '190307'
-data_load = datetime.datetime.now().strftime("%Y%m%d")
-#data_load = '20190307'
+    data_execucao = datetime.datetime.now().strftime("%y%m%d")
+    #data_execucao = '190315'
+    data_load = datetime.datetime.now().strftime("%Y%m%d")
+    #data_load = '20190315'
 
-hostname = config.get('ZOS.'+ambiente_tom,'host')
-port = int(config.get('ZOS.'+ambiente_tom,'port'))
-ftp_user = config.get('ZOS.FTP.'+ambiente_tom,'user')
-ftp_pass = config.get('ZOS.FTP.'+ambiente_tom,'password')
+    hostname = config.get('ZOS.'+ambiente_tom,'host')
+    port = int(config.get('ZOS.'+ambiente_tom,'port'))
+    ftp_user = config.get('ZOS.FTP.'+ambiente_tom,'user')
+    ftp_pass = config.get('ZOS.FTP.'+ambiente_tom,'password')
 
-hostname_load = config.get('ZOS.'+ambiente,'host')
-port_load = int(config.get('ZOS.'+ambiente,'port'))
-ftp_user_load = config.get('ZOS.FTP.'+ambiente,'user')
-ftp_pass_load = config.get('ZOS.FTP.'+ambiente,'password')
+    hostname_load = config.get('ZOS.'+ambiente,'host')
+    port_load = int(config.get('ZOS.'+ambiente,'port'))
+    ftp_user_load = config.get('ZOS.FTP.'+ambiente,'user')
+    ftp_pass_load = config.get('ZOS.FTP.'+ambiente,'password')
 
-load_lib = config.get(sistema+'.'+ambiente,'lib_load')
-tom = config.get('ZOS.'+ambiente_tom,'tom')
-tom_directory= 'arquivos/tom'
-load_directory= 'arquivos/load'
+    load_lib = config.get(sistema+'.'+ambiente,'lib_load')
+    tom = config.get('ZOS.'+ambiente_tom,'tom')
+    tom_directory= 'arquivos/tom'
+    load_directory= 'arquivos/load'
+except:
+    print("\n\n\033[101mParâmetros inválidos ou não encontrados no arquivo arquivos/properties\n\n\tFavor ler o README.md do projeto\033[0m \n\n")
 
 arquivolog = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M")
 saida = open('arquivos/log/'+arquivolog+'.'+sistema+'.'+ambiente+'.RESULTADO.log','w')
@@ -61,8 +64,7 @@ with open(arquivo_jobs,'r') as job:
         load_value=''
         try:
             print(tom+'.F'+data_execucao+'.'+job_name+'.'+jobnumber)
-            with open(tom_directory+'/'+programa+'-'+jobnumber,'w', encoding="latin-1") as arquivo:
-                ##ftp.retrlines('RETR '+tom+'.F'+data_execucao+'.JHDEVOPS.'+jobnumber,lambda s: arquivo.write(re.sub('[ \r]+$','\n',s )))
+            with open(tom_directory+'/'+programa+'-'+jobnumber,'w', encoding="latin-1",errors="ignore") as arquivo:
                 ftp.retrlines('RETR '+tom+'.F'+data_execucao+'.'+job_name+'.'+jobnumber,arquivo.write)
             arquivo.close()
 
@@ -100,17 +102,20 @@ with open(arquivo_jobs,'r') as job:
                 load_result=''
 
             if max_rc:
-                print("{};{};{};{}\n".format(programa,jobnumber,max_rc.group(1),load_value))
+                color="\033[42m"
+                if str(max_rc.group(1))!="00":
+                    color="\033[101m"
+                print(color+"{};{};{};{}\033[0m\n".format(programa,jobnumber,max_rc.group(1),load_value))
                 saida.write("{};{};{};{}\n".format(programa,jobnumber,max_rc.group(1),load_value))
             if jcl_error:
-                print("{};{};{};{}\n".format(programa,jobnumber,jcl_error.group(1),load_value))
+                print("\033[101m{};{};{};{}\033[0m\n".format(programa,jobnumber,jcl_error.group(1),load_value))
                 saida.write("{};{};{};{}\n".format(programa,jobnumber,jcl_error.group(1),load_value))
             if abend:
-                print("{};{};{};{}\n".format(programa,jobnumber,abend.group(1),load_value))
+                print("\033[101m{};{};{};{}\033[0m\n".format(programa,jobnumber,abend.group(1),load_value))
                 saida.write("{};{};{};{}\n".format(programa,jobnumber,abend.group(1),load_value))
             saida.flush()
         except:
-            error_text = ''
+            error_text = 'Em Processamento'
             if str(sys.exc_info()[1]).find('not found') is not -1:
                 error_text='Sem SYSOUT'
 

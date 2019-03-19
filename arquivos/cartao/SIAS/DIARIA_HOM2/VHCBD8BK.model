@@ -1,0 +1,15 @@
+//VHCBD8BK JOB (00,PN),'ID_EXECUTOR',TIME=1440,
+//         CLASS=D,MSGCLASS=T,MSGLEVEL=(1,1)
+/*ROUTE PRINT JES2PRD1
+//*
+//E157PROC EXEC PPCBD08,N=8BK,
+// E=HOM.CB.DDATA_MOVIMENTO.CB0082B.ORBITALL,
+// S='DDATA_MOVIMENTO_ENVIO_ORBITALL_CB0082B.TXT'
+//*
+//*********************************************************************
+//** STEP DE ENVIO DE MENSAGEM SOBRE JOB COM  ERRO NO ZEKE.          **
+//*********************************************************************
+//  IF (ABEND | RC EQ 99 | RC EQ 09 | RC EQ 08 | RC EQ 12) THEN
+//ABEND EXEC PPSEND,N=VHCBD8BK
+//  ENDIF
+//*

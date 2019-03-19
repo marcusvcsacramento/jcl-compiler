@@ -17,6 +17,11 @@ sistema=sys.argv[1]
 ambiente=sys.argv[2]
 data_movimento=sys.argv[3]
 periodo_movimento=sys.argv[4]
+data_anterior=sys.argv[5]
+anomes_movimento=data_movimento[:4]
+dia_movimento=data_movimento[-2:]
+
+
 """Carrega parâmetros passados na linha de comando"""
 print(sistema+'-'+ambiente)
 
@@ -52,7 +57,10 @@ with open('arquivos/DIARIA', 'rt') as f:
         job_final='arquivos/cartao/'+sistema+'/JOB'+sistema+job
         sub_string_file(job_modelo,'arquivos/cartao/'+sistema+'/'+ambiente+'/JOBJCL.tmp','ID_EXECUTOR',id_executor)
         sub_string_file('arquivos/cartao/'+sistema+'/'+ambiente+'/JOBJCL.tmp','arquivos/cartao/'+sistema+'/'+ambiente+'/JOBJCLI.tmp','DATA_MOVIMENTO',data_movimento)
-        sub_string_file('arquivos/cartao/'+sistema+'/'+ambiente+'/JOBJCLI.tmp',job_final,'PERIODO_MOVIMENTO','DES_SP01')
+        sub_string_file('arquivos/cartao/'+sistema+'/'+ambiente+'/JOBJCLI.tmp','arquivos/cartao/'+sistema+'/'+ambiente+'/JOBJCLII.tmp','ANOMES_MOVIMENTO',anomes_movimento)
+        sub_string_file('arquivos/cartao/'+sistema+'/'+ambiente+'/JOBJCLII.tmp','arquivos/cartao/'+sistema+'/'+ambiente+'/JOBJCLIII.tmp','DIA_MOVIMENTO',dia_movimento)
+        sub_string_file('arquivos/cartao/'+sistema+'/'+ambiente+'/JOBJCLIII.tmp','arquivos/cartao/'+sistema+'/'+ambiente+'/JOBJCLIV.tmp','DATA_ANTERIOR',data_anterior)
+        sub_string_file('arquivos/cartao/'+sistema+'/'+ambiente+'/JOBJCLIV.tmp',job_final,'PERIODO_MOVIMENTO',periodo_movimento)
         cartao_job=open(job_final,'rb')
         result = ftp.storlines('STOR JOB'+sistema,cartao_job)
         job_number= re.search(r'(JOB[0-9]{5})',result)

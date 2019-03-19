@@ -37,8 +37,14 @@ Após a execução dos Jobs basta executar em linha de comando:`python validacao
 
 #### Cartões de diária ou testes
 
+#### Submissão
+
 1. No arquivo **DIARIA** deve ser informado o programa seguindo o padrão:
   1. «NOME_JOB»
     * Deve correspondere ao nome do arquivo model no diretório _arquivos/cartao_
 
-Executar em linha de comando: `python submissao.py «SISTEMA» «DIARIA_AMBIENTE» «DATA_MOVIMENTO» «PERIODO_MOVIMENTO»`
+Executar em linha de comando: `python submissao.py «SISTEMA» «DIARIA_AMBIENTE» «DATA_MOVIMENTO» «PERIODO_MOVIMENTO» «DIA_ANTERIOR»`
+
+#### Validação
+
+Após a execução dos Jobs basta executar em linha de comando:`python validacao-job.py «SISTEMA» «DIARIA_AMBIENTE» PRD`

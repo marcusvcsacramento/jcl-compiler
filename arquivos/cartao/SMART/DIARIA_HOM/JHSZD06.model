@@ -1,6 +1,5 @@
 //JHSZD06  JOB (00,EV),'ID_EXECUTOR',TIME=1440,REGION=0M,
 //         CLASS=A,MSGCLASS=T,MSGLEVEL=(1,1)
-/*ROUTE PRINT JES2PRD1
 //*
 //JOBLIB   DD  DISP=SHR,DSN=DSNC10.DB2M.SDSNLOAD
 //         DD  DISP=SHR,DSN=HOM.V01.LOAD
@@ -77,7 +76,7 @@ QUIT
            LIB('HOM.V01.LOAD')            -
            PARMS('/ABTERMENC(ABEND)')
 //SYSIN    DD *
-006204APIPHOM.API.MZ.BCS2.M037D901.DDATA_MOVIMENTO.SASSE
+006204APIRHOM.API.MZ.BCS2.M037D901.DDATA_MOVIMENTO.SASSE
 //**       =======================================================
 //**       GERACAO RELATORIO DE ACOMPANHAMENTO DISEF
 //**       =======================================================
@@ -129,7 +128,7 @@ HOM.API.MZ.BCS2.M037D901.DDATA_MOVIMENTO.SASSE
            LIB('HOM.V01.LOAD')            -
            PARMS('/ABTERMENC(ABEND)')
 //SYSIN    DD *
-006204APIPHOM.API.MZ.BCS2.M037D901.DDATA_MOVIMENTO.SASSE
+006204APIRHOM.API.MZ.BCS2.M037D901.DDATA_MOVIMENTO.SASSE
 //**       =======================================================
 //**       GERACAO DE FATURAS
 //**       =======================================================
@@ -169,7 +168,7 @@ HOM.API.MZ.BCS2.M037D901.DDATA_MOVIMENTO.SASSE
            LIB('HOM.V01.LOAD')            -
            PARMS('/ABTERMENC(ABEND)')
 //SYSIN    DD *
-006204APIPHOM.API.MZ.BCS2.M037D901.DDATA_MOVIMENTO.SASSE
+006204APIRHOM.API.MZ.BCS2.M037D901.DDATA_MOVIMENTO.SASSE
 //**       =======================================================
 //**       DISPONILIZACAO DOS ARQUIVOS DE SAIDA NA REDE
 //**       =======================================================

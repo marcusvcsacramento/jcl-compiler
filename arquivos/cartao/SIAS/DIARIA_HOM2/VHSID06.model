@@ -1,0 +1,36 @@
+//VHSID06  JOB (00,PN),'ID_EXECUTOR',TIME=1440,
+//         CLASS=A,MSGCLASS=T,MSGLEVEL=(1,1)
+//*
+//*********************************************************************
+//JOBLIB   DD DISP=SHR,DSN=DSNC10.DB2M.SDSNLOAD
+//         DD DISP=SHR,DSN=HOM.JV1.LOAD
+//*********************************************************************
+//E001LIST EXEC  PGM=IKJEFT01,
+//         PARM=('PRDFULL CNT.ACT.MZ.BBA2.ISEGURO1.DDATA_MOVIMENTO.S001')
+//SYSPROC  DD DSN=HOM.JV1.CLIST,DISP=SHR
+//SYSTSIN  DD DUMMY
+//SYSPRINT DD SYSOUT=*
+//SYSTSPRT DD SYSOUT=*
+//*
+//***************************************************************
+//         IF E001LIST.RC = 00 THEN
+//E0020856 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//SIACTREC DD DISP=SHR,
+//         DSN=CNT.ACT.MZ.BBA2.ISEGURO1.DDATA_MOVIMENTO.S001
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=PRD.V01.SYSIN(SI0856B),DISP=SHR
+//SYSIN    DD DUMMY
+//         ENDIF
+//*
+//*********************************************************************
+//** STEP DE ENVIO DE MENSAGEM SOBRE JOB COM  ERRO NO ZEKE.          **
+//*********************************************************************
+//  IF (ABEND | RC EQ 99 | RC EQ 09 | RC EQ 08 | RC EQ 12) THEN
+//ABEND EXEC PPSEND,N=VHSID06
+//  ENDIF
+//*
