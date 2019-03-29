@@ -42,6 +42,7 @@ ftp = ftplib.FTP()
 ftp.connect(hostname, port)
 ftp.set_debuglevel(0)
 ftp.login(ftp_user, ftp_pass)
+ftp.sendcmd("site sbd=(IBM-1047,ISO8859-1)")
 ftp.voidcmd('site filetype=jes')
 
 saida.write('######################     SUBMISSÃO DE JOBS   ######################\n')

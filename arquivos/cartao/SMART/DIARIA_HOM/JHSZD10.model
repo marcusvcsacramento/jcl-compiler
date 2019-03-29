@@ -1,11 +1,14 @@
 //JHSZD10  JOB (00,EV),'ID_EXECUTOR',TIME=1440,REGION=0M,
-//         CLASS=A,MSGCLASS=T,MSGLEVEL=(1,1),TYPRUN=SCAN
+//         CLASS=A,MSGCLASS=T,MSGLEVEL=(1,1)
 /*ROUTE PRINT JES2PRD1
-//*
+//*DIARIA JV1. DATA:DATA_MOVIMENTO
+//*DIARIA JV1. PERIODO:PERIODO_MOVIMENTO
+//*DIARIA JV1. ANO MES:ANOMES_MOVIMENTO
+//*DIARIA JV1. DIA:DIA_MOVIMENTO
+//*DIARIA JV1. DATA ANTERIOR:DATA_ANTERIOR
 //JOBLIB   DD DISP=SHR,DSN=DSNC10.DB2M.SDSNLOAD
 //         DD DISP=SHR,DSN=HOM.V01.LOAD
-//*
-//**********************************************************************
+//*        ========================================================
 //E000DELE EXEC PGM=IEFBR14
 //SYSOUT   DD SYSOUT=*
 //SYSPRINT DD SYSOUT=*
@@ -14,14 +17,14 @@
 //SYSUT2   DD DISP=(MOD,DELETE),UNIT=SYSALLDA,SPACE=(TRK,(5,5)),
 //         DSN=HOM.SZ.DDATA_MOVIMENTO.SZEMB307.SAIDA
 //SYSUT3   DD DISP=(MOD,DELETE),UNIT=SYSALLDA,SPACE=(TRK,(5,5)),
-//         DSN=HOM.EF.DDATA_MOVIMENTO.SZEMB404.SORT01
+//         DSN=HOM.SZ.DDATA_MOVIMENTO.SZEMB404.SORT01
 //SYSUT4   DD DISP=(MOD,DELETE),UNIT=SYSALLDA,SPACE=(TRK,(5,5)),
-//         DSN=HOM.EF.DDATA_MOVIMENTO.SZEMB404.SORT02
+//         DSN=HOM.SZ.DDATA_MOVIMENTO.SZEMB404.SORT02
 //SYSUT5   DD DISP=(MOD,DELETE),UNIT=SYSALLDA,SPACE=(TRK,(5,5)),
 //         DSN=HOM.SZ.DDATA_MOVIMENTO.SORT.SYSOUT
 //SYSUT6   DD DISP=(MOD,DELETE),UNIT=SYSALLDA,SPACE=(TRK,(5,5)),
 //         DSN=HOM.SZ.DDATA_MOVIMENTO.SZEMB168.BARIGUI.HIPOTEC
-//**********************************************************************
+//****************************************************************
 //E001GET  EXEC PGM=FTP,REGION=0M,PARM='10.100.2.144'
 //STEPLIB  DD DSN=TCPIP.SEZALOAD,DISP=SHR
 //SYSTCPD  DD DSN=HOM1.TCPPARMS(TCPDATA),DISP=SHR
@@ -37,15 +40,15 @@ LOCSITE PRIMARY=500
 LOCSITE SECONDARY=100
 LOCSITE LRECL=664 BLKSIZE=0 RECFM=FB
 CD /UPLOAD/JV1/JDSZD10/ENTRADA
-GET CNT.EXT.EF.BARIGUI.P772449.DDATA_MOVIMENTO.TXT  +
+GET CNT.EXT.EF.BARIGUI.P772449.DDATA_MOVIMENTO.TXT +
    'HOM.SZ.DDATA_MOVIMENTO.BARIGUI.HIPOTEC' (REPLACE
 QUIT
-//**********************************************************************
+//****************************************************************
 //E003SORT EXEC PGM=SORT,REGION=0K
 //SYSPRINT DD   SYSOUT=*
 //SORTMSG  DD   SYSOUT=*
 //SORTIN   DD   DSN=HOM.SZ.DDATA_MOVIMENTO.BARIGUI.HIPOTEC,DISP=SHR
-//ARQF0003 DD   DSN=HOM.EF.DDATA_MOVIMENTO.SZEMB404.SORT01,
+//ARQF0003 DD   DSN=HOM.SZ.DDATA_MOVIMENTO.SZEMB404.SORT01,
 //         DISP=(,CATLG,DELETE),
 //         UNIT=SYSALLDA,SPACE=(CYL,(2000,500),RLSE),
 //         DCB=(RECFM=FB,LRECL=664,BLKSIZE=0,DSORG=PS)
@@ -57,35 +60,36 @@ QUIT
 //SYSIN    DD   *
   SORT FIELDS=COPY
   OUTFIL FNAMES=ARQF0003
-  INREC FINDREP=(IN=(C'√°',C'¬∞',C'√£',C'√¢',C'√†',C'√©',C'√™',
-                    C'√Ç',C'√Å',C'√É',C'√Ç',C'√Ä',C'√â',C'√ä',
-                    C'√≠',C'√≥',C'√µ',C'√¥',C'√∫',C'√ß',C'&',C'√è',
-                    C'√ç',C'√ì',C'√ï',C'√î',C'√ö',C'√á',C'?',C' ',
-                    C'?',C'¬¥',C'"',C'¬∞',C'¬™',C'¬≠',C'¬ß',C'√ú',
-                    C'¬®',C'¬∏',C'¬∂',C'¬∫',C'¬Ø',C'¬¶',C'?',C'-'),
-                    OUT=C' ')
+  INREC FINDREP=(IN=(C'·',C'∞',C'„',C'‚',C'‡',C'È',C'Í',
+                     C'¬',C'¡',C'√',C'¬',C'¿',C'…',C' ',
+                     C'Ì',C'Û',C'ı',C'Ù',C'˙',C'Á',C'&',C'œ',
+                     C'Õ',C'”',C'’',C'‘',C'⁄',C'«',C'?',C' ',
+                     C'?',C'¥',C'"',C'∞',C'™',C'≠',C'ß',C'‹',
+                     C'®',C'∏',C'∂',C'∫',C'Ø',C'¶',C'?',C'-'),
+                 OUT=C' ')
 /*
-//**********************************************************************
+//***************************************************************
 //E004SORT EXEC PGM=SORT
 //SORTIN   DD DISP=SHR,
-//         DSN=HOM.EF.DDATA_MOVIMENTO.SZEMB404.SORT01
-//SORTOUT  DD DSN=HOM.EF.DDATA_MOVIMENTO.SZEMB404.SORT02,
+//         DSN=HOM.SZ.DDATA_MOVIMENTO.SZEMB404.SORT01
+//SORTOUT  DD DSN=HOM.SZ.DDATA_MOVIMENTO.SZEMB404.SORT02,
 //         DISP=(,CATLG,DELETE),
 //         UNIT=SYSALLDA,SPACE=(CYL,(2000,500),RLSE),
 //         DCB=(RECFM=FB,LRECL=664,BLKSIZE=0,DSORG=PS)
 //SORTWK01 DD UNIT=SYSALLDA,SPACE=(CYL,(50,50))
 //SORTWK02 DD UNIT=SYSALLDA,SPACE=(CYL,(50,50))
 //SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
 //SYSIN    DD *
   SORT FIELDS=(11,12,CH,A,604,1,CH,A)
 //*
-//**********************************************************************
+//***************************************************************
 //E0050404 EXEC PGM=IKJEFT01,DYNAMNBR=20
 //SYSTSPRT DD SYSOUT=*
 //SYSPRINT DD SYSOUT=*
 //SYSUDUMP DD SYSOUT=Z
 //SYSOUT   DD SYSOUT=*
-//SZMOVTO  DD DSN=HOM.EF.DDATA_MOVIMENTO.SZEMB404.SORT02,DISP=SHR
+//SZMOVTO  DD DSN=HOM.SZ.DDATA_MOVIMENTO.SZEMB404.SORT02,DISP=SHR
 //SYSDBOUT DD SYSOUT=*
 //SYSABOUT DD SYSOUT=*
 //SYSTSIN  DD *
@@ -94,8 +98,8 @@ QUIT
            LIB('HOM.V01.LOAD')            -
            PARMS('/ABTERMENC(ABEND)')
 //SYSIN    DD *
-006291BRGPHOM.SZ.DDATA_MOVIMENTO.BARIGUI.HIPOTEC
-//**********************************************************************
+006313BRGPHOM.SZ.DDATA_MOVIMENTO.BARIGUI.HIPOTEC
+//****************************************************************
 //E0050168 EXEC PGM=IKJEFT01,DYNAMNBR=20
 //SYSTSPRT DD SYSOUT=*
 //SYSPRINT DD SYSOUT=*
@@ -113,23 +117,24 @@ QUIT
            LIB('HOM.V01.LOAD')            -
            PARMS('/ABTERMENC(ABEND)')
 //SYSIN    DD *
-006291BRGPHOM.SZ.DDATA_MOVIMENTO.BARIGUI.HIPOTEC
-//**********************************************************************
+006313BRGPHOM.SZ.DDATA_MOVIMENTO.BARIGUI.HIPOTEC
+//***************************************************************
 //E0050056 EXEC PGM=IKJEFT01,DYNAMNBR=20
 //SYSTSPRT DD  SYSOUT=*
 //SYSUDUMP DD  SYSOUT=*
-//SYSOUT   DD  SYSOUT=*
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
 //SYSDBOUT DD  SYSOUT=*
 //SYSABOUT DD  SYSOUT=*
 //SYSIN    DD  *
-006291BRGPHOM.SZ.DDATA_MOVIMENTO.BARIGUI.HIPOTEC
+006313BRGPHOM.SZ.DDATA_MOVIMENTO.BARIGUI.HIPOTEC
 //SYSTSIN  DD  *
     DSN    SYSTEM(DB2M)
     RUN    PROGRAM(SZEMB056) PLAN(SIASBAT) -
            LIB('HOM.V01.LOAD') -
            PARMS('/ABTERMENC(ABEND)')
 /*
-//**********************************************************************
+//****************************************************************
 //E008FTP  EXEC PGM=FTP,REGION=4096K,TIME=NOLIMIT,
 //         PARM='10.100.2.144'
 //STEPLIB  DD DSN=TCPIP.SEZALOAD,DISP=SHR
@@ -141,7 +146,9 @@ QUIT
 //INPUT    DD *
 USERPROD USRPRD
 CD /UPLOAD/JV1/JDSZD10/SAIDA
-PUT 'HOM.SZ.DDATA_MOVIMENTO.SZEMB307.SAIDA'    +
+PUT 'HOM.SZ.DDATA_MOVIMENTO.SZEMB168.BARIGUI.HIPOTEC'  +
+     HOM.SZ.DDATA_MOVIMENTO.SZEMB168.BARIGUI.HIPOTEC.TXT
+PUT 'HOM.SZ.DDATA_MOVIMENTO.SZEMB307.SAIDA' +
      HOM.SZ.DDATA_MOVIMENTO.SZEMB307.SAIDA.TXT
 QUIT
 //

@@ -108,10 +108,10 @@ ClassName=TProjectRunConfiguationNode
 Name=SIAS.HOM2
 
 [Project\ChildNodes\Node1\ChildNodes\Node1\RunConfig]
-ScriptName=D:\JCL\submissao.py
+ScriptName=D:\JCL\validacao.py
 EngineType=peRemote
 ReinitializeBeforeRun=TRUE
-Parameters=SIAS HOM2
+Parameters=SIAS HOM2 PRD JHDEVOPS
 WorkingDir=$[ActiveScript-Dir]
 WriteOutputToFile=FALSE
 OutputFileName=$[ActiveScript-NoExt].log
@@ -131,10 +131,10 @@ ClassName=TProjectRunConfiguationNode
 Name=TOM.PRD
 
 [Project\ChildNodes\Node1\ChildNodes\Node2\RunConfig]
-ScriptName=D:\JCL\validacao.py
+ScriptName=D:\JCL\validacao-job.py
 EngineType=peRemote
 ReinitializeBeforeRun=TRUE
-Parameters=SIAS HOM2 PRD
+Parameters=SMART HOM PRD
 WorkingDir=$[ActiveScript-Dir]
 WriteOutputToFile=FALSE
 OutputFileName=$[ActiveScript-NoExt].log
@@ -180,7 +180,7 @@ Name=RECUPERAJOBSIAS
 ScriptName=D:\JCL\validacao-job.py
 EngineType=peRemote
 ReinitializeBeforeRun=TRUE
-Parameters=SIAS DIARIA_HOM2 PRD NENHUM
+Parameters=SMART DIARIA_HOM PRD
 WorkingDir=$[ActiveScript-Dir]
 WriteOutputToFile=FALSE
 OutputFileName=$[ActiveScript-NoExt].log

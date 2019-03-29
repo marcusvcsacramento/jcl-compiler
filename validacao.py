@@ -66,6 +66,7 @@ with open(arquivo_jobs,'r') as job:
             print(tom+'.F'+data_execucao+'.'+job_name+'.'+jobnumber)
             with open(tom_directory+'/'+programa+'-'+jobnumber,'w', encoding="latin-1",errors="ignore") as arquivo:
                 ftp.retrlines('RETR '+tom+'.F'+data_execucao+'.'+job_name+'.'+jobnumber,arquivo.write)
+
             arquivo.close()
 
             with open(tom_directory+'/'+programa+'-'+jobnumber,'r', encoding="latin-1") as arquivo:
@@ -100,11 +101,10 @@ with open(arquivo_jobs,'r') as job:
                     load_value = load_result.group(1)
             except:
                 load_result=''
-
+            color="\033[42m"
             if max_rc:
-                color="\033[42m"
-                if str(max_rc.group(1))!="00":
-                    color="\033[101m"
+                if str(max_rc.group(1))!="00" and str(max_rc.group(1)) != "0004":
+                    color="\033[41m"
                 print(color+"{};{};{};{}\033[0m\n".format(programa,jobnumber,max_rc.group(1),load_value))
                 saida.write("{};{};{};{}\n".format(programa,jobnumber,max_rc.group(1),load_value))
             if jcl_error:

@@ -60,7 +60,7 @@ with open('arquivos/PROGRAMAS', 'rt') as f:
         if(classe=='BATCH'):
             tipo = compilacao[2]
             try:
-                fp=open(diretorio_fonte+'/COBOL.GCS/BATCH/'+programa+'.cbl','r',encoding='latin-1',errors="ignore")
+                fp=open(diretorio_fonte+'/COBOL.GCS/BATCH/'+programa+'.cbl','r',encoding='utf-8',errors="ignore")
                 job=io.BytesIO(fp.read().encode('latin-1'))
                 ftp = ftplib.FTP()
                 ftp.connect(hostname, port)
