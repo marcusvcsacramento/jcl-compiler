@@ -1,6 +1,11 @@
 //VHCBD14  JOB (00,PN),'ID_EXECUTOR',TIME=1440,CLASS=A,
-//         MSGCLASS=T,MSGLEVEL=(1,1),RESTART=E003LIST
+//         MSGCLASS=T,MSGLEVEL=(1,1)
 /*ROUTE PRINT JES2PRD1
+//*DIARIA JV1. DATA:DATA_MOVIMENTO
+//*DIARIA JV1. PERIODO:PERIODO_MOVIMENTO
+//*DIARIA JV1. ANO MES:ANOMES_MOVIMENTO
+//*DIARIA JV1. DIA:DIA_MOVIMENTO
+//*DIARIA JV1. DATA ANTERIOR:DATA_ANTERIOR
 //*
 //JOBLIB   DD DISP=SHR,DSN=DSNC10.DB2H.SDSNLOAD
 //         DD DISP=SHR,DSN=HOM.JV1.LOAD
@@ -143,6 +148,12 @@
 //         ENDIF
 //**
 //*********************************************************************
+//D0136252 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//ARQTXT   DD DSN=HOM.BI.DDATA_MOVIMENTO.BI6252B.CRITICA,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
 //E0136252 EXEC PGM=IKJEFT01,DYNAMNBR=20
 //SYSTSPRT DD SYSOUT=*
 //SYSPRINT DD SYSOUT=*
@@ -157,6 +168,12 @@
 //SYSIN    DD DUMMY
 //*
 //*********************************************************************
+//D0146253 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//ARQTXT   DD DSN=HOM.BI.DDATA_MOVIMENTO.BI6253B.CRITICA,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
 //E0146253 EXEC PGM=IKJEFT01,DYNAMNBR=20
 //SYSTSPRT DD SYSOUT=*
 //SYSPRINT DD SYSOUT=*
@@ -172,6 +189,14 @@
 //SYSIN    DD DUMMY
 //*
 //*********************************************************************
+//D0156254 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//MV023000 DD DSN=HOM.BI.DDATA_MOVIMENTO.BI6254B.MV023000,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//ARQTXT   DD DSN=HOM.BI.DDATA_MOVIMENTO.BI6254B.PARCELAS,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
 //E0156254 EXEC PGM=IKJEFT01,DYNAMNBR=20
 //SYSTSPRT DD SYSOUT=*
 //SYSPRINT DD SYSOUT=*
@@ -188,6 +213,15 @@
 //SYSTSIN  DD DSN=HOM.JV1.SYSIN(BI6254B),DISP=SHR
 //SYSIN    DD DUMMY
 //*
+//*********************************************************************
+//D0166256 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//MV012000 DD DSN=HOM.BI.DDATA_MOVIMENTO.BI6256B.MV012000,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//ARQTXT   DD DSN=HOM.BI.DDATA_MOVIMENTO.BI6256B.ARQTXT,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
 //E0166256 EXEC PGM=IKJEFT01,DYNAMNBR=20
 //SYSTSPRT DD SYSOUT=*
 //SYSPRINT DD SYSOUT=*
@@ -272,7 +306,7 @@
 //*********************************************************************
 //** STEP DE ENVIO DE MENSAGEM SOBRE JOB COM  ERRO NO ZEKE.          **
 //*********************************************************************
-//  IF (ABEND | RC EQ 99 | RC EQ 09 | RC EQ 08 | RC EQ 12) THEN
-//ABEND EXEC PPSEND,N=VHCBD14
-//  ENDIF
+//*   IF (ABEND | RC EQ 99 | RC EQ 09 | RC EQ 08 | RC EQ 12) THEN
+//* ABEND EXEC PPSEND,N=VHCBD14
+//*   ENDIF
 //*

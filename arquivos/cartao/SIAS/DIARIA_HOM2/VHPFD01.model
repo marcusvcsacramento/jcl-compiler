@@ -1,6 +1,11 @@
 //VHPFD01  JOB (00,PN),'ID_EXECUTOR',TIME=1440,
 //         CLASS=A,MSGCLASS=T,MSGLEVEL=(1,1)
 /*ROUTE PRINT JES2PRD1
+//*DIARIA JV1. DATA:DATA_MOVIMENTO
+//*DIARIA JV1. PERIODO:PERIODO_MOVIMENTO
+//*DIARIA JV1. ANO MES:ANOMES_MOVIMENTO
+//*DIARIA JV1. DIA:DIA_MOVIMENTO
+//*DIARIA JV1. DATA ANTERIOR:DATA_ANTERIOR
 //*
 //*********************************************
 //JOBLIB     DD DISP=SHR,DSN=DSNC10.DB2H.SDSNLOAD
@@ -128,7 +133,7 @@
 //*********************************************************************
 //** STEP DE ENVIO DE MENSAGEM SOBRE JOB COM  ERRO NO ZEKE.          **
 //*********************************************************************
-//  IF (ABEND | RC EQ 99 | RC EQ 09 | RC EQ 08 | RC EQ 12) THEN
-//ABEND EXEC PPSEND,N=JPPFD01
-//  ENDIF
+//*   IF (ABEND | RC EQ 99 | RC EQ 09 | RC EQ 08 | RC EQ 12) THEN
+//* ABEND EXEC PPSEND,N=JPPFD01
+//*   ENDIF
 //*

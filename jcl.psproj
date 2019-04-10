@@ -64,14 +64,18 @@ FileName=$[Project-Path]diaria.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node3]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]submissao.py
+FileName=$[Project-Path]diaria_validacao.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node4]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]submissao.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node5]
 ClassName=TProjectFileNode
 FileName=$[Project-Path]validacao.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes]
-Count=5
+Count=6
 
 [Project\ChildNodes\Node0\ChildNodes]
 Count=1
@@ -81,14 +85,14 @@ ClassName=TProjectRunConfiguationsNode
 
 [Project\ChildNodes\Node1\ChildNodes\Node0]
 ClassName=TProjectRunConfiguationNode
-Name=SIAS.DEV
+Name=SMART_HOM
 
 [Project\ChildNodes\Node1\ChildNodes\Node0\RunConfig]
 ScriptName=D:\JCL\submissao.py
-Description=Execução para SIAS em Desenvolvimento
+Description=Promoção de Programas - SMART
 EngineType=peRemote
 ReinitializeBeforeRun=TRUE
-Parameters=SIAS DEV
+Parameters=SMART HOM JHDEVOPS
 WorkingDir=$[ActiveScript-Dir]
 WriteOutputToFile=FALSE
 OutputFileName=$[ActiveScript-NoExt].log
@@ -105,13 +109,14 @@ MessagesFormat=$[FileName] $[LineNumber]
 
 [Project\ChildNodes\Node1\ChildNodes\Node1]
 ClassName=TProjectRunConfiguationNode
-Name=SIAS.HOM2
+Name=SIAS_HOM2
 
 [Project\ChildNodes\Node1\ChildNodes\Node1\RunConfig]
-ScriptName=D:\JCL\validacao.py
+ScriptName=D:\JCL\submissao.py
+Description=Promoção de Programas - SIAS
 EngineType=peRemote
 ReinitializeBeforeRun=TRUE
-Parameters=SIAS HOM2 PRD JHDEVOPS
+Parameters=SIAS HOM2 JHDEVOPS
 WorkingDir=$[ActiveScript-Dir]
 WriteOutputToFile=FALSE
 OutputFileName=$[ActiveScript-NoExt].log
@@ -128,13 +133,14 @@ MessagesFormat=$[FileName] $[LineNumber]
 
 [Project\ChildNodes\Node1\ChildNodes\Node2]
 ClassName=TProjectRunConfiguationNode
-Name=TOM.PRD
+Name=DIARIA_SMART_HOM
 
 [Project\ChildNodes\Node1\ChildNodes\Node2\RunConfig]
-ScriptName=D:\JCL\validacao-job.py
+ScriptName=D:\JCL\diaria_validacao.py
+Description=Execução da Diária SMART - HOM
 EngineType=peRemote
 ReinitializeBeforeRun=TRUE
-Parameters=SMART HOM PRD
+Parameters=SMART DIARIA_HOM 190401 2019-04-012019-04-30 190403
 WorkingDir=$[ActiveScript-Dir]
 WriteOutputToFile=FALSE
 OutputFileName=$[ActiveScript-NoExt].log
@@ -151,13 +157,14 @@ MessagesFormat=$[FileName] $[LineNumber]
 
 [Project\ChildNodes\Node1\ChildNodes\Node3]
 ClassName=TProjectRunConfiguationNode
-Name=SMART.TESTE
+Name=DIARIA_SIAS_HOM2
 
 [Project\ChildNodes\Node1\ChildNodes\Node3\RunConfig]
-ScriptName=D:\JCL\diaria.py
+ScriptName=D:\JCL\diaria_validacao.py
+Description=Execução da Diária SIAS - HOM2
 EngineType=peRemote
 ReinitializeBeforeRun=TRUE
-Parameters=SIAS DIARIA_HOM2 190225 2019-02-062019-01-31
+Parameters=SIAS DIARIA_HOM2 190401 2019-04-012019-04-30 190403
 WorkingDir=$[ActiveScript-Dir]
 WriteOutputToFile=FALSE
 OutputFileName=$[ActiveScript-NoExt].log
@@ -174,13 +181,11 @@ MessagesFormat=$[FileName] $[LineNumber]
 
 [Project\ChildNodes\Node1\ChildNodes\Node4]
 ClassName=TProjectRunConfiguationNode
-Name=RECUPERAJOBSIAS
+Name=VALIDACAO
 
 [Project\ChildNodes\Node1\ChildNodes\Node4\RunConfig]
-ScriptName=D:\JCL\validacao-job.py
 EngineType=peRemote
 ReinitializeBeforeRun=TRUE
-Parameters=SMART DIARIA_HOM PRD
 WorkingDir=$[ActiveScript-Dir]
 WriteOutputToFile=FALSE
 OutputFileName=$[ActiveScript-NoExt].log

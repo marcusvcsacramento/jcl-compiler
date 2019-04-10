@@ -49,7 +49,7 @@ tom=TOM.PRD1
 ## Configura��o do FTP no ZOS de Produ��o
 [ZOS.FTP.PRD]
 user = te00479
-password = 1212dez
+password = 1212qaz
 
 # Configura��o do ZOS de execução de diária em Homologa��o
 [ZOS.DIARIA_HOM]
@@ -58,8 +58,31 @@ port = 21
 
 ## Configura��o do FTP no ZOS de execução de diária emHomologa��o2(SIAS)
 [ZOS.FTP.DIARIA_HOM]
-user = RSSDPLY
-password = 1212QW
+user = SISUPD1H
+password = 2019jv
+##user = RSSDPLY
+##password = 1212QW
+
+# Configura��o do ZOS de execução de diária em Homologa��o
+[ZOS.DIARIA_HOM2]
+host = zoshom
+port = 21
+
+## Configura��o do FTP no ZOS de execução de diária emHomologa��o2(SIAS)
+[ZOS.FTP.DIARIA_HOM2]
+user = SISUPD1H
+password = 2019jv
+
+
+# Configura��o do ZOS de execução de diária em Homologa��o
+[ZOS.DIARIA_DEV]
+host = zosdev
+port = 21
+
+## Configura��o do FTP no ZOS de execução de diária emHomologa��o2(SIAS)
+[ZOS.FTP.DIARIA_DEV]
+user = TE89323
+password = 1983cs
 
 ###### Configura��es para Upload de c�digo para os PDS's Mainframe ######
 
@@ -88,9 +111,25 @@ lib_load=HOM.JV1.LOAD
 lib_batch=SHRDES.GE.A.NEWSEG.PGMLIB.COB2.SMART
 lib_booklib=SHRDES.GE.A.NEWSEG.BOOKLIB
 lib_cics=SHRDES.GE.A.NEWSEG.PGMLIB.COB2.SMART
+lib_load=DES.V01.LOAD
 
 [SMART.HOM]
 lib_batch=HOM.GE.A.PGMLIB.COB2H
 lib_booklib=SHRHOM.GE.A.BOOKLIB
 lib_cics=VERTQS.GE.A.PGMLIB.COB2.JV1
 lib_load=HOM.V01.LOAD
+
+
+
+#######
+### tso ex 'VERTQS.GE.A.PGMLIB.COB2.JV1(X)'
+#####EXEC 'VERTQS.GE.A.PGMLIB.COB2.TE22466(ISPFPRIM)'
+#######/*ISR@PRIM*/
+#######ISPEXEC SELECT PANEL(ISR@PRIM) NEWAPPL(ISR)
+#######SET XRC = &LASTCC                      /*                            /*
+#######IF &LASTCC �= 0 THEN    /* RETURN CODES                          */ +
+#######DO                    /*  4 - RETURN COMMAND ENTERED FROM      */
+#######  WRITE *** PROBLEMAS NO SELECT ***
+#######  WRITE *** &ZERRLM ***
+#######END                   /*      SELECTION MENU OR LOWER LEVEL    */
+#######
