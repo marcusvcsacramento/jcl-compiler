@@ -15,9 +15,9 @@ try:
     ambiente=sys.argv[2]
     ambiente_tom=sys.argv[3]
     data_execucao = datetime.datetime.now().strftime("%y%m%d")
-    ##data_execucao = '190324'
+    #data_execucao = '190411'
     data_load = datetime.datetime.now().strftime("%Y%m%d")
-    ##data_load = '20190324'
+    #data_load = '20190411'
 
     hostname = config.get('ZOS.'+ambiente_tom,'host')
     port = int(config.get('ZOS.'+ambiente_tom,'port'))
@@ -64,6 +64,7 @@ with open(arquivo_jobs,'r') as job:
             print("######   Realizando GET do JOB de Homologação "+sistema.center(8)+" "+ambiente.center(8)+": "+programa.center(8)+"    ######")
             with open(tom_directory+'/'+programa+'-'+jobnumber,'w', encoding="latin-1") as arquivo:
                 ftp.retrlines('RETR '+tom+'.F'+data_execucao+'.'+programa+'.'+jobnumber,lambda s: arquivo.write(re.sub('$','\n',s )))
+
             arquivo.close()
             with open(tom_directory+'/'+programa+'-'+jobnumber,'r', encoding="latin-1") as arquivo:
                 for linha in arquivo.read().split('\n'):
@@ -115,6 +116,7 @@ with open(arquivo_jobs,'r') as job:
             error_text = 'Em Processamento'
             if str(sys.exc_info()[1]).find('not found') is not -1:
                 error_text='Sem SYSOUT'
+                print(sys.exc_info())
             print("{};{};{}\n".format(programa,jobnumber,error_text))
             saida.write("{};{};{}\n".format(programa,jobnumber,error_text))
         print("###################################################################################")

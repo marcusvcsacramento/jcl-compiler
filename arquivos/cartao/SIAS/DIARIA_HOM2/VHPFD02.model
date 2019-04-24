@@ -1,0 +1,1826 @@
+//VHPFD02  JOB (00,PN),'ID_EXECUTOR',TIME=1440,
+//         CLASS=A,MSGCLASS=T,MSGLEVEL=(1,1)
+//*
+/*ROUTE PRINT JES2PRD1
+//*
+//*DIARIA JV1. DATA:DATA_MOVIMENTO
+//*DIARIA JV1. PERIODO:PERIODO_MOVIMENTO
+//*DIARIA JV1. ANO MES:ANOMES_MOVIMENTO
+//*DIARIA JV1. DIA:DIA_MOVIMENTO
+//*DIARIA JV1. DATA ANTERIOR:DATA_ANTERIOR 
+//*
+//JOBLIB   DD DISP=SHR,DSN=DSNC10.DB2H.SDSNLOAD
+//         DD DISP=SHR,DSN=HOM.JV1.LOAD
+//*
+//*
+//*******************************************************************
+//*        EXECUCAO DE EMAIL                                        *
+//*******************************************************************
+//*E000MAIL EXEC EMAIL1,R=JPPFD02,P=$(C,TIME,HHMM),Q=0400
+//*
+//*******************************************************************
+//*        EXECUCAO DO PF0100B                                      *
+//*******************************************************************
+//D0010100 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//STASASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0100B1,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//STAFCAP  DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0100B2,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//STAFPREV DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0100B3,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
+//E0010100 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//*
+//STASASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0100B1,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,250),RLSE),
+//         DCB=(RECFM=FB,LRECL=100,BLKSIZE=0,DSORG=PS)
+//*
+//STAFCAP  DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0100B2,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,250),RLSE),
+//         DCB=(RECFM=FB,LRECL=100,BLKSIZE=0,DSORG=PS)
+//*
+//STAFPREV DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0100B3,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,250),RLSE),
+//         DCB=(RECFM=FB,LRECL=100,BLKSIZE=0,DSORG=PS)
+//*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(PF0100B),DISP=SHR
+//SYSIN    DD DUMMY
+//*
+//*****************************************************************
+//*        EXECUTA CASO O E0010100 SEJA DIFERENTE DE ZERO         *
+//*****************************************************************
+//         IF E0010100.RC NE 0 THEN
+//E002BR14 EXEC PGM=IDCAMS
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *
+  ALTER HOM.PF.DDATA_MOVIMENTO.PF0100B1 -
+  NEWNAME (HOM.PF.DDATA_MOVIMENTO.PF0100B1.ERRO.JV1ERROR)
+  ALTER HOM.PF.DDATA_MOVIMENTO.PF0100B2 -
+  NEWNAME (HOM.PF.DDATA_MOVIMENTO.PF0100B2.ERRO.JV1ERROR)
+  ALTER HOM.PF.DDATA_MOVIMENTO.PF0100B3 -
+  NEWNAME (HOM.PF.DDATA_MOVIMENTO.PF0100B3.ERRO.JV1ERROR)
+/*
+//*
+//         ENDIF
+//*
+//*******************************************************************
+//*        EXECUCAO DO PF0612B                                      *
+//*******************************************************************
+//D0030612 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//PRPSASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0612B,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
+//E0030612 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//*
+//PRPSASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0612B,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,250),RLSE),
+//         DCB=(RECFM=FB,LRECL=300,BLKSIZE=0,DSORG=PS)
+//*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(PF0612B),DISP=SHR
+//SYSIN    DD DUMMY
+//*
+//*****************************************************************
+//*        EXECUTA CASO O E0030612 SEJA DIFERENTE DE ZERO         *
+//*****************************************************************
+//         IF E0030612.RC NE 0 THEN
+//E004BR14 EXEC PGM=IDCAMS
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *
+  ALTER HOM.PF.DDATA_MOVIMENTO.PF0612B -
+  NEWNAME (HOM.PF.DDATA_MOVIMENTO.PF0612B.ERRO.JV1ERROR)
+/*
+//*
+//         ENDIF
+//*
+//*****************************************************************
+//*        PESQUISA SE EXISTE E TEM DADOS NO ARQUIVO.             *
+//*****************************************************************
+//E005LIST EXEC PGM=IKJEFT01,DYNAMNBR=20,
+//         PARM=('PRDFULL TRANS.FDCAP.DDATA_MOVIMENTO.PRPFCAP')
+//SYSTSPRT DD SYSOUT=*
+//SYSPROC  DD DISP=SHR,DSN=HOM.JV1.CLIST
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DUMMY
+//SYSIN    DD DUMMY
+//*
+//*****************************************************************
+//*        EXECUTA CASO O E005LIST SEJA DIFERENTE DE ZERO         *
+//*****************************************************************
+//         IF E005LIST.RC NE 0 THEN
+//E006BR14 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//CRIACAO  DD DSN=TRANS.FDCAP.DDATA_MOVIMENTO.PRPFCAP,
+//         DISP=(,CATLG,CATLG),UNIT=SYSDA,SPACE=(TRK,(1,1)),
+//         DCB=(RECFM=FB,LRECL=300,BLKSIZE=0,DSORG=PS)
+//         ENDIF
+//*
+//*******************************************************************
+//*        EXECUCAO DO PF0614B                                      *
+//*******************************************************************
+//         IF E005LIST.RC = 00 THEN
+//*******************************************************************
+//D0070614 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//PRPSCAP  DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0614B,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
+//E0070614 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//*
+//PRPFCAP  DD DISP=SHR,
+//         DSN=TRANS.FDCAP.DDATA_MOVIMENTO.PRPFCAP
+//*
+//PRPSCAP  DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0614B,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(1500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=300,BLKSIZE=0,DSORG=PS)
+//*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(PF0614B),DISP=SHR
+//SYSIN    DD DUMMY
+//         ENDIF
+//*
+//*****************************************************************
+//*        EXECUTA CASO O E0060614 SEJA DIFERENTE DE ZERO         *
+//*****************************************************************
+//         IF E0070614.RC NE 0 THEN
+//E008BR14 EXEC PGM=IDCAMS
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *
+  ALTER HOM.PF.DDATA_MOVIMENTO.PF0614B -
+  NEWNAME (HOM.PF.DDATA_MOVIMENTO.PF0614B.ERRO.JV1ERROR)
+/*
+//         ENDIF
+//*
+//*******************************************************************
+//D0090617 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//PRPSASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0617B,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
+//E0090617 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//*
+//PRPSASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0617B,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(250,150),RLSE),
+//         DCB=(RECFM=FB,LRECL=300,BLKSIZE=0,DSORG=PS)
+//*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(PF0617B),DISP=SHR
+//SYSIN    DD DUMMY
+//*
+//*****************************************************************
+//*        EXECUTA CASO O E0110617 SEJA DIFERENTE DE ZERO         *
+//*****************************************************************
+//         IF E0090617.RC NE 0 THEN
+//E010BR14 EXEC PGM=IDCAMS
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *
+  ALTER HOM.PF.DDATA_MOVIMENTO.PF0617B -
+  NEWNAME (HOM.PF.DDATA_MOVIMENTO.PF0617B.ERRO.JV1ERROR)
+/*
+//*
+//         ENDIF
+//*
+//*****************************************************************
+//*        PESQUISA SE EXISTE E TEM DADOS NO ARQUIVO.             *
+//*****************************************************************
+//E011LIST EXEC PGM=IKJEFT01,DYNAMNBR=20,
+//         PARM=('PRDFULL TRANS.FDCAP.DDATA_MOVIMENTO.RETCAP')
+//SYSTSPRT DD SYSOUT=*
+//SYSPROC  DD DISP=SHR,DSN=HOM.JV1.CLIST
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DUMMY
+//SYSIN    DD DUMMY
+//*
+//*******************************************************************
+//*        EXECUCAO DO PF0100B                                      *
+//*******************************************************************
+// IF E005LIST.RC = 00 AND E0070614.RC = 00 AND E011LIST.RC = 00 THEN
+//*********************************************************************
+//D0120603 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//STACAP   DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0603B,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//PRPCAP   DD DSN=TRANS.FDCAP.DDATA_MOVIMENTO.RETCAP.ERRO,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
+//E0120603 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//*
+//RETCAP   DD DISP=SHR,
+//         DSN=TRANS.FDCAP.DDATA_MOVIMENTO.RETCAP
+//*
+//STACAP   DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0603B,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(450,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=100,BLKSIZE=0,DSORG=PS)
+//*
+//PRPCAP   DD DSN=TRANS.FDCAP.DDATA_MOVIMENTO.RETCAP.ERRO,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,250),RLSE),
+//         DCB=(RECFM=FB,LRECL=16,BLKSIZE=0,DSORG=PS)
+//*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(PF0603B),DISP=SHR
+//SYSIN    DD DUMMY
+//         ENDIF
+//*
+//*****************************************************************
+//*        EXECUTA CASO O E0140603 SEJA DIFERENTE DE ZERO         *
+//*****************************************************************
+//         IF E0120603.RC NE 0 THEN
+//E013BR14 EXEC PGM=IDCAMS
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *
+  ALTER HOM.PF.DDATA_MOVIMENTO.PF0603B -
+  NEWNAME (HOM.PF.DDATA_MOVIMENTO.PF0603B.ERRO.JV1ERROR)
+  ALTER TRANS.FDCAP.DDATA_MOVIMENTO.RETCAP.ERRO -
+  NEWNAME (TRANS.FDCAP.DDATA_MOVIMENTO.RETCAP.ERRO.JV1ERROR)
+/*
+//*
+//         ENDIF
+//*******************************************************************
+//*        EXECUCAO DO PF0605B                                      *
+//*******************************************************************
+//*********************************************************************
+//D0140605 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//STASASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0605B,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
+//E0140605 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//*
+//STASASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0605B,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(1500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=100,BLKSIZE=0,DSORG=PS)
+//*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(PF0605B),DISP=SHR
+//SYSIN    DD DUMMY
+//*
+//*****************************************************************
+//*        EXECUTA CASO O E0010100 SEJA DIFERENTE DE ZERO         *
+//*****************************************************************
+//         IF E0140605.RC NE 0 THEN
+//E015BR14 EXEC PGM=IDCAMS
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *
+  ALTER HOM.PF.DDATA_MOVIMENTO.PF0605B -
+  NEWNAME (HOM.PF.DDATA_MOVIMENTO.PF0605B.ERRO.JV1ERROR)
+/*
+//*
+//         ENDIF
+//*
+//*******************************************************************
+//*        EXECUCAO DO PF0618B                                      *
+//*******************************************************************
+//*********************************************************************
+//D0160618 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//STASASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0618B,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
+//E0160618 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//*
+//STASASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0618B,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(1000,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=100,BLKSIZE=0,DSORG=PS)
+//*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(PF0618B),DISP=SHR
+//SYSIN    DD DUMMY
+//*
+//*****************************************************************
+//*        EXECUTA CASO O E0010100 SEJA DIFERENTE DE ZERO         *
+//*****************************************************************
+//         IF E0160618.RC NE 0 THEN
+//E017BR14 EXEC PGM=IDCAMS
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *
+  ALTER HOM.PF.DDATA_MOVIMENTO.PF0618B -
+  NEWNAME (HOM.PF.DDATA_MOVIMENTO.PF0618B.ERRO.JV1ERROR)
+/*
+//*
+//         ENDIF
+//*
+//*******************************************************************
+//*        EXECUCAO DO PF0619B                                      *
+//*******************************************************************
+//*********************************************************************
+//D0180619 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//PRPSASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0619B,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
+//E0180619 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//*
+//PRPSASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0619B,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,250),RLSE),
+//         DCB=(RECFM=FB,LRECL=300,BLKSIZE=0,DSORG=PS)
+//*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(PF0619B),DISP=SHR
+//SYSIN    DD DUMMY
+//*
+//*****************************************************************
+//*        EXECUTA CASO O E0250619 SEJA DIFERENTE DE ZERO         *
+//*****************************************************************
+//         IF E0180619.RC NE 0 THEN
+//E019BR14 EXEC PGM=IDCAMS
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *
+  ALTER HOM.PF.DDATA_MOVIMENTO.PF0619B -
+  NEWNAME (HOM.PF.DDATA_MOVIMENTO.PF0619B.ERRO.JV1ERROR)
+/*
+//*
+//         ENDIF
+//*
+//*******************************************************************
+//*        EXECUCAO DO PF0705B                                      *
+//*******************************************************************
+//*********************************************************************
+//D0200705 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//STASASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0705B,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
+//E0200705 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//*
+//STASASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0705B,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,250),RLSE),
+//         DCB=(RECFM=FB,LRECL=100,BLKSIZE=0,DSORG=PS)
+//*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(PF0705B),DISP=SHR
+//SYSIN    DD DUMMY
+//*
+//*****************************************************************
+//*        EXECUTA CASO O E0270705 SEJA DIFERENTE DE ZERO         *
+//*****************************************************************
+//         IF E0200705.RC NE 0 THEN
+//E021BR14 EXEC PGM=IDCAMS
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *
+  ALTER HOM.PF.DDATA_MOVIMENTO.PF0705B -
+  NEWNAME (HOM.PF.DDATA_MOVIMENTO.PF0705B.ERRO.JV1ERROR)
+/*
+//*
+//         ENDIF
+//*
+//*
+//*******************************************************************
+//*        EXECUCAO DO PF0706B                                      *
+//*******************************************************************
+//*********************************************************************
+//D0220706 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//STASASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0706B,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
+//E0220706 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//*
+//STASASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0706B,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,250),RLSE),
+//         DCB=(RECFM=FB,LRECL=100,BLKSIZE=0,DSORG=PS)
+//*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(PF0706B),DISP=SHR
+//SYSIN    DD DUMMY
+//*
+//*****************************************************************
+//*        EXECUTA CASO O E0290706 SEJA DIFERENTE DE ZERO         *
+//*****************************************************************
+//         IF E0220706.RC NE 0 THEN
+//E023BR14 EXEC PGM=IDCAMS
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *
+  ALTER HOM.PF.DDATA_MOVIMENTO.PF0706B -
+  NEWNAME (HOM.PF.DDATA_MOVIMENTO.PF0706B.ERRO.JV1ERROR)
+/*
+//*
+//         ENDIF
+//*
+//*
+//*****************************************************************
+//*        PESQUISA SE EXISTE E TEM DADOS NO ARQUIVO.             *
+//*        HOM.GPF.MSREJSAS.D$(DANT1)
+//*****************************************************************
+//E024LIST EXEC PGM=IKJEFT01,DYNAMNBR=20,
+//         PARM=('PRDEXIST HOM.GPF.MSREJSAS.D$(DANT1)')
+//SYSTSPRT DD SYSOUT=*
+//SYSPROC  DD DISP=SHR,DSN=HOM.JV1.CLIST
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DUMMY
+//SYSIN    DD DUMMY
+//*
+//*******************************************************************
+//*        EXECUCAO DO PF0402B                                      *
+//*******************************************************************
+//        IF E024LIST.RC = 00 THEN
+//*********************************************************************
+//D0250402 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//RPF0402B DD DSN=HOM.INTERNET.DDATA_MOVIMENTO.PFD01.PROPOSTA,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
+//E0250402 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//*
+//DPF0402B DD DISP=SHR,
+//         DSN=HOM.GPF.MSREJSAS.D$(DANT1)
+//*
+//RPF0402B DD DSN=HOM.INTERNET.DDATA_MOVIMENTO.PFD01.PROPOSTA,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FBA,LRECL=133,BLKSIZE=0,DSORG=PS)
+//*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(PF0402B),DISP=SHR
+//SYSIN    DD DUMMY
+//SORTCNTL DD DSN=HOM.JV1.SYSIN(SORTCNTL),DISP=SHR
+//SORTWK01 DD UNIT=SYSALLDA,SPACE=(CYL,(15,15),RLSE)
+//SORTWK02 DD UNIT=SYSALLDA,SPACE=(CYL,(15,15),RLSE)
+//SORTWK03 DD UNIT=SYSALLDA,SPACE=(CYL,(15,15),RLSE)
+//         ENDIF
+//*
+//E026LIST EXEC  PGM=IKJEFT01,
+//         PARM=('PRDFULL HOM.GPF.MJUNMOV.D$(DANT1)')
+//SYSPROC  DD DSN=HOM.JV1.CLIST,DISP=SHR
+//SYSTSIN  DD DUMMY
+//SYSPRINT DD SYSOUT=*
+//SYSTSPRT DD SYSOUT=*
+//*
+//         IF E026LIST.RC NE 0 THEN
+//*********************************************************************
+//D0260403 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//RPF0403B DD DSN=HOM.REL.DDATA_MOVIMENTO.PF0403B,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
+//E0260403 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//*
+//MOVSIGAT DD DISP=SHR,
+//         DSN=HOM.GPF.MJUNMOV.D$(DANT1)
+//*
+//RPF0403B DD DSN=HOM.REL.DDATA_MOVIMENTO.PF0403B,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(100,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=134,BLKSIZE=0,DSORG=PS)
+//*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(PF0403B),DISP=SHR
+//SYSIN    DD DUMMY
+//SORTCNTL DD DSN=HOM.JV1.SYSIN(SORTCNTL),DISP=SHR
+//SORTWK01 DD UNIT=SYSALLDA,SPACE=(CYL,(15,5),RLSE)
+//SORTWK02 DD UNIT=SYSALLDA,SPACE=(CYL,(15,5),RLSE)
+//SORTWK03 DD UNIT=SYSALLDA,SPACE=(CYL,(15,5),RLSE)
+//         ENDIF
+//*
+//*******************************************************************
+//*        EXECUCAO DO PF0623B                                      *
+//*******************************************************************
+//D0270623 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//PRPSASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0623B.PRPSASSE,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//STASASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0623B.STASASSE,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
+//E0270623 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//*
+//PRPSASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0623B.PRPSASSE,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(100,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=300,BLKSIZE=0,DSORG=PS)
+//*
+//STASASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0623B.STASASSE,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(100,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=100,BLKSIZE=0,DSORG=PS)
+//*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(PF0623B),DISP=SHR
+//SYSIN    DD DUMMY
+//*
+//*****************************************************************
+//*        EXECUTA CASO O E0340623 SEJA DIFERENTE DE ZERO         *
+//*****************************************************************
+//         IF E0270623.RC NE 0 THEN
+//E028BR14 EXEC PGM=IDCAMS
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *
+  ALTER HOM.PF.DDATA_MOVIMENTO.PF0623B.PRPSASSE -
+  NEWNAME (HOM.PF.DDATA_MOVIMENTO.PF0623B.PRPSASSE.ERRO.JV1ERROR)
+  ALTER HOM.PF.DDATA_MOVIMENTO.PF0623B.STASASSE -
+  NEWNAME (HOM.PF.DDATA_MOVIMENTO.PF0623B.STASASSE.ERRO.JV1ERROR)
+/*
+//*
+//         ENDIF
+//*
+//*****************************************************************
+//*        PESQUISA SE EXISTE E TEM DADOS NO ARQUIVO.             *
+//*****************************************************************
+//E029LIST EXEC PGM=IKJEFT01,DYNAMNBR=20,
+//     PARM=('PRDFULL HOM.AU.DDATA_MOVIMENTO.AU6800B.ARQSTAT.PFD00')
+//SYSTSPRT DD SYSOUT=*
+//SYSPROC  DD DISP=SHR,DSN=HOM.JV1.CLIST
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DUMMY
+//SYSIN    DD DUMMY
+//*
+//*******************************************************************
+//*        EXECUCAO DO PF0708B                                      *
+//*******************************************************************
+//         IF E029LIST.RC = 00 THEN
+//*********************************************************************
+//D0300708 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//STACEF   DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0708B1,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//RPF0708B DD DSN=HOM.REL.DDATA_MOVIMENTO.PF0708B1,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
+//E0300708 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//*
+//STAAUTO  DD DISP=SHR,
+//         DSN=HOM.AU.DDATA_MOVIMENTO.AU6800B.ARQSTAT.PFD00
+//*
+//STACEF   DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0708B1,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(50,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=100,BLKSIZE=0,DSORG=PS)
+//*
+//RPF0708B DD DSN=HOM.REL.DDATA_MOVIMENTO.PF0708B1,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(50,500),RLSE),
+//         DCB=(RECFM=FBA,LRECL=133,BLKSIZE=0,DSORG=PS)
+//*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(PF0708B),DISP=SHR
+//SYSIN    DD DUMMY
+//         ENDIF
+//*
+//*****************************************************************
+//*        EXECUTA CASO O E0370708 SEJA DIFERENTE DE ZERO         *
+//*****************************************************************
+//         IF E0300708.RC NE 0 THEN
+//E031BR14 EXEC PGM=IDCAMS
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *
+  ALTER HOM.PF.DDATA_MOVIMENTO.PF0708B1 -
+  NEWNAME (HOM.PF.DDATA_MOVIMENTO.PF0708B1.ERRO.JV1ERROR)
+/*
+//*
+//         ENDIF
+//*
+//*****************************************************************
+//*        PESQUISA SE EXISTE E TEM DADOS NO ARQUIVO.             *
+//*****************************************************************
+//E032LIST EXEC PGM=IKJEFT01,DYNAMNBR=20,
+//         PARM=('PRDFULL HOM.CV.DDATA_MOVIMENTO.CV0010B.CSSTATUS')
+//SYSTSPRT DD SYSOUT=*
+//SYSPROC  DD DISP=SHR,DSN=HOM.JV1.CLIST
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DUMMY
+//SYSIN    DD DUMMY
+//*
+//*******************************************************************
+//*        EXECUCAO DO PF0708B                                      *
+//*******************************************************************
+//         IF E032LIST.RC = 00 THEN
+//*********************************************************************
+//D0330708 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//STACEF   DD DSN=HOM.REL.DDATA_MOVIMENTO.VP0105B.XXXXX,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//RPF0708B DD DSN=HOM.REL.DDATA_MOVIMENTO.PF0708B2,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
+//E0330708 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//*
+//STAAUTO  DD DISP=SHR,
+//         DSN=HOM.CV.DDATA_MOVIMENTO.CV0010B.CSSTATUS
+//*
+//STACEF   DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0708B2,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,250),RLSE),
+//         DCB=(RECFM=FB,LRECL=100,BLKSIZE=0,DSORG=PS)
+//*
+//RPF0708B DD DSN=HOM.REL.DDATA_MOVIMENTO.PF0708B2,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,250),RLSE),
+//         DCB=(RECFM=FBA,LRECL=133,BLKSIZE=0,DSORG=PS)
+//*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(PF0708B),DISP=SHR
+//SYSIN    DD DUMMY
+//         ENDIF
+//*
+//*****************************************************************
+//*        EXECUTA CASO O E0010100 SEJA DIFERENTE DE ZERO         *
+//*****************************************************************
+//         IF E0330708.RC NE 0 THEN
+//E034BR14 EXEC PGM=IDCAMS
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *
+  ALTER HOM.PF.DDATA_MOVIMENTO.PF0708B2 -
+  NEWNAME (HOM.PF.DDATA_MOVIMENTO.PF0708B2.ERRO.JV1ERROR)
+/*
+//*
+//         ENDIF
+//*
+//*******************************************************************
+//*        EXECUCAO DO PF0709B                                      *
+//*******************************************************************
+//*********************************************************************
+//D0350709 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//STASASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0709B,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
+//E0350709 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//*
+//STASASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0709B,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,250),RLSE),
+//         DCB=(RECFM=FB,LRECL=100,BLKSIZE=0,DSORG=PS)
+//*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(PF0709B),DISP=SHR
+//SYSIN    DD DUMMY
+//*
+//*****************************************************************
+//*        EXECUTA CASO O E0420709 SEJA DIFERENTE DE ZERO         *
+//*****************************************************************
+//         IF E0350709.RC NE 0 THEN
+//E036BR14 EXEC PGM=IDCAMS
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *
+  ALTER HOM.PF.DDATA_MOVIMENTO.PF0709B -
+  NEWNAME (HOM.PF.DDATA_MOVIMENTO.PF0709B.ERRO.JV1ERROR)
+/*
+//*
+//         ENDIF
+//*
+//*****************************************************************
+//*        EXECUCAO DO PF0634B                                      *
+//*******************************************************************
+//*********************************************************************
+//D0370634 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//STASASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0634B,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
+//E0370634 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//*
+//STASASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0634B,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,250),RLSE),
+//         DCB=(RECFM=FB,LRECL=100,BLKSIZE=0,DSORG=PS)
+//*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(PF0634B),DISP=SHR
+//SYSIN    DD DUMMY
+//*
+//*****************************************************************
+//*        EXECUTA CASO O E0540634 SEJA DIFERENTE DE ZERO         *
+//*****************************************************************
+//         IF E0370634.RC NE 0 THEN
+//E038BR14 EXEC PGM=IDCAMS
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *
+  ALTER HOM.PF.DDATA_MOVIMENTO.PF0634B -
+  NEWNAME (HOM.PF.DDATA_MOVIMENTO.PF0634B.ERRO.JV1ERROR)
+/*
+//*
+//         ENDIF
+//*
+//*****************************************************************
+//*        PESQUISA SE EXISTE E TEM DADOS NO ARQUIVO.             *
+//*****************************************************************
+//E039LIST EXEC PGM=IKJEFT01,DYNAMNBR=20,
+//    PARM=('PRDFULL HOM.PF.DDATA_MOVIMENTO.PF3995B.PROPSIES.SEMNSGD')
+//SYSTSPRT DD SYSOUT=*
+//SYSPROC  DD DISP=SHR,DSN=HOM.JV1.CLIST
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DUMMY
+//SYSIN    DD DUMMY
+//*
+//*******************************************************************
+//*        EXECUCAO DO PF0641B                                      *
+//*******************************************************************
+//         IF E039LIST.RC = 00 THEN
+//*********************************************************************
+//D0400641 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//ARQCEF   DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0641B,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//ARQFNAE  DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0641B.ARQFNAE,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
+//E0400641 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//*
+//ARQMR    DD DISP=SHR,
+//         DSN=HOM.PF.DDATA_MOVIMENTO.PF3995B.PROPSIES.SEMNSGD
+//*
+//ARQCEF   DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0641B,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(1,2500),RLSE),
+//         DCB=(RECFM=FB,LRECL=300,BLKSIZE=0,DSORG=PS)
+//*
+//ARQFNAE  DD DUMMY,
+//         DSN=HOM.PF.DDATA_MOVIMENTO.PF0641B.ARQFNAE,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,50),RLSE),
+//         DCB=(RECFM=FB,LRECL=300,BLKSIZE=0,DSORG=PS)
+//*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(PF0641B),DISP=SHR
+//SYSIN    DD DUMMY
+//         ENDIF
+//*
+//*****************************************************************
+//*        EXECUTA CASO O E0570641 SEJA DIFERENTE DE ZERO         *
+//*****************************************************************
+//         IF E0400641.RC NE 0 THEN
+//E041BR14 EXEC PGM=IDCAMS
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *
+  ALTER HOM.PF.DDATA_MOVIMENTO.PF0641B -
+  NEWNAME (HOM.PF.DDATA_MOVIMENTO.PF0641B.ERRO.JV1ERROR)
+/*
+//*
+//         ENDIF
+//*
+//*****************************************************************
+//*        PESQUISA SE EXISTE E TEM DADOS NO ARQUIVO.             *
+//*****************************************************************
+//E042LIST EXEC PGM=IKJEFT01,DYNAMNBR=20,
+//         PARM=('PRDFULL HOM.MR.DDATA_MOVIMENTO.MR0002B2.STA')
+//SYSTSPRT DD SYSOUT=*
+//SYSPROC  DD DISP=SHR,DSN=HOM.JV1.CLIST
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DUMMY
+//SYSIN    DD DUMMY
+//*
+//*******************************************************************
+//*        EXECUCAO DO PF0711B                                      *
+//*******************************************************************
+// IF E039LIST.RC = 00 AND E0400641.RC = 00 AND E042LIST.RC = 00 THEN
+//*********************************************************************
+//D0430711 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//STACEF   DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0711B,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//STAFNAE  DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0711B.STAFNAE,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//PRINTER  DD DSN=HOM.REL.DDATA_MOVIMENTO.PF0711B,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
+//E0430711 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//*
+//STAMR    DD DISP=OLD,
+//         DSN=HOM.MR.DDATA_MOVIMENTO.MR0002B2.STA
+//*
+//STACEF   DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0711B,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,250),RLSE),
+//         DCB=(RECFM=FB,LRECL=100,BLKSIZE=0,DSORG=PS)
+//*
+//STAFNAE  DD DUMMY,
+//         DSN=HOM.PF.DDATA_MOVIMENTO.PF0711B.STAFNAE,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(50,50),RLSE),
+//         DCB=(RECFM=FB,LRECL=100,BLKSIZE=0,DSORG=PS)
+//*
+//RPF0711B DD DSN=HOM.REL.DDATA_MOVIMENTO.PF0711B,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,250),RLSE),
+//         DCB=(RECFM=FB,LRECL=133,BLKSIZE=0,DSORG=PS)
+//*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(PF0711B),DISP=SHR
+//SYSIN    DD DUMMY
+//         ENDIF
+//*
+//*****************************************************************
+//*        EXECUTA CASO O E0600711 SEJA DIFERENTE DE ZERO         *
+//*****************************************************************
+//         IF E0430711.RC NE 0 THEN
+//E044BR14 EXEC PGM=IDCAMS
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *
+  ALTER HOM.PF.DDATA_MOVIMENTO.PF0711B -
+  NEWNAME (HOM.PF.DDATA_MOVIMENTO.PF0711B.ERRO.JV1ERROR)
+  ALTER HOM.REL.DDATA_MOVIMENTO.PF0711B -
+  NEWNAME (HOM.REL.DDATA_MOVIMENTO.PF0711B.ERRO.JV1ERROR)
+/*
+//*
+//         ENDIF
+//*
+//*****************************************************************
+//*        PESQUISA SE EXISTE E TEM DADOS NO ARQUIVO.             *
+//*****************************************************************
+//E045LIST EXEC PGM=IKJEFT01,DYNAMNBR=20,
+//         PARM=('PRDFULL HOM.MR.DDATA_MOVIMENTO.MR0002B2.STA')
+//SYSTSPRT DD SYSOUT=*
+//SYSPROC  DD DISP=SHR,DSN=HOM.JV1.CLIST
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DUMMY
+//SYSIN    DD DUMMY
+//*
+//**@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//** CASO OCORRA ABEND NO PF0645 REEXECTAR O PACOTE              ==
+//**@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//**EXECUCAO DO PF0645:                                            *
+//**        GERA: PROP E STA                                       *
+//**         PROP - EXECUTA 641 -> 770                             *
+//**         STA  - EXECUTA 711 -> 771                             *
+//**@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//**BLOCO DE EXECUCAO: PF0645B-PF0641B-PF0711B-PF0770B-PF0771B/EXEC2*
+//**@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//**
+//********************************************************************
+//**       EXECUCAO DO PF0645B                                      *
+//********************************************************************
+//*********************************************************************
+//D0460645 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//PF0645B1 DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0645B1.PROP,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//PF0645B2 DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0645B2.STA,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//PF0645B3 DD DSN=HOM.REL.DDATA_MOVIMENTO.PF0645B3,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
+//E0460645 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//*
+//PF0645B1 DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0645B1.PROP,
+//        UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//        SPACE=(TRK,(500,50),RLSE),
+//        DCB=(RECFM=FB,LRECL=300,BLKSIZE=0,DSORG=PS)
+//*
+//PF0645B2 DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0645B2.STA,
+//        UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//        SPACE=(TRK,(500,250),RLSE),
+//        DCB=(RECFM=FB,LRECL=100,BLKSIZE=0,DSORG=PS)
+//*
+//PF0645B3 DD DSN=HOM.REL.DDATA_MOVIMENTO.PF0645B3,
+//        UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//        SPACE=(TRK,(500,250),RLSE),
+//        DCB=(RECFM=FB,LRECL=133,BLKSIZE=0,DSORG=PS)
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSIN   DD DUMMY
+//SYSTSIN DD DSN=HOM.JV1.SYSIN(PF0645B),DISP=SHR
+//SYSIN   DD DUMMY
+//*
+//******************************************************************
+//**       PESQUISA SE EXISTE E TEM DADOS NO ARQUIVO.             *
+//******************************************************************
+//      IF E0460645.RC = 00 THEN
+//*********************************************************************
+//E047LIST EXEC PGM=IKJEFT01,DYNAMNBR=20,
+//         PARM=('PRDFULL HOM.PF.DDATA_MOVIMENTO.PF0645B1.PROP')
+//SYSTSPRT DD SYSOUT=*
+//SYSPROC  DD DISP=SHR,DSN=HOM.JV1.CLIST
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DUMMY
+//SYSIN    DD DUMMY
+//      ENDIF
+//*
+//********************************************************************
+//**       EXECUCAO DO PF0641B                                      *
+//********************************************************************
+//      IF E047LIST.RC = 00 THEN
+//*********************************************************************
+//D0480641 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//ARQCEF   DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0641B.EXEC2,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//ARQFNAE  DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0641B.ARQFNAE.EXEC2,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
+//E0480641 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//*
+//ARQMR    DD DISP=SHR,
+//         DSN=HOM.PF.DDATA_MOVIMENTO.PF0645B1.PROP
+//*
+//ARQCEF   DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0641B.EXEC2,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,50),RLSE),
+//         DCB=(RECFM=FB,LRECL=300,BLKSIZE=0,DSORG=PS)
+//*
+//ARQFNAE  DD DUMMY,
+//         DSN=HOM.PF.DDATA_MOVIMENTO.PF0641B.ARQFNAE.EXEC2,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,50),RLSE),
+//         DCB=(RECFM=FB,LRECL=300,BLKSIZE=0,DSORG=PS)
+//*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(PF0641B),DISP=SHR
+//SYSIN    DD DUMMY
+//      ENDIF
+//*
+//******************************************************************
+//**       EXECUTA CASO O E0660641 SEJA DIFERENTE DE ZERO         *
+//******************************************************************
+//      IF E0480641.RC NE 0 THEN
+//E049BR14 EXEC PGM=IDCAMS
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *
+  ALTER HOM.PF.DDATA_MOVIMENTO.PF0641B.EXEC2 -
+  NEWNAME (HOM.PF.DDATA_MOVIMENTO.PF0641B.EXEC2.ERRO.JV1ERROR)
+/*
+//*
+//         ENDIF
+//********************************************************************
+//**       EXECUCAO DO PF0770B                                      *
+//********************************************************************
+//      IF E0480641.RC = 00 THEN
+//*********************************************************************
+//D0500770 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SAIDA770 DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0770B.EXEC2,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
+//E0500770 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//*
+//ENTRADA1 DD DISP=SHR,
+//         DSN=HOM.PF.DDATA_MOVIMENTO.PF0641B.EXEC2
+//*
+//SAIDA770 DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0770B.EXEC2,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,50),RLSE),
+//         DCB=(RECFM=FB,LRECL=300,BLKSIZE=0,DSORG=PS)
+//*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(PF0770B),DISP=SHR
+//SYSIN    DD DUMMY
+//         ENDIF
+//*
+//******************************************************************
+//**       PESQUISA SE EXISTE E TEM DADOS NO ARQUIVO.             *
+//******************************************************************
+//         IF E0460645.RC = 00 THEN
+//E051LIST EXEC PGM=IKJEFT01,DYNAMNBR=20,
+//         PARM=('PRDEXIST HOM.PF.DDATA_MOVIMENTO.PF0645B2.STA')
+//SYSTSPRT DD SYSOUT=*
+//SYSPROC  DD DISP=SHR,DSN=HOM.JV1.CLIST
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DUMMY
+//SYSIN    DD DUMMY
+//         ENDIF
+//*
+//********************************************************************
+//**       EXECUCAO DO PF0711B                                      *
+//********************************************************************
+//         IF E051LIST.RC = 00 THEN
+//*********************************************************************
+//D0520711 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//STACEF   DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0711B.EXEC2,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//STAFNAE  DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0711B.STAFNAE.EXEC2,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//RPF0711B DD DSN=HOM.REL.DDATA_MOVIMENTO.PF0711B.EXEC2,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
+//E0520711 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//*
+//STAMR    DD DISP=OLD,
+//         DSN=HOM.PF.DDATA_MOVIMENTO.PF0645B2.STA
+//*
+//STACEF   DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0711B.EXEC2,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(50,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=100,BLKSIZE=0,DSORG=PS)
+//*
+//STAFNAE  DD DUMMY,
+//         DSN=HOM.PF.DDATA_MOVIMENTO.PF0711B.STAFNAE.EXEC2,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,250),RLSE),
+//         DCB=(RECFM=FB,LRECL=100,BLKSIZE=0,DSORG=PS)
+//*
+//RPF0711B DD DSN=HOM.REL.DDATA_MOVIMENTO.PF0711B.EXEC2,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(50,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=133,BLKSIZE=0,DSORG=PS)
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(PF0711B),DISP=SHR
+//SYSIN    DD DUMMY
+//         ENDIF
+//*
+//******************************************************************
+//**       EXECUTA CASO O E0700711 SEJA DIFERENTE DE ZERO         *
+//******************************************************************
+//         IF E0520711.RC NE 0 THEN
+//E053BR14 EXEC PGM=IDCAMS
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *
+  ALTER HOM.PF.DDATA_MOVIMENTO.PF0711B.EXEC2 -
+  NEWNAME (HOM.PF.DDATA_MOVIMENTO.PF0711B.EXEC2.ERRO.JV1ERROR)
+  ALTER HOM.REL.DDATA_MOVIMENTO.PF0711B.EXEC2 -
+  NEWNAME (HOM.REL.DDATA_MOVIMENTO.PF0711B.EXEC2.JV1ERROR)
+/*
+//*
+//         ENDIF
+//*
+//********************************************************************
+//**       EXECUCAO DO PF0771B                                      *
+//********************************************************************
+//         IF E0520711.RC = 00 THEN
+//*********************************************************************
+//E0540771 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SAIDA771 DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0771B.EXEC2,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
+//E0540771 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//*
+//ENTRADA1 DD DISP=SHR,
+//         DSN=HOM.PF.DDATA_MOVIMENTO.PF0711B.EXEC2
+//*
+//SAIDA771 DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0771B.EXEC2,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,50),RLSE),
+//         DCB=(RECFM=FB,LRECL=100,BLKSIZE=0,DSORG=PS)
+//*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(PF0771B),DISP=SHR
+//SYSIN    DD DUMMY
+//      ENDIF
+//*
+//*******************************************************************
+//*        EXECUCAO DO PF0715B                                      *
+//*******************************************************************
+//*********************************************************************
+//D0550715 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//STASASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0715B,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
+//E0550715 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//STASASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0715B,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(250,50),RLSE),
+//         DCB=(RECFM=FB,LRECL=100,BLKSIZE=0,DSORG=PS)
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(PF0715B),DISP=SHR
+//SYSIN    DD DUMMY
+//*
+//*****************************************************************
+//*        EXECUTA CASO O E0840715 SEJA DIFERENTE DE ZERO         *
+//*****************************************************************
+//         IF E0550715.RC NE 0 THEN
+//E056BR14 EXEC PGM=IDCAMS
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *
+  ALTER HOM.PF.DDATA_MOVIMENTO.PF0715B -
+  NEWNAME (HOM.PF.DDATA_MOVIMENTO.PF0715B.ERRO.JV1ERROR)
+/*
+//*
+//         ENDIF
+//*
+//*******************************************************************
+//*        EXECUCAO DO PF0716B                                      *
+//*******************************************************************
+//*********************************************************************
+//D0570716 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//STASASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0716B,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
+//E0570716 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//STASASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0716B,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(250,50),RLSE),
+//         DCB=(RECFM=FB,LRECL=100,BLKSIZE=0,DSORG=PS)
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(PF0716B),DISP=SHR
+//SYSIN    DD DUMMY
+//*
+//*****************************************************************
+//*        EXECUTA CASO O E0860716 SEJA DIFERENTE DE ZERO         *
+//*****************************************************************
+//         IF E0570716.RC NE 0 THEN
+//E058BR14 EXEC PGM=IDCAMS
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *
+  ALTER HOM.PF.DDATA_MOVIMENTO.PF0716B -
+  NEWNAME (HOM.PF.DDATA_MOVIMENTO.PF0716B.ERRO.JV1ERROR)
+/*
+//*
+//         ENDIF
+//*
+//*******************************************************************
+//*        EXECUCAO DO PF0642B                                      *
+//*******************************************************************
+//*********************************************************************
+//E0590642 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//PRPSASSE  DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0642B.PRPSASSE,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//STASASSE  DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0642B.STASASSE,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
+//E0590642 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//*
+//PRPSASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0642B.PRPSASSE,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(250,50),RLSE),
+//         DCB=(RECFM=FB,LRECL=300,BLKSIZE=0,DSORG=PS)
+//*
+//STASASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0642B.STASASSE,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(250,50),RLSE),
+//         DCB=(RECFM=FB,LRECL=100,BLKSIZE=0,DSORG=PS)
+//*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(PF0642B),DISP=SHR
+//SYSIN    DD DUMMY
+//*
+//*****************************************************************
+//*        EXECUTA CASO O E0010100 SEJA DIFERENTE DE ZERO         *
+//*****************************************************************
+//         IF E0590642.RC NE 0 THEN
+//E060BR14 EXEC PGM=IDCAMS
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *
+  ALTER HOM.PF.DDATA_MOVIMENTO.PF0642B.PRPSASSE -
+  NEWNAME (HOM.PF.DDATA_MOVIMENTO.PF0642B.PRPSASSE.ERRO.JV1ERROR)
+  ALTER HOM.PF.DDATA_MOVIMENTO.PF0642B.STASASSE -
+  NEWNAME (HOM.PF.DDATA_MOVIMENTO.PF0642B.STASASSE.ERRO.JV1ERROR)
+/*
+//*
+//         ENDIF
+//*
+//*******************************************************************
+//*        EXECUCAO DO PF0717B                                      *
+//*******************************************************************
+//*********************************************************************
+//D0610717 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//STASASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0717B.STASASSE,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
+//E0610717 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//*
+//STASASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0717B.STASASSE,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(250,50),RLSE),
+//         DCB=(RECFM=FB,LRECL=100,BLKSIZE=0,DSORG=PS)
+//*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(PF0717B),DISP=SHR
+//SYSIN    DD DUMMY
+//*
+//*****************************************************************
+//*        EXECUTA CASO O E0900717 SEJA DIFERENTE DE ZERO         *
+//*****************************************************************
+//         IF E0610717.RC NE 0 THEN
+//E062BR14 EXEC PGM=IDCAMS
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *
+  ALTER HOM.PF.DDATA_MOVIMENTO.PF0717B.STASASSE -
+  NEWNAME (HOM.PF.DDATA_MOVIMENTO.PF0717B.STASASSE.ERRO.JV1ERROR)
+/*
+//*
+//         ENDIF
+//*
+//*******************************************************************
+//*        EXECUCAO DO PF0720B                                      *
+//*******************************************************************
+//*********************************************************************
+//D0630720 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//STASASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0720B,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
+//E0630720 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//*
+//STASASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0720B,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,250),RLSE),
+//         DCB=(RECFM=FB,LRECL=100,BLKSIZE=0,DSORG=PS)
+//*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(PF0720B),DISP=SHR
+//SYSIN    DD DUMMY
+//*
+//*
+//*****************************************************************
+//*        EXECUTA CASO O E0950720 SEJA DIFERENTE DE ZERO         *
+//*****************************************************************
+//         IF E0630720.RC NE 0 THEN
+//E064BR14 EXEC PGM=IDCAMS
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *
+  ALTER HOM.PF.DDATA_MOVIMENTO.PF0720B -
+  NEWNAME (HOM.PF.DDATA_MOVIMENTO.PF0720B.ERRO.JV1ERROR)
+/*
+//*
+//         ENDIF
+//*
+//*******************************************************************
+//*        EXECUCAO DO PF0721B                                      *
+//*******************************************************************
+//*********************************************************************
+//D0650721 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//STASASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0721B,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
+//E0650721 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//*
+//STASASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0721B,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,250),RLSE),
+//         DCB=(RECFM=FB,LRECL=100,BLKSIZE=0,DSORG=PS)
+//*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(PF0721B),DISP=SHR
+//SYSIN    DD DUMMY
+//*
+//*****************************************************************
+//*        EXECUTA CASO O E0970721 SEJA DIFERENTE DE ZERO         *
+//*****************************************************************
+//         IF E0650721.RC NE 0 THEN
+//E066BR14 EXEC PGM=IDCAMS
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *
+  ALTER HOM.PF.DDATA_MOVIMENTO.PF0721B -
+  NEWNAME (HOM.PF.DDATA_MOVIMENTO.PF0721B.ERRO.JV1ERROR)
+/*
+//*
+//         ENDIF
+//*
+//*
+//*******************************************************************
+//*        EXECUCAO DO PF0725B                                      *
+//*******************************************************************
+//*********************************************************************
+//D0670725 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//STASASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0725B,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
+//E0670725 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//*
+//STASASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0725B,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(1,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=100,BLKSIZE=0,DSORG=PS)
+//*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(PF0725B),DISP=SHR
+//SYSIN    DD DUMMY
+//*
+//*****************************************************************
+//*        EXECUTA CASO O E0990725 SEJA DIFERENTE DE ZERO         *
+//*****************************************************************
+//         IF E0670725.RC NE 0 THEN
+//E068BR14 EXEC PGM=IDCAMS
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *
+  ALTER HOM.PF.DDATA_MOVIMENTO.PF0725B -
+  NEWNAME (HOM.PF.DDATA_MOVIMENTO.PF0725B.ERRO.JV1ERROR)
+/*
+//*
+//         ENDIF
+//*
+//*******************************************************************
+//*        EXECUCAO DO PF0726B                                      *
+//*******************************************************************
+//*********************************************************************
+//D0690726 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//STASASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0726B,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
+//E0690726 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//*
+//STASASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0726B,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,250),RLSE),
+//         DCB=(RECFM=FB,LRECL=100,BLKSIZE=0,DSORG=PS)
+//*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(PF0726B),DISP=SHR
+//SYSIN    DD DUMMY
+//*
+//*****************************************************************
+//*        EXECUTA CASO O E1010726 SEJA DIFERENTE DE ZERO         *
+//*****************************************************************
+//         IF E0690726.RC NE 0 THEN
+//E070BR14 EXEC PGM=IDCAMS
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *
+  ALTER HOM.PF.DDATA_MOVIMENTO.PF0726B -
+  NEWNAME (HOM.PF.DDATA_MOVIMENTO.PF0726B.ERRO.JV1ERROR)
+/*
+//*
+//         ENDIF
+//*
+//*******************************************************************
+//*        EXECUCAO DO PF0648B                                      *
+//*******************************************************************
+//*********************************************************************
+//D0710648 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//PRPSASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0648B.PROP,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
+//E0710648 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//*
+//PRPSASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0648B.PROP,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,250),RLSE),
+//         DCB=(RECFM=FB,LRECL=300,BLKSIZE=0,DSORG=PS)
+//*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(PF0648B),DISP=SHR
+//SYSIN    DD DUMMY
+//*
+//*******************************************************************
+//*        EXECUCAO DO PF0714B                                      *
+//*******************************************************************
+//*********************************************************************
+//D0720714 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//STASASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0714B,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
+//E0720714 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//*
+//STASASSE DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0714B,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(250,50),RLSE),
+//         DCB=(RECFM=FB,LRECL=100,BLKSIZE=0,DSORG=PS)
+//*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(PF0714B),DISP=SHR
+//SYSIN    DD DUMMY
+//*
+//*****************************************************************
+//*        EXECUTA CASO O E1070714 SEJA DIFERENTE DE ZERO         *
+//*****************************************************************
+//         IF E0720714.RC NE 0 THEN
+//E073BR14 EXEC PGM=IDCAMS
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *
+  ALTER HOM.PF.DDATA_MOVIMENTO.PF0714B -
+  NEWNAME (HOM.PF.DDATA_MOVIMENTO.PF0714B.ERRO.JV1ERROR)
+/*
+//*
+//         ENDIF
+//*
+//*
+//*********************************************************************
+//** STEP DE ENVIO DE MENSAGEM SOBRE JOB COM  ERRO NO ZEKE.          **
+//*********************************************************************
+//*   IF (ABEND | RC EQ 99 | RC EQ 09 | RC EQ 08 | RC EQ 12) THEN
+//* ABEND EXEC PPSEND,N=JPPFD02
+//*   ENDIF
+//*
+//*
+//*
+//*
+//*
+//F001LIST EXEC  PGM=IKJEFT01,
+//         PARM=('PRDFULL HOM.REL.DDATA_MOVIMENTO.PF2620B3')
+//SYSPROC  DD DSN=HOM.JV1.CLIST,DISP=SHR
+//SYSTSIN  DD DUMMY
+//SYSPRINT DD SYSOUT=*
+//SYSTSPRT DD SYSOUT=*
+//*
+//         IF F001LIST.RC = 00 THEN
+//F002PUT  EXEC PGM=FTP,REGION=4096K,TIME=NOLIMIT,
+//         PARM='10.100.2.144'
+//*STEPLIB DD DSN=TCPIP.SEZALOAD,DISP=SHR
+//SYSTCPD  DD DSN=HOM1.TCPPARMS(TCPDATA),DISP=SHR
+//SYSFTPD  DD DSN=HOM1.TCPPARMS(FTPSDATA),DISP=SHR
+//SYSMDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//INPUT    DD *
+USERPROD USRPRD
+CD \UPLOAD\JV1-SIAS\OUTROS\GERADOS
+PUT 'HOM.REL.DDATA_MOVIMENTO.PF2620B3'             +
+    DDATA_MOVIMENTO_PF2620B3.TXT
+QUIT
+//  ENDIF
+//*
+//**********************************************************************
+//F003LIST EXEC  PGM=IKJEFT01,
+//         PARM=('PRDFULL HOM.REL.DDATA_MOVIMENTO.PF0707B')
+//SYSPROC  DD DSN=HOM.JV1.CLIST,DISP=SHR
+//SYSTSIN  DD DUMMY
+//SYSPRINT DD SYSOUT=*
+//SYSTSPRT DD SYSOUT=*
+//*
+//         IF F003LIST.RC = 00 THEN
+//F004PUT  EXEC PGM=FTP,REGION=4096K,TIME=NOLIMIT,
+//         PARM='10.100.2.144'
+//*STEPLIB DD DSN=TCPIP.SEZALOAD,DISP=SHR
+//SYSTCPD  DD DSN=HOM1.TCPPARMS(TCPDATA),DISP=SHR
+//SYSFTPD  DD DSN=HOM1.TCPPARMS(FTPSDATA),DISP=SHR
+//SYSMDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//INPUT    DD *
+USERPROD USRPRD
+CD \UPLOAD\JV1-SIAS\OUTROS\GERADOS
+PUT 'HOM.REL.DDATA_MOVIMENTO.PF0707B'             +
+    DDATA_MOVIMENTO_PF0707B.TXT
+QUIT
+//  ENDIF
+//*
+//**********************************************************************
+//F005MRE  EXEC PGM=FTP,REGION=4096K,TIME=NOLIMIT,
+//         PARM='10.100.2.144'
+//*STEPLIB DD DSN=TCPIP.SEZALOAD,DISP=SHR
+//SYSTCPD  DD DSN=HOM1.TCPPARMS(TCPDATA),DISP=SHR
+//SYSFTPD  DD DSN=HOM1.TCPPARMS(FTPSDATA),DISP=SHR
+//SYSMDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//INPUT    DD *
+USERPROD USRPRD
+PUT 'HOM.REL.DDATA_MOVIMENTO.PF0403B'     +
+    DDATA_MOVIMENTO.PF0403B.GESEF
+PUT 'HOM.REL.DDATA_MOVIMENTO.PF0711B'     +
+    DDATA_MOVIMENTO.PF0711B.GESIS
+QUIT
+/*
+//*============================================================
+//*==  ENVIO TEMPORARIO DOS ARQUIVO PF0645B PARA PASTA GESUN  =
+//*============================================================
+//F006PUT  EXEC PGM=FTP,REGION=4096K,TIME=NOLIMIT,
+//         PARM='10.100.2.144'
+//*STEPLIB DD DSN=TCPIP.SEZALOAD,DISP=SHR
+//SYSTCPD  DD DSN=HOM1.TCPPARMS(TCPDATA),DISP=SHR
+//SYSFTPD  DD DSN=HOM1.TCPPARMS(FTPSDATA),DISP=SHR
+//SYSMDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//INPUT    DD *
+USERPROD USRPRD
+CD \UPLOAD\JV1-SIAS\OUTROS\GERADOS
+PUT 'HOM.PF.DDATA_MOVIMENTO.PF0645B1.PROP'   +
+    HOM.PF.DDATA_MOVIMENTO.PF0645B1.PROP.TXT
+PUT 'HOM.PF.DDATA_MOVIMENTO.PF0645B2.STA'    +
+    HOM.PF.DDATA_MOVIMENTO.PF0645B2.STA.TXT
+PUT 'HOM.REL.DDATA_MOVIMENTO.PF0645B3'        +
+    HOM.PF.DDATA_MOVIMENTO.PF0645B3.TXT
+QUIT
+//*
+//*********************************************************************
+//F007PUT  EXEC PGM=FTP,REGION=4096K,TIME=NOLIMIT,
+//         PARM='10.100.2.144'
+//*STEPLIB DD DSN=TCPIP.SEZALOAD,DISP=SHR
+//SYSTCPD  DD DSN=HOM1.TCPPARMS(TCPDATA),DISP=SHR
+//SYSFTPD  DD DSN=HOM1.TCPPARMS(FTPSDATA),DISP=SHR
+//SYSMDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//INPUT    DD *
+USERPROD USRPRD
+PUT 'HOM.PF.DDATA_MOVIMENTO.PF0727B.RPF0727B' +
+    DDATA_MOVIMENTO_PF0727B_RPF0727B.TXT
+QUIT
+//**********************************************************************
+//F008LIST EXEC  PGM=IKJEFT01,
+//         PARM=('PRDFULL TRANS.FPREV.DDATA_MOVIMENTO.RETPREV')
+//SYSPROC  DD DSN=HOM.JV1.CLIST,DISP=SHR
+//SYSTSIN  DD DUMMY
+//SYSPRINT DD SYSOUT=*
+//SYSTSPRT DD SYSOUT=*
+//*
+//**********************************************************************
+//         IF F008LIST.RC = 00 THEN
+//F009PUT  EXEC PGM=FTP,REGION=4096K,TIME=NOLIMIT,
+//         PARM='10.100.2.144'
+//*STEPLIB DD DSN=TCPIP.SEZALOAD,DISP=SHR
+//SYSTCPD  DD DSN=HOM1.TCPPARMS(TCPDATA),DISP=SHR
+//SYSFTPD  DD DSN=HOM1.TCPPARMS(FTPSDATA),DISP=SHR
+//SYSMDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//INPUT    DD *
+USERPROD USRPRD
+CD \UPLOAD\JV1-SIAS\OUTROS\GERADOS
+PUT 'TRANS.FPREV.DDATA_MOVIMENTO.RETPREV'   +
+   TRANS.FPREV.DDATA_MOVIMENTO.RETPREV.TXT
+QUIT
+//  ENDIF
+//*
+//**********************************************************************
+//F010LIST EXEC  PGM=IKJEFT01,
+//         PARM=('PRDFULL TRANS.FPREV.DDATA_MOVIMENTO.PRPFPREV')
+//SYSPROC  DD DSN=HOM.JV1.CLIST,DISP=SHR
+//SYSTSIN  DD DUMMY
+//SYSPRINT DD SYSOUT=*
+//SYSTSPRT DD SYSOUT=*
+//*
+//**********************************************************************
+//         IF F010LIST.RC = 00 THEN
+//F011PUT  EXEC PGM=FTP,REGION=4096K,TIME=NOLIMIT,
+//         PARM='10.100.2.144'
+//*STEPLIB DD DSN=TCPIP.SEZALOAD,DISP=SHR
+//SYSTCPD  DD DSN=HOM1.TCPPARMS(TCPDATA),DISP=SHR
+//SYSFTPD  DD DSN=HOM1.TCPPARMS(FTPSDATA),DISP=SHR
+//SYSMDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//INPUT    DD *
+USERPROD USRPRD
+CD \UPLOAD\JV1-SIAS\OUTROS\GERADOS
+PUT 'TRANS.FPREV.DDATA_MOVIMENTO.PRPFPREV' +
+  TRANS.FPREV.DDATA_MOVIMENTO.PRPFPREV.TXT
+QUIT
+//  ENDIF
+//*

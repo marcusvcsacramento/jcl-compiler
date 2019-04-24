@@ -17,9 +17,9 @@ try:
     job_name=sys.argv[4]
 
     data_execucao = datetime.datetime.now().strftime("%y%m%d")
-    #data_execucao = '190315'
+    #data_execucao = '190411'
     data_load = datetime.datetime.now().strftime("%Y%m%d")
-    #data_load = '20190315'
+    #data_load = '20190411'
 
     hostname = config.get('ZOS.'+ambiente_tom,'host')
     port = int(config.get('ZOS.'+ambiente_tom,'port'))
@@ -103,7 +103,7 @@ with open(arquivo_jobs,'r') as job:
                 load_result=''
             color="\033[42m"
             if max_rc:
-                if str(max_rc.group(1))!="00" and str(max_rc.group(1)) != "0004":
+                if str(max_rc.group(1))!="0000" and str(max_rc.group(1)) != "0004":
                     color="\033[41m"
                 print(color+"{};{};{};{}\033[0m\n".format(programa,jobnumber,max_rc.group(1),load_value))
                 saida.write("{};{};{};{}\n".format(programa,jobnumber,max_rc.group(1),load_value))

@@ -1,0 +1,139 @@
+//VHBID03  JOB (00,PN),'ID_EXECUTOR',TIME=1440,CLASS=A,
+//         MSGCLASS=T,MSGLEVEL=(1,1)
+//*
+/*ROUTE PRINT JES2PRD1
+//*
+//JOBLIB   DD DISP=SHR,DSN=DSNC10.DB2H.SDSNLOAD
+//         DD DISP=SHR,DSN=HOM.JV1.LOAD
+//*
+//*DIARIA JV1. DATA:DATA_MOVIMENTO
+//*DIARIA JV1. PERIODO:PERIODO_MOVIMENTO
+//*DIARIA JV1. ANO MES:ANOMES_MOVIMENTO
+//*DIARIA JV1. DIA:DIA_MOVIMENTO
+//*DIARIA JV1. DATA ANTERIOR:DATA_ANTERIOR 
+//*
+//*********************************************************************
+//**       GET DO ARQUIVO NO NTSERVERCPD                             **
+//*********************************************************************
+//E001GET  EXEC PGM=FTP,REGION=4M,
+//         PARM='10.100.2.144'
+//STEPLIB  DD DSN=TCPIP.SEZALOAD,DISP=SHR
+//SYSTCPD  DD DSN=HOM1.TCPPARMS(TCPDATA),DISP=SHR
+//SYSFTPD  DD DSN=HOM1.TCPPARMS(FTPSDATA),DISP=SHR
+//SYSMDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//INPUT    DD *
+USERPROD USRPRD
+CD UPLOAD\JV1-SIAS\ENTRADA_RECUPERADA\DATA_MOVIMENTO
+LOCSITE UNIT=SYSDA
+LOCSITE TRACKS
+LOCSITE PRIMARY=50
+LOCSITE LRECL=300 BLKSIZE=0 RECFM=FB
+GET HOM.BI.DDATA_MOVIMENTO.MOVXREDE.DATA +
+    'HOM.BI.DDATA_MOVIMENTO.MOVXREDE.DATA'
+QUIT
+//*
+//*
+//*********************************************************************
+//**       COM OU SEM DADOS VAI EXECUTAR                              *
+//*********************************************************************
+//E002LIST EXEC  PGM=IKJEFT01,
+//     PARM=('PRDFULL HOM.BI.DDATA_MOVIMENTO.MOVXREDE.DATA')
+//SYSPROC  DD DSN=HOM.JV1.CLIST,DISP=SHR
+//SYSTSIN  DD DUMMY
+//SYSPRINT DD SYSOUT=*
+//SYSTSPRT DD SYSOUT=*
+//*
+//********************************************************************
+//*********************************************************************
+//**       EXECUTA BI3600B                                           **
+//*********************************************************************
+//         IF E002LIST.RC = 00 THEN
+//E0043600 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//MOVSCRED DD DISP=SHR,
+//         DSN=HOM.BI.DDATA_MOVIMENTO.MOVXREDE.DATA
+//*
+//ARQVDEMP DD DSN=HOM.BI.DDATA_MOVIMENTO.BI3600B.ARQVDEMP.MOVXREDE,
+//         DISP=(,CATLG,DELETE),
+//         UNIT=SYSDA,SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=300,BLKSIZE=0,DSORG=PS)
+//*
+//ARQAUTO  DD DSN=HOM.BI.DDATA_MOVIMENTO.BI3600B.ARQAUTO.MOVXREDE,
+//         DISP=(,CATLG,DELETE),
+//         UNIT=SYSDA,SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=300,BLKSIZE=0,DSORG=PS)
+//*
+//ARQRISCO DD DSN=HOM.BI.DDATA_MOVIMENTO.BI3600B.ARQRISCO.MOVXREDE,
+//         DISP=(,CATLG,DELETE),
+//         UNIT=SYSDA,SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=300,BLKSIZE=0,DSORG=PS)
+//*
+//ARQCEF   DD DSN=HOM.BI.DDATA_MOVIMENTO.BI3600B.ARQCEF.MOVXREDE,
+//         DISP=(,CATLG,DELETE),
+//         UNIT=SYSDA,SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=300,BLKSIZE=0,DSORG=PS)
+//*
+//RBI3600B DD DSN=HOM.BI.DDATA_MOVIMENTO.BI3600B.RBI3600B.MOVXREDE,
+//         DISP=(,CATLG,DELETE),
+//         UNIT=SYSDA,SPACE=(TRK,(1,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=132,BLKSIZE=0,DSORG=PS)
+//*
+//RBI3600D DD DSN=HOM.BI.DDATA_MOVIMENTO.BI3600B.RBI3600D.MOVXREDE,
+//         DISP=(,CATLG,DELETE),
+//         UNIT=SYSDA,SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=200,BLKSIZE=0,DSORG=PS)
+//*
+//RBI3600S DD DSN=HOM.BI.DDATA_MOVIMENTO.BI3600B.RBI3600S.MOVXREDE,
+//         DISP=(,CATLG,DELETE),
+//         UNIT=SYSDA,SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=250,BLKSIZE=0,DSORG=PS)
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(BI3600B),DISP=SHR
+//SYSIN    DD DUMMY
+//*
+//         ENDIF
+//**
+//*********************************************************************
+//**       EXECUTA BI3602B                                           **
+//*********************************************************************
+//         IF E0043600.RC = 00 THEN
+//E0053602 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(BI3602B),DISP=SHR
+//SYSIN    DD DUMMY
+//         ENDIF
+//*
+//*********************************************************************
+//**  INIBIDO - RM037558-0414   - CLOVIS  EM 29/04/2014             ***
+//** REATIVADO- RM037573-0414   - CLOVIS  EM 30/04/2014             ***
+//*********************************************************************
+//         IF E0053602.RC = 00 THEN
+//E0063005 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(BI3005B),DISP=SHR
+//SYSIN    DD DUMMY
+//         ENDIF
+//*
+//*********************************************************************
+//** STEP DE ENVIO DE MENSAGEM SOBRE JOB COM  ERRO NO ZEKE.          **
+//*********************************************************************
+//*   IF (ABEND | RC EQ 99 | RC EQ 09 | RC EQ 08 | RC EQ 12) THEN
+//* ABEND EXEC PPSEND,N=JPBID03
+//*   ENDIF
+//*

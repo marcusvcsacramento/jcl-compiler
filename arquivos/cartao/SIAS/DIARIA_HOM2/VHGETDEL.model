@@ -1,0 +1,28 @@
+//VHGETDEL JOB (99,PN),'ID_EXECUTOR',
+//         TIME=1440,
+//         CLASS=A,MSGCLASS=T,MSGLEVEL=(1,1)
+/*ROUTE PRINT JES2PRD1
+//*
+//***************************************************************
+//JOBLIB     DD DISP=SHR,DSN=DSNC10.DB2H.SDSNLOAD
+//           DD DISP=SHR,DSN=HOM.JV1.LOAD
+//***************************************************************
+//*******************************************************************
+//**       DELECAO                                                ***
+//*******************************************************************
+//E000BR14 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//DELETE01 DD DSN=HOM.CB.DDATA_ANTERIOR.R600139.RCV,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//*
+//E012ENER EXEC  PGM=ICEGENER
+//SYSUT1   DD DSN=HOM.EM.DDATA_ANTERIOR.EM8008B.CV600139,
+//         DISP=SHR
+//SYSUT2   DD DSN=HOM.CB.DDATA_ANTERIOR.R600139.RCV,
+//         SPACE=(TRK,(500,100),RLSE),UNIT=SYSDA,
+//         DCB=*.SYSUT1,DSORG=PS,
+//         DISP=(,CATLG,DELETE)
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD DUMMY
+

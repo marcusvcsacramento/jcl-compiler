@@ -71,6 +71,12 @@
 //* EXECUTA O PF0613B COM O ARQUIVO HOM.PF.DDATA_MOVIMENTO.PF0630B.PARAMEO
 //* POIS ELE CONTEM DADOS
 //*******************************************************************
+//D0050613 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//PARAMS   DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0613B.MVPARAM,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
 //E0050613 EXEC PGM=IKJEFT01,DYNAMNBR=20,
 //         COND=((00,NE,E002VZ01),(00,NE,E0010630))
 //SYSTSPRT DD SYSOUT=*
@@ -93,6 +99,12 @@
 //* POIS O ARQUIVO HOM.PF.DDATA_MOVIMENTO.PF0630B.PARAMEO
 //* NAO CONTEM DADOS
 //*******************************************************************
+//D0070613 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//PARAMS   DD DSN=HOM.PF.DDATA_MOVIMENTO.PF0613B.MVPARAM,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
 //E0070613 EXEC PGM=IKJEFT01,DYNAMNBR=20,
 //         COND=(00,EQ,E002VZ01)
 //SYSTSPRT DD SYSOUT=*
@@ -111,6 +123,12 @@
 //SYSIN    DD DUMMY
 //*
 //********************************************************************
+//D0080139 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//ARQCE1   DD DSN=HOM.PF.DDATA_MOVIMENTO.CB0139B.MVARQCRP,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
 //E0080139 EXEC PGM=IKJEFT01,DYNAMNBR=20
 //SYSTSPRT DD SYSOUT=*
 //SYSPRINT DD SYSOUT=*

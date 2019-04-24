@@ -1,0 +1,988 @@
+//VHGETH06 JOB (00,PN),'PRODUCAO-MVS',TIME=1440,
+//         CLASS=A,MSGCLASS=T,MSGLEVEL=(1,1),RESTART=E0068008
+/*ROUTE PRINT JES2PRD1
+//*
+//JOBLIB   DD DISP=SHR,DSN=DSNC10.DB2H.SDSNLOAD
+//         DD DISP=SHR,DSN=HOM.JV1.LOAD
+//*
+//*******************************************************************
+//**       DELECAO                                                ***
+//*******************************************************************
+//E000BR14 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//DELETE01 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8006B.SICOV,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE02 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8006B.SICAP,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE03 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8006B.SICOB,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE04 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8006B.SIGPF,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE05 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8006B.CARTAO,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE06 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8006B.CHEQUE,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE07 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8006B.SIACC,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE08 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8006B.BANCOOB,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE09 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8006B.SICOVP,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE10 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8006B.SICAPP,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE11 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8006B.EXPURGO,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE12 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8006B.DEBITO,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE13 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8006B.SIGCB,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE14 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8006B.CESTASER,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE15 DD DSN=HOM.EM.DDATA_ANTERIOR.TOTAL.ARQSH06,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE16 DD DSN=HOM.GE.DDATA_MOVIMENTO.VHGETH06.OK,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//*
+//*****************************************************************
+//*        JUNCAO DOS ARQUIVOS CAPTURADOS
+//*****************************************************************
+//*E001ENER EXEC PGM=ICEGENER
+//*SYSUT1   DD DISP=SHR,DSN=HOM.EM.DDATA_ANTERIOR.ECOB.JUNCAO
+//*         DD DISP=SHR,DSN=HOM.EM.DDATA_ANTERIOR.HCOB.JUNCAO
+//*         DD DISP=SHR,DSN=HOM.EM.DDATA_ANTERIOR.SICAP.JUNCAO
+//*         DD DISP=SHR,DSN=HOM.EM.DDATA_ANTERIOR.C100.JUNCAO
+//*         DD DISP=SHR,DSN=HOM.EM.DDATA_ANTERIOR.C200.JUNCAO
+//*         DD DISP=SHR,DSN=HOM.EM.DDATA_ANTERIOR.E100.JUNCAO
+//*         DD DISP=SHR,DSN=HOM.EM.DDATA_ANTERIOR.E200.JUNCAO
+//*         DD DISP=SHR,DSN=HOM.EM.DDATA_ANTERIOR.K100.JUNCAO
+//*         DD DISP=SHR,DSN=HOM.EM.DDATA_ANTERIOR.K200.JUNCAO
+//*         DD DISP=SHR,DSN=HOM.EM.DDATA_ANTERIOR.M100.JUNCAO
+//*         DD DISP=SHR,DSN=HOM.EM.DDATA_ANTERIOR.M200.JUNCAO
+//*         DD DISP=SHR,DSN=HOM.EM.DDATA_ANTERIOR.N100.JUNCAO
+//*         DD DISP=SHR,DSN=HOM.EM.DDATA_ANTERIOR.N200.JUNCAO
+//*         DD DISP=SHR,DSN=HOM.EM.DDATA_ANTERIOR.S100.JUNCAO
+//*         DD DISP=SHR,DSN=HOM.EM.DDATA_ANTERIOR.S200.JUNCAO
+//*
+//*SYSUT2   DD DSN=HOM.EM.DDATA_ANTERIOR.TOTAL.ARQSH06,
+//*         UNIT=SYSDA,SPACE=(TRK,(250,1500),RLSE),
+//*         DCB=(RECFM=FB,LRECL=500,BLKSIZE=27500,DSORG=PS),
+//*         DISP=(,CATLG,CATLG)
+//*SYSPRINT DD SYSOUT=*
+//*SYSIN    DD DUMMY
+//*
+//*******************************************************************
+//*      Ajuste para execução em HOM2 JV1
+//*******************************************************************
+//E001GET  EXEC PGM=FTP,REGION=4M,PARM='10.100.2.144'
+//STEPLIB  DD DSN=TCPIP.SEZALOAD,DISP=SHR
+//SYSTCPD  DD DSN=HOM1.TCPPARMS(TCPDATA),DISP=SHR
+//SYSFTPD  DD DSN=HOM1.TCPPARMS(FTPSDATA),DISP=SHR
+//SYSMDUMP DD SYSOUT=Z
+//SYSPRINT DD SYSOUT=*
+//SYSOUT   DD SYSOUT=*
+//INPUT    DD *
+USERPROD USRPRD
+LOCSITE TRACKS
+LOCSITE PRIMARY=250
+LOCSITE SECONDARY=1500
+LOCSITE LRECL=500 BLKSIZE=0 RECFM=FB
+CD \UPLOAD\JV1-SIAS\ENTRADA\ARQH
+GET DDATA_ANTERIOR.TOTAL.ARQSH06.TXT     +
+'HOM.EM.DDATA_ANTERIOR.TOTAL.ARQSH06' (REPLACE
+quit
+//*
+//E002LIST EXEC PGM=IKJEFT01,
+//         PARM=('PRDFULL HOM.EM.DDATA_ANTERIOR.TOTAL.ARQSH06')
+//SYSPROC  DD DSN=HOM.JV1.CLIST,DISP=SHR
+//SYSTSIN  DD DUMMY
+//SYSPRINT DD SYSOUT=*
+//SYSTSPRT DD SYSOUT=*
+//*
+//         IF E002LIST.RC = 00  THEN
+//*******************************************************************
+//*        FUNCAO ............GERACAO DE ARQUIVOS DO PROJETO SAP
+//*                           REF. RETORNO (ARQ-H) EXCETO SINISTRO
+//*******************************************************************
+//E0028006 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//*
+//ARQH     DD DISP=SHR,DSN=HOM.EM.DDATA_ANTERIOR.TOTAL.ARQSH06
+//*
+//*------------------------------------------------------
+//*-------- VAI PARA O STEP E0068008 DA JPGETH06
+//*------------------------------------------------------
+//SICOV    DD DSN=HOM.EM.DDATA_ANTERIOR.EM8006B.SICOV,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=300,BLKSIZE=0,DSORG=PS)
+//*
+//*------------------------------------------------------
+//*-------- VAI PARA O STEP E0088009 DA JPGETH06
+//*------------------------------------------------------
+//SICAP    DD DSN=HOM.EM.DDATA_ANTERIOR.EM8006B.SICAP,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=300,BLKSIZE=0,DSORG=PS)
+//*
+//*------------------------------------------------------
+//*-------- VAI PARA O STEP E0048007 DA JPGETH06
+//*------------------------------------------------------
+//SICOB    DD DSN=HOM.EM.DDATA_ANTERIOR.EM8006B.SICOB,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=300,BLKSIZE=0,DSORG=PS)
+//*
+//*------------------------------------------------------
+//*-------- VAI PARA O STEP E0178010 DA JPGETH06
+//*------------------------------------------------------
+//SIGPF    DD DSN=HOM.EM.DDATA_ANTERIOR.EM8006B.SIGPF,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=300,BLKSIZE=0,DSORG=PS)
+//*
+//*------------------------------------------------------
+//*-------- VAI PARA O STEP E0158023 DA JPGETH06
+//*------------------------------------------------------
+//CARTAO   DD DSN=HOM.EM.DDATA_ANTERIOR.EM8006B.CARTAO,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=300,BLKSIZE=0,DSORG=PS)
+//*
+//*------------------------------------------------------
+//*-------- VAI PARA O STEP E0138022 DA JPGETH06
+//*------------------------------------------------------
+//CHEQUE   DD DSN=HOM.EM.DDATA_ANTERIOR.EM8006B.CHEQUE,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=300,BLKSIZE=0,DSORG=PS)
+//*
+//*------------------------------------------------------
+//*-------- VAI PARA O STEP E0108020 DA JPGETH06
+//*-------- VAI PARA O STEP E0128021 DA JPGETH06
+//*------------------------------------------------------
+//SIACC    DD DSN=HOM.EM.DDATA_ANTERIOR.EM8006B.SIACC,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=300,BLKSIZE=0,DSORG=PS)
+//*
+//*------------------------------------------------------
+//*-------- VAI PARA O STEP E0198012 DA JPGETH06
+//*------------------------------------------------------
+//BANCOOB  DD DSN=HOM.EM.DDATA_ANTERIOR.EM8006B.BANCOOB,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=400,BLKSIZE=0,DSORG=PS)
+//*
+//*------------------------------------------------------
+//*-------- VAI PARA O STEP E0088009 DA JPGETH06
+//*------------------------------------------------------
+//SICAPP   DD DSN=HOM.EM.DDATA_ANTERIOR.EM8006B.SICAPP,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=300,BLKSIZE=0,DSORG=PS)
+//*
+//*------------------------------------------------------
+//*-------- NAO ESTA INDO PARA NENHUM LUGAR
+//*------------------------------------------------------
+//SICOVP   DD DSN=HOM.EM.DDATA_ANTERIOR.EM8006B.SICOVP,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=300,BLKSIZE=0,DSORG=PS)
+//*
+//*------------------------------------------------------
+//*-------- ARQUIVO DE EXPURGO
+//*------------------------------------------------------
+//EXPURGO  DD DSN=HOM.EM.DDATA_ANTERIOR.EM8006B.EXPURGO,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=500,BLKSIZE=0,DSORG=PS)
+//*
+//*------------------------------------------------------
+//*-------- ARQUIVO DE EXPURGO
+//*------------------------------------------------------
+//SIGCB    DD DSN=HOM.EM.DDATA_ANTERIOR.EM8006B.SIGCB,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=400,BLKSIZE=0,DSORG=PS)
+//*
+//*------------------------------------------------------
+//*-------- ARQUIVO DE EXPURGO
+//*------------------------------------------------------
+//DEBITO   DD DSN=HOM.EM.DDATA_ANTERIOR.EM8006B.DEBITO,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=150,BLKSIZE=0,DSORG=PS)
+//*------------------------------------------------------
+//*-------- ARQUIVO DE CESTA DE SERVICOS DISEF
+//*------------------------------------------------------
+//CESTASER DD DSN=HOM.EM.DDATA_ANTERIOR.EM8006B.CESTASER,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=300,BLKSIZE=0,DSORG=PS)
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSIN    DD DUMMY
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(EM8006B),DISP=SHR
+//*
+//         ENDIF
+//*******************************************************************
+//**       DELECAO                                                ***
+//*******************************************************************
+//E003BR14 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//DELETE01 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00383,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE02 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB01010,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE03 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB41428,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE04 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00011,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE05 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00013,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE06 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00031,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE07 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00033,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE08 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00044,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE09 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00060,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE10 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00061,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE11 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00062,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE12 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00072,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE13 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00075,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE14 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00100,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE15 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00113,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE16 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00114,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE17 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00130,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE18 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00233,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE19 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00287,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE20 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00288,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE21 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00319,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE22 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00320,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE23 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00282,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//*
+//*******************************************************************
+//*        FUNCAO .................  GERACAO DE ARQUIVOS DO LATOUT
+//*                                  ARQUIVO H PARA O CNAB ( SICOB )
+//*******************************************************************
+//         IF E0028006.RC = 00 THEN
+//E0048007 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//*------------------------------------------------------
+//*-------- VAI TUDO PARA A JPGETH08 E FICA SOMENTE LA
+//*------------------------------------------------------
+//ENTRADA  DD DISP=SHR,
+//         DSN=HOM.EM.DDATA_ANTERIOR.EM8006B.SICOB
+//*
+//ARQCOB01 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00383,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=400,BLKSIZE=0,DSORG=PS)
+//*
+//ARQCOB02 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB01010,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=400,BLKSIZE=0,DSORG=PS)
+//*
+//ARQCOB03 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB41428,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=400,BLKSIZE=0,DSORG=PS)
+//*
+//ARQCOB04 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00011,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=400,BLKSIZE=0,DSORG=PS)
+//*
+//ARQCOB05 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00013,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=400,BLKSIZE=0,DSORG=PS)
+//*
+//ARQCOB06 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00031,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=400,BLKSIZE=0,DSORG=PS)
+//*
+//ARQCOB07 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00033,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=400,BLKSIZE=0,DSORG=PS)
+//*
+//ARQCOB08 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00044,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=400,BLKSIZE=0,DSORG=PS)
+//*
+//ARQCOB09 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00060,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=400,BLKSIZE=0,DSORG=PS)
+//*
+//ARQCOB10 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00061,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=400,BLKSIZE=0,DSORG=PS)
+//*
+//ARQCOB11 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00062,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=400,BLKSIZE=0,DSORG=PS)
+//*
+//ARQCOB12 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00072,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=400,BLKSIZE=0,DSORG=PS)
+//*
+//ARQCOB13 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00075,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=400,BLKSIZE=0,DSORG=PS)
+//*
+//ARQCOB14 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00100,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=400,BLKSIZE=0,DSORG=PS)
+//*
+//ARQCOB15 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00113,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=400,BLKSIZE=0,DSORG=PS)
+//*
+//ARQCOB16 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00114,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=400,BLKSIZE=0,DSORG=PS)
+//*
+//ARQCOB17 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00130,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=400,BLKSIZE=0,DSORG=PS)
+//*
+//ARQCOB18 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00233,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=400,BLKSIZE=0,DSORG=PS)
+//*
+//ARQCOB19 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00287,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=400,BLKSIZE=0,DSORG=PS)
+//*
+//ARQCOB20 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00288,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=400,BLKSIZE=0,DSORG=PS)
+//*
+//ARQCOB21 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00319,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=400,BLKSIZE=0,DSORG=PS)
+//*
+//ARQCOB22 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00320,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=400,BLKSIZE=0,DSORG=PS)
+//*
+//ARQCOB23 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.COB00282,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=400,BLKSIZE=0,DSORG=PS)
+//*
+//ARQCOB24 DD DUMMY,
+//         DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.ARQCOB24,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=400,BLKSIZE=0,DSORG=PS)
+//*
+//ARQCOB25 DD DUMMY,
+//         DSN=HOM.EM.DDATA_ANTERIOR.EM8007B.ARQCOB25,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=400,BLKSIZE=0,DSORG=PS)
+//*
+//SORTCNTL DD DSN=HOM.JV1.SYSIN(SORTCNTL),DISP=SHR
+//SORTWK01 DD UNIT=SYSALLDA,SPACE=(CYL,(500,500),RLSE)
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSIN    DD DUMMY
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(EM8007B),DISP=SHR
+//         ENDIF
+//*
+//*******************************************************************
+//**       DELECAO                                                ***
+//*******************************************************************
+//E005BR14 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//DELETE01 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8008B.CV600114,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE02 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8008B.CV600119,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE03 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8008B.CV600120,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE04 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8008B.CV600121,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE05 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8008B.CV600123,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE06 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8008B.CV600128,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE07 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8008B.CV600139,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE08 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8008B.CV600140,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE09 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8008B.CV608800,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE10 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8008B.CV609000,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE11 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8008B.CV613100,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE12 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8008B.CV613200,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE13 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8008B.CV900662,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE13 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8008B.CV600149,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//*
+//*******************************************************************
+//*        FUNCAO......  GERACAO DE ARQUIVOS DO LATOUT
+//*                      ARQUIVO H PARA O CNAB ( SICOV )
+//*******************************************************************
+//         IF E0048007.RC = 00 THEN
+//E0068008 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//ENTRADA  DD DISP=SHR,
+//         DSN=HOM.EM.DDATA_ANTERIOR.EM8006B.SICOV
+//*
+//*------------------------------------------------------
+//*-------- VAI PARA JPGETH07, JPGETH09
+//*------------------------------------------------------
+//ARQCOV01 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8008B.CV600114,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=150,BLKSIZE=0,DSORG=PS)
+//*
+//*------------------------------------------------------
+//*-------- VAI PARA JPGETH07, JPGETH09
+//*------------------------------------------------------
+//ARQCOV02 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8008B.CV600119,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=150,BLKSIZE=0,DSORG=PS)
+//*
+//*------------------------------------------------------
+//*-------- VAI PARA JPGETH07, JPGETH09
+//*------------------------------------------------------
+//ARQCOV03 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8008B.CV600120,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=150,BLKSIZE=0,DSORG=PS)
+//*
+//*------------------------------------------------------
+//*-------- VAI PARA JPCBD00, JPGETH07, JPGETH09
+//*------------------------------------------------------
+//ARQCOV04 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8008B.CV600121,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=150,BLKSIZE=0,DSORG=PS)
+//*
+//*------------------------------------------------------
+//*-------- VAI PARA JPGETH07, JPGETH09
+//*------------------------------------------------------
+//ARQCOV05 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8008B.CV600123,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=150,BLKSIZE=0,DSORG=PS)
+//*
+//*------------------------------------------------------
+//*-------- VAI PARA JPGETH07, JPGETH09
+//*------------------------------------------------------
+//ARQCOV06 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8008B.CV600128,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=150,BLKSIZE=0,DSORG=PS)
+//*
+//*------------------------------------------------------
+//*-------- VAI PARA JPCBD00, JPGETH07, JPGETH09
+//*------------------------------------------------------
+//ARQCOV07 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8008B.CV600139,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=150,BLKSIZE=0,DSORG=PS)
+//*
+//*------------------------------------------------------
+//*-------- VAI PARA JPCBD00, JPGETH07, JPGETH09
+//*------------------------------------------------------
+//ARQCOV08 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8008B.CV600140,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=150,BLKSIZE=0,DSORG=PS)
+//*
+//*------------------------------------------------------
+//*-------- VAI PARA JPGETH07, JPGETH09
+//*------------------------------------------------------
+//ARQCOV09 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8008B.CV608800,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=150,BLKSIZE=0,DSORG=PS)
+//*
+//*------------------------------------------------------
+//*-------- VAI PARA JPGETH07, JPGETH09
+//*------------------------------------------------------
+//ARQCOV10 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8008B.CV609000,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=150,BLKSIZE=0,DSORG=PS)
+//*
+//*------------------------------------------------------
+//*-------- VAI PARA JPGETH07, JPGETH09
+//*------------------------------------------------------
+//ARQCOV11 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8008B.CV613100,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=150,BLKSIZE=0,DSORG=PS)
+//*
+//*------------------------------------------------------
+//*-------- VAI PARA JPGETH07
+//*------------------------------------------------------
+//ARQCOV12 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8008B.CV613200,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=150,BLKSIZE=0,DSORG=PS)
+//*
+//*------------------------------------------------------
+//*-------- VAI PARA JPCBD00, JPGETH07, JPGETH09
+//*------------------------------------------------------
+//ARQCOV13 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8008B.CV900662,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=150,BLKSIZE=0,DSORG=PS)
+//*
+//******************************************************************
+//ARQCOV14 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8008B.CV600149,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=150,BLKSIZE=0,DSORG=PS)
+//*
+//******************************************************************
+//ARQCOV15 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8008B.CV609500,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=150,BLKSIZE=0,DSORG=PS)
+//*
+//SORTCNTL DD DSN=HOM.JV1.SYSIN(SORTCNTL),DISP=SHR
+//SORTWK01 DD UNIT=SYSALLDA,SPACE=(CYL,(500,500),RLSE)
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSIN    DD DUMMY
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(EM8008B),DISP=SHR
+//         ENDIF
+//*
+//*******************************************************************
+//**       DELECAO                                                ***
+//*******************************************************************
+//E007BR14 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//DELETE01 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8009B.CP911241,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE02 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8009B.CP911334,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE03 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8009B.CP021000,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE03 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8009B.CP912014,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//*
+//*******************************************************************
+//*        FUNCAO......  GERACAO DE ARQUIVOS DO LATOUT
+//*                      ARQUIVO H PARA O CNAB ( SICAP )
+//*******************************************************************
+//         IF E0068008.RC = 00 THEN
+//E0088009 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//ENTRADA  DD DISP=SHR,DSN=HOM.EM.DDATA_ANTERIOR.EM8006B.SICAP
+//*
+//*------------------------------------------------------
+//*-------- VAI PARA JPCBD14
+//*------------------------------------------------------
+//ARQCAP01 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8009B.CP911241,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=150,BLKSIZE=0,DSORG=PS)
+//*
+//*------------------------------------------------------
+//*-------- VAI PARA JPCBD14
+//*------------------------------------------------------
+//ARQCAP02 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8009B.CP911334,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=150,BLKSIZE=0,DSORG=PS)
+//*
+//*------------------------------------------------------
+//*-------- VAI PARA JPCBD14
+//*------------------------------------------------------
+//ARQCAP03 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8009B.CP021000,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=150,BLKSIZE=0,DSORG=PS)
+//*
+//*------------------------------------------------------
+//*-------- VAI PARA JPCBD14
+//*------------------------------------------------------
+//ARQCAP04 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8009B.CP912014,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=150,BLKSIZE=0,DSORG=PS)
+//*
+//SORTCNTL DD DSN=HOM.JV1.SYSIN(SORTCNTL),DISP=SHR
+//SORTWK01 DD UNIT=SYSALLDA,SPACE=(CYL,(500,500),RLSE)
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSIN    DD DUMMY
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(EM8009B),DISP=SHR
+//         ENDIF
+//*
+//*******************************************************************
+//**       DELECAO                                                ***
+//*******************************************************************
+//E009BR14 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//DELETE01 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8020B.MV921286,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//*
+//*******************************************************************
+//*        FUNCAO......  GERACAO DE ARQUIVOS DO LAYOUT
+//*                      ARQUIVO H PARA O CNAB ( ATM )
+//*******************************************************************
+//         IF E0088009.RC = 00 THEN
+//E0108020 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//SIACC    DD DISP=SHR,
+//         DSN=HOM.EM.DDATA_ANTERIOR.EM8006B.SIACC
+//*
+//*------------------------------------------------------
+//*-------- VAI PARA JPCBD00
+//*------------------------------------------------------
+//MV921286 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8020B.MV921286,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(5,50),RLSE),
+//         DCB=(RECFM=FB,LRECL=240,BLKSIZE=0,DSORG=PS)
+//*
+//SORTCNTL DD DSN=HOM.JV1.SYSIN(SORTCNTL),DISP=SHR
+//SORTWK01 DD UNIT=SYSALLDA,SPACE=(CYL,(500,500),RLSE)
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSIN    DD DUMMY
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(EM8020B),DISP=SHR
+//         ENDIF
+//*
+//*******************************************************************
+//**       DELECAO                                                ***
+//*******************************************************************
+//E011BR14 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//DELETE01 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8021B.MV043350,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//*
+//*******************************************************************
+//*        FUNCAO..PROCESSA FITA DE RETORNO SIACC A PARTIR DA
+//*                LEITURA DO ARQUIVO GERADO PELO PGM EM8006B
+//*                RETORNO ARQ-H SAP - LEGADO CONV.043350 - C.E.F.
+//*******************************************************************
+//         IF E0108020.RC = 00 THEN
+//E0128021 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//SIACC    DD DISP=SHR,
+//         DSN=HOM.EM.DDATA_ANTERIOR.EM8006B.SIACC
+//*
+//*------------------------------------------------------
+//*-------- VAI PARA JPSID02
+//*------------------------------------------------------
+//MV043350 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8021B.MV043350,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=240,BLKSIZE=0,DSORG=PS)
+//*
+//SORTCNTL DD DSN=HOM.JV1.SYSIN(SORTCNTL),DISP=SHR
+//SORTWK01 DD UNIT=SYSALLDA,SPACE=(CYL,(500,500),RLSE)
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSIN    DD DUMMY
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(EM8021B),DISP=SHR
+//         ENDIF
+//*
+//*******************************************************************
+//*        FUNCAO..GERACAO DE ARQUIVOS DO LAYOUT
+//*                ARQUIVO H PARA CHEQUES EMITIDOS.
+//*******************************************************************
+//         IF E0128021.RC = 00 THEN
+//E0138022 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//ENTRADA  DD DISP=SHR,
+//         DSN=HOM.EM.DDATA_ANTERIOR.EM8006B.CHEQUE
+//*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSIN    DD DUMMY
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(EM8022B),DISP=SHR
+//         ENDIF
+//*
+//*******************************************************************
+//**       DELECAO                                                ***
+//*******************************************************************
+//E014BR14 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//DELETE01 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8023B.PRODBANC,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//DELETE02 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8023B.AGENDAME,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//*
+//*******************************************************************
+//*        FUNCAO..GERACAO DE ARQUIVOS DO LATOUT
+//*                ARQUIVO H PARA CARTAO.
+//*******************************************************************
+//         IF E014BR14.RC = 00 AND E0028006.RC = 00 THEN
+//E0158023 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//ENTRADA  DD DISP=SHR,
+//         DSN=HOM.EM.DDATA_ANTERIOR.EM8006B.CARTAO
+//*
+//*------------------------------------------------------
+//*-------- VAI PARA JPGETH11
+//*------------------------------------------------------
+//ARQCAR01 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8023B.PRODBANC,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=120,BLKSIZE=0,DSORG=PS)
+//*
+//*------------------------------------------------------
+//*-------- VAI PARA JPGETH11
+//*------------------------------------------------------
+//ARQCAR02 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8023B.AGENDAME,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=150,BLKSIZE=0,DSORG=PS)
+//*
+//SORTCNTL DD DSN=HOM.JV1.SYSIN(SORTCNTL),DISP=SHR
+//SORTWK01 DD UNIT=SYSALLDA,SPACE=(CYL,(500,500),RLSE)
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSIN    DD DUMMY
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(EM8023B),DISP=SHR
+//         ENDIF
+//*
+//*******************************************************************
+//**       DELECAO                                                ***
+//*******************************************************************
+//E016BR14 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//DELETE01 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8010B.SIGPFSEG,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//*******************************************************************
+//*        FUNCAO......  GERACAO DE ARQUIVOS DO LAYOUT
+//*                      ARQUIVO H PARA O CNAB ( ATM )
+//*******************************************************************
+//         IF E0028006.RC = 00 THEN
+//E0178010 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//ENTRADA  DD DISP=SHR,
+//         DSN=HOM.EM.DDATA_ANTERIOR.EM8006B.SIGPF
+//*
+//*------------------------------------------------------
+//*-------- VAI PARA JPCBD00
+//*------------------------------------------------------
+//ARQSIG01 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8010B.SIGPFSEG,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=420,BLKSIZE=0,DSORG=PS)
+//*
+//SORTCNTL DD DSN=HOM.JV1.SYSIN(SORTCNTL),DISP=SHR
+//SORTWK01 DD UNIT=SYSALLDA,SPACE=(CYL,(500,500),RLSE)
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSIN    DD DUMMY
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(EM8010B),DISP=SHR
+//         ENDIF
+//*
+//*******************************************************************
+//**       DELECAO                                                ***
+//*******************************************************************
+//E018BR14 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//DELETE01 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8012B.COB01575,
+//         DISP=(MOD,DELETE,DELETE),UNIT=3390,SPACE=(TRK,(1,1))
+//*******************************************************************
+//*        FUNCAO......  GERACAO DE ARQUIVOS DO LAYOUT
+//*                      ARQUIVO H PARA O CNAB ( ATM )
+//*******************************************************************
+//         IF E0028006.RC = 00 THEN
+//E0198012 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//ENTRADA  DD DISP=SHR,
+//         DSN=HOM.EM.DDATA_ANTERIOR.EM8006B.BANCOOB
+//*
+//*------------------------------------------------------
+//*-------- VAI PARA JPVPD05
+//*------------------------------------------------------
+//ARQCOB01 DD DSN=HOM.EM.DDATA_ANTERIOR.EM8012B.COB01575,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=400,BLKSIZE=0,DSORG=PS)
+//*
+//ARQCOB02 DD DUMMY,
+//         DSN=HOM.EM.DDATA_ANTERIOR.EM8012B.ARQCOB02,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=400,BLKSIZE=0,DSORG=PS)
+//*
+//ARQCOB03 DD DUMMY,
+//         DSN=HOM.EM.DDATA_ANTERIOR.EM8012B.ARQCOB03,
+//         UNIT=SYSDA,DISP=(,CATLG,DELETE),
+//         SPACE=(TRK,(500,500),RLSE),
+//         DCB=(RECFM=FB,LRECL=400,BLKSIZE=0,DSORG=PS)
+//*
+//SORTCNTL DD DSN=HOM.JV1.SYSIN(SORTCNTL),DISP=SHR
+//SORTWK01 DD UNIT=SYSALLDA,SPACE=(CYL,(500,500),RLSE)
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSIN    DD DUMMY
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(EM8012B),DISP=SHR
+//         ENDIF
+//*
+//*********************************************************************
+//*        CRIA ARQUIVO PARA LIBERACAO DA JPCBD00
+//*********************************************************************
+//     IF (E0028006.RC = 00 & E0048007.RC = 00 &
+//         E0068008.RC = 00 & E0088009.RC = 00) THEN
+//E020ENER EXEC PGM=ICEGENER
+//SYSUT1   DD DISP=SHR,DSN=NULLFILE,
+//         DCB=(RECFM=FB,LRECL=150,BLKSIZE=27900)
+//SYSUT2   DD DSN=HOM.GE.DDATA_MOVIMENTO.VHGETH06.OK,
+//         UNIT=SYSDA,SPACE=(TRK,5),
+//         DCB=(RECFM=FB,LRECL=150,BLKSIZE=0,DSORG=PS),
+//         DISP=(,CATLG,CATLG)
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD DUMMY
+//         ENDIF
+//*
+//*********************************************************************
+//**       TRANSMISSAO DOS DADOS QUE ENTRARAM NA ROTINA              **
+//*********************************************************************
+//*E021FTP  EXEC PGM=FTP,REGION=4096K,TIME=NOLIMIT,
+//*         PARM='10.100.2.144'
+//*STEPLIB  DD DSN=TCPIP.SEZALOAD,DISP=SHR
+//*SYSTCPD  DD DSN=HOM1.TCPPARMS(TCPDATA),DISP=SHR
+//*SYSFTPD  DD DSN=HOM1.TCPPARMS(FTPSDATA),DISP=SHR
+//*SYSMDUMP DD SYSOUT=Z
+//*SYSPRINT DD SYSOUT=*
+//*SYSOUT   DD SYSOUT=*
+//*INPUT    DD *
+//*USERPROD USRPRD
+//*PUT 'HOM.EM.DDATA_ANTERIOR.TOTAL.ARQSH06'      +
+//*     /GESIS/ARQSH06/DDATA_ANTERIOR.TOTAL.ARQSH06.TXT
+//*QUIT
+//*
+//E022LIST EXEC  PGM=IKJEFT01,
+//         PARM=('PRDFULL HOM.EM.DDATA_ANTERIOR.EM8006B.EXPURGO')
+//SYSPROC  DD DSN=HOM.JV1.CLIST,DISP=SHR
+//SYSTSIN  DD DUMMY
+//SYSPRINT DD SYSOUT=*
+//SYSTSPRT DD SYSOUT=*
+//*
+//         IF E022LIST.RC = 00 THEN
+//E023MAIL EXEC PGM=ICEGENER
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD DUMMY
+//SYSUT2   DD SYSOUT=B,DEST=SMTP,
+//         DCB=(RECFM=FB,LRECL=80,BLKSIZE=3120)
+//SYSUT1   DD DISP=SHR,DSN=HOM.JV1.SYSIN(ICEMAIL)
+//         DD DISP=SHR,DSN=HOM.JV1.SYSIN(EGETH06A)
+//         DD DATA,DLM=WW
+SUBJECT:  ARQHJV1 - REGISTRO DO MOVIMENTO REJEITADO
+
+ FAVOR VERIFICAR O ARQUIVO ABAIXO, EXISTEM REGISTROS
+ QUE FORAM REJEITADOS PELO EM8006B.
+
+ HOM.EM.DDATA_ANTERIOR.EM8006B.EXPURGO
+
+
+ GEINF/PRODUCAO
+
+WW
+//*
+//E024FTP  EXEC PGM=FTP,REGION=4096K,TIME=NOLIMIT,
+//         PARM='10.100.2.144'
+//STEPLIB  DD DSN=TCPIP.SEZALOAD,DISP=SHR
+//SYSTCPD  DD DSN=HOM1.TCPPARMS(TCPDATA),DISP=SHR
+//SYSFTPD  DD DSN=HOM1.TCPPARMS(FTPSDATA),DISP=SHR
+//SYSMDUMP DD SYSOUT=Z
+//SYSPRINT DD SYSOUT=*
+//SYSOUT   DD SYSOUT=*
+//INPUT    DD *
+USERPROD USRPRD
+CD \UPLOAD\JV1-SIAS\ENTRADA\ARQH
+PUT 'HOM.EM.DDATA_ANTERIOR.EM8006B.EXPURGO'  DDATA_ANTERIOR.EM8006B.EXPURGO.TXT
+QUIT
+//*
+//    ENDIF
+//*
+//*********************************************************************
+//** STEP DE ENVIO DE MENSAGEM SOBRE JOB COM  ERRO NO ZEKE.          **
+//*********************************************************************
+//  IF (ABEND | RC EQ 99 | RC EQ 09 | RC EQ 08 | RC EQ 12) THEN
+//ABEND EXEC PPSEND,N=VHGETH06
+//  ENDIF
+//*

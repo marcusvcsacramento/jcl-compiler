@@ -1,0 +1,100 @@
+//VHVED07  JOB (00,PN),'ID_EXECUTOR',TIME=1440,
+//         CLASS=A,MSGCLASS=T,MSGLEVEL=(1,1)
+//*                                                                     
+/*ROUTE PRINT JES2PRD1
+//*
+//*DIARIA JV1. DATA:DATA_MOVIMENTO
+//*DIARIA JV1. PERIODO:PERIODO_MOVIMENTO
+//*DIARIA JV1. ANO MES:ANOMES_MOVIMENTO
+//*DIARIA JV1. DIA:DIA_MOVIMENTO
+//*DIARIA JV1. DATA ANTERIOR:DATA_ANTERIOR 
+//*
+//JOBLIB   DD DISP=SHR,DSN=DSNC10.DB2H.SDSNLOAD
+//         DD DISP=SHR,DSN=HOM.JV1.LOAD
+//*                                                                     
+//******************************************************************    
+//******************************************************************    
+//***  PROGRAMA INIBIDO - RM035460-1213   -  BRICE  EM 18/12/2013 **    
+//******************************************************************    
+//******************************************************************    
+//*E0010436 EXEC PGM=IKJEFT01,DYNAMNBR=20                               
+//*SYSTSPRT DD SYSOUT=*                                                 
+//*SYSPRINT DD SYSOUT=*                                                 
+//*SYSUDUMP DD SYSOUT=Z                                                 
+//*SYSOUT   DD SYSOUT=*                                                 
+//*AVE0436B DD DSN=HOM.VE.DDATA_MOVIMENTO).VE0436B,                     
+//*         SPACE=(TRK,(50,250),RLSE),UNIT=SYSDA,DISP=(,CATLG),         
+//*         DCB=(RECFM=FB,LRECL=700,BLKSIZE=0,DSORG=PS)                 
+//*SYSDBOUT DD SYSOUT=*                                                 
+//*SYSABOUT DD SYSOUT=*                                                 
+//*SYSTSIN  DD DSN=HOM.JV1.SYSIN(VE0436B),DISP=SHR                      
+//*SYSIN    DD DUMMY                                                    
+//*                                                                     
+//********************************************************************
+//*         IF E0010436.RC NE 0 THEN
+//*E002RENA EXEC PGM=IDCAMS
+//*SYSOUT   DD SYSOUT=*
+//*SYSPRINT DD SYSOUT=*
+//*SYSIN    DD *
+//****  ALTER HOM.VE.DDATA_MOVIMENTO).VE0436B -
+//****  NEWNAME (HOM.VE.DDATA_MOVIMENTO).VE0436B.JV1ERROR)
+//*
+//*         ENDIF
+//******************************************************************    
+//E0030030 EXEC PGM=IKJEFT01,DYNAMNBR=20,COND=(00,NE)                   
+//SYSTSPRT DD SYSOUT=*                                                  
+//SYSPRINT DD SYSOUT=*                                                  
+//SYSUDUMP DD SYSOUT=Z                                                  
+//SYSOUT   DD SYSOUT=*                                                  
+//SYSDBOUT DD SYSOUT=*                                                  
+//SYSABOUT DD SYSOUT=*                                                  
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(VE0030B),DISP=SHR                       
+//SYSIN    DD DUMMY                                                     
+//*                                                                     
+//******************************************************************    
+//E0040031 EXEC PGM=IKJEFT01,DYNAMNBR=20,COND=(00,NE)                   
+//SYSTSPRT DD SYSOUT=*                                                  
+//SYSPRINT DD SYSOUT=*                                                  
+//SYSUDUMP DD SYSOUT=Z                                                  
+//SYSOUT   DD SYSOUT=*                                                  
+//SYSDBOUT DD SYSOUT=*                                                  
+//SYSABOUT DD SYSOUT=*                                                  
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(VE0031B),DISP=SHR                       
+//SYSIN    DD DUMMY                                                     
+//*                                                                     
+//******************************************************************    
+//E0050032 EXEC PGM=IKJEFT01,DYNAMNBR=20,COND=(00,NE)                   
+//SYSTSPRT DD SYSOUT=*                                                  
+//SYSPRINT DD SYSOUT=*                                                  
+//SYSUDUMP DD SYSOUT=Z                                                  
+//SYSOUT   DD SYSOUT=*                                                  
+//SYSDBOUT DD SYSOUT=*                                                  
+//SYSABOUT DD SYSOUT=*                                                  
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(VE0032B),DISP=SHR                       
+//SYSIN    DD DUMMY                                                     
+//*                                                                     
+//********************************************************************
+//E006LIST EXEC PPEXIST,ARQ=HOM.VG.DDATA_MOVIMENTO.VG0030B.ABEND
+//********************************************************************
+//         IF E006LIST.E001LIST.RC = 02 THEN
+//E0060030 EXEC PGM=IKJEFT01,DYNAMNBR=20,COND=(00,NE)
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(VG0030B),DISP=SHR
+//SYSIN    DD DUMMY
+//         ENDIF
+//********************************************************************
+//         IF E0060030.RC NE 0 THEN
+//E006CRIA EXEC PPCRIA,ARQ=HOM.VG.DDATA_MOVIMENTO.VG0030B.ABEND
+//         ENDIF
+//*********************************************************************
+//** STEP DE ENVIO DE MENSAGEM SOBRE JOB COM  ERRO NO ZEKE.          **
+//*********************************************************************
+//*   IF (ABEND | RC EQ 99 | RC EQ 09 | RC EQ 08 | RC EQ 12) THEN
+//* ABEND EXEC PPSEND,N=JPVED07
+//*   ENDIF
+//*

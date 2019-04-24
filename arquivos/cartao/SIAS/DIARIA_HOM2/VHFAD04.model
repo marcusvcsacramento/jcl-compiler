@@ -1,0 +1,42 @@
+//VHFAD04  JOB (00,PN),'TE62253',TIME=1440,
+//         CLASS=A,MSGCLASS=T,MSGLEVEL=(1,1)
+//*
+//JOBLIB   DD DISP=SHR,DSN=DSNC10.DB2H.SDSNLOAD
+//         DD DISP=SHR,DSN=HOM.JV1.LOAD
+//*
+//*********************************************************************
+//*        EXECUCAO DO PROGRAMA SISAP02B                           ****
+//*********************************************************************
+//E001SAP2 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SIJC0910 DD SYSOUT=(A,INTRDR)
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(SISAP02B),DISP=SHR
+//SYSIN    DD DUMMY
+//*
+//*
+//*#####################################################################
+//*#####################################################################
+//*        ESTE STEP SOMENTE LIBERA A JPFAD05 INDEPENDENTE         ****
+//*        DO RESULTADO DO STEP ANTERIOR SISAP02B
+//*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//*
+//*
+//E002BR14 EXEC PGM=IEFBR14
+//*
+//*#####################################################################
+//*
+//*
+//*
+//*********************************************************************
+//** STEP DE ENVIO DE MENSAGEM SOBRE JOB COM  ERRO NO ZEKE.          **
+//*********************************************************************
+//*   IF (ABEND | RC EQ 99 | RC EQ 09 | RC EQ 08 | RC EQ 12) THEN
+//* ABEND EXEC PPSEND,N=JPFAD04
+//*   ENDIF
+//*

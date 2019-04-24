@@ -74,8 +74,12 @@ FileName=$[Project-Path]submissao.py
 ClassName=TProjectFileNode
 FileName=$[Project-Path]validacao.py
 
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node6]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]validacao-job.py
+
 [Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes]
-Count=6
+Count=7
 
 [Project\ChildNodes\Node0\ChildNodes]
 Count=1
@@ -184,8 +188,10 @@ ClassName=TProjectRunConfiguationNode
 Name=VALIDACAO
 
 [Project\ChildNodes\Node1\ChildNodes\Node4\RunConfig]
+ScriptName=D:\JCL\validacao-job.py
 EngineType=peRemote
 ReinitializeBeforeRun=TRUE
+Parameters=SIAS DIARIA_HOM2 PRD
 WorkingDir=$[ActiveScript-Dir]
 WriteOutputToFile=FALSE
 OutputFileName=$[ActiveScript-NoExt].log
@@ -200,8 +206,31 @@ WorkingDirectory=$[ActiveScript-Dir]
 ShortCut=0
 MessagesFormat=$[FileName] $[LineNumber]
 
+[Project\ChildNodes\Node1\ChildNodes\Node5]
+ClassName=TProjectRunConfiguationNode
+Name=RECUPERA-JOBS
+
+[Project\ChildNodes\Node1\ChildNodes\Node5\RunConfig]
+ScriptName=D:\JCL\recupera-jobs.py
+EngineType=peRemote
+ReinitializeBeforeRun=TRUE
+Parameters=SMART PRD
+WorkingDir=$[ActiveScript-Dir]
+WriteOutputToFile=FALSE
+OutputFileName=$[ActiveScript-NoExt].log
+AppendToFile=FALSE
+
+[Project\ChildNodes\Node1\ChildNodes\Node5\RunConfig\ExternalRun]
+Caption=External Run
+Description=Run script using an external Python Interpreter
+ApplicationName=$[PythonExe-Short]
+Parameters=$[ActiveScript-Short]
+WorkingDirectory=$[ActiveScript-Dir]
+ShortCut=0
+MessagesFormat=$[FileName] $[LineNumber]
+
 [Project\ChildNodes\Node1\ChildNodes]
-Count=5
+Count=6
 
 [Project\ChildNodes]
 Count=2

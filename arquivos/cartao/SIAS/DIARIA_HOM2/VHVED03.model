@@ -1,0 +1,183 @@
+//VHVED03  JOB (00,PN),'ID_EXECUTOR',TIME=1440,
+//         CLASS=A,MSGCLASS=T,MSGLEVEL=(1,1)
+//*
+/*ROUTE PRINT JES2PRD1
+//*  
+//*DIARIA JV1. DATA:DATA_MOVIMENTO
+//*DIARIA JV1. PERIODO:PERIODO_MOVIMENTO
+//*DIARIA JV1. ANO MES:ANOMES_MOVIMENTO
+//*DIARIA JV1. DIA:DIA_MOVIMENTO
+//*DIARIA JV1. DATA ANTERIOR:DATA_ANTERIOR 
+//*
+//JOBLIB   DD DISP=SHR,DSN=DSNC10.DB2H.SDSNLOAD
+//         DD DISP=SHR,DSN=HOM.JV1.LOAD
+//*                                                               
+//*********************************************************************
+//E0010009 EXEC PGM=IKJEFT01,DYNAMNBR=20                                
+//SYSTSPRT DD SYSOUT=*                                                  
+//SYSPRINT DD SYSOUT=*                                                  
+//SYSUDUMP DD SYSOUT=Z                                                  
+//SYSOUT   DD SYSOUT=*                                                  
+//SYSDBOUT DD SYSOUT=*                                                  
+//SYSABOUT DD SYSOUT=*                                                  
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(VE0009B),DISP=SHR                       
+//SYSIN    DD DUMMY                                                     
+//*                                                                     
+//*********************************************************************
+//D0040105 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//PRINTER  DD DSN=HOM.REL.DDATA_MOVIMENTO.VP0105B.L1VZ6,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
+//E0020010 EXEC PGM=IKJEFT01,DYNAMNBR=20                                
+//SYSTSPRT DD SYSOUT=*                                                  
+//SYSPRINT DD SYSOUT=*                                                  
+//SYSUDUMP DD SYSOUT=Z                                                  
+//SYSOUT   DD SYSOUT=*                                                  
+//DVE0010B DD DSN=HOM.VE.DDATA_MOVIMENTO.VE0010B.VGSASSE,                     
+//         SPACE=(TRK,(50,250),RLSE),UNIT=SYSDA,DISP=(,CATLG),          
+//         DCB=(RECFM=FB,LRECL=400,BLKSIZE=0,DSORG=PS)                  
+//SYSDBOUT DD SYSOUT=*                                                  
+//SYSABOUT DD SYSOUT=*                                                  
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(VE0010B),DISP=SHR                       
+//SYSIN    DD DUMMY                                                     
+//*                                                                     
+//********************************************************************
+//         IF E0020010.RC NE 0 THEN
+//E003RENA EXEC PGM=IDCAMS
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *
+  ALTER HOM.VE.DDATA_MOVIMENTO.VE0010B.VGSASSE -
+  NEWNAME (HOM.VE.DDATA_MOVIMENTO.VE0010B.VGSASSE.JV1ERROR)
+/*
+//*
+//         ENDIF
+//*********************************************************************
+//E0041600 EXEC PGM=IKJEFT01,DYNAMNBR=20                                
+//SYSTSPRT DD SYSOUT=*                                                  
+//SYSPRINT DD SYSOUT=*                                                  
+//SYSUDUMP DD SYSOUT=Z                                                  
+//SYSOUT   DD SYSOUT=*                                                  
+//ARQGRAV  DD DISP=OLD,                                                 
+//         DSN=HOM.VE.DDATA_MOVIMENTO.VE0010B.VGSASSE                   
+//SYSDBOUT DD SYSOUT=*                                                  
+//SYSABOUT DD SYSOUT=*                                                  
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(VE1600B),DISP=SHR                       
+//SYSIN    DD DUMMY                                                     
+//*                                                                     
+//********************************************************************
+//E005LIST EXEC PPEXIST,ARQ=HOM.VG.DDATA_MOVIMENTO.VG0010B.ABEND
+//********************************************************************
+//         IF E005LIST.E001LIST.RC = 02 THEN
+//D0050010 EXEC PGM=IEFBR14
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//DVG0010S DD DSN=HOM.VG.DDATA_MOVIMENTO.VG0010B1.VED03,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//DVG0010D DD DSN=HOM.VG.DDATA_MOVIMENTO.VG0010B2.VED03,
+//         DISP=(MOD,DELETE,DELETE),SPACE=(TRK,(1,1),RLSE)
+//*        -----------------------------------------------
+//E0050010 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//DVG0010S DD DSN=HOM.VG.DDATA_MOVIMENTO.VG0010B1.VED03,
+//         DISP=(,CATLG,DELETE),
+//         UNIT=SYSDA,SPACE=(TRK,(50,50),RLSE),
+//         DCB=(RECFM=FB,LRECL=250,BLKSIZE=0,DSORG=PS)
+//DVG0010D DD DSN=HOM.VG.DDATA_MOVIMENTO.VG0010B2.VED03,
+//         DISP=(,CATLG,DELETE),
+//         UNIT=SYSDA,SPACE=(TRK,(50,50),RLSE),
+//         DCB=(RECFM=FB,LRECL=200,BLKSIZE=0,DSORG=PS)
+//SORTCNTL DD DSN=HOM.JV1.SYSIN(SORTCNTL),DISP=SHR
+//SORTWK01 DD UNIT=SYSALLDA,SPACE=(CYL,(50,100),RLSE)
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(VG0010B),DISP=SHR
+//SYSIN    DD DUMMY
+//         ENDIF
+//*                                                                    
+//********************************************************************
+//         IF E0050010.RC NE 0 THEN
+//E006CRIA EXEC PPCRIA,ARQ=HOM.VG.DDATA_MOVIMENTO.VG0010B.ABEND
+//         ENDIF
+//********************************************************************
+//         IF E0050010.RC NE 0 THEN
+//E006RENA EXEC PGM=IDCAMS
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *
+  ALTER HOM.VG.DDATA_MOVIMENTO.VG0010B1.VED03 -
+  NEWNAME (HOM.VG.DDATA_MOVIMENTO.VG0010B1.VED03.JV1ERROR)
+  ALTER HOM.VG.DDATA_MOVIMENTO.VG0010B2.VED03 -
+  NEWNAME (HOM.VG.DDATA_MOVIMENTO.VG0010B2.VED03.JV1ERROR)
+/*
+//*
+//         ENDIF
+//********************************************************************
+//E007LIST EXEC PPEXIST,ARQ=HOM.VG.DDATA_MOVIMENTO.VG0040B.ABEND
+//********************************************************************
+//         IF E007LIST.E001LIST.RC = 02 THEN
+//E0070040 EXEC PGM=IKJEFT01,DYNAMNBR=20                               
+//SYSTSPRT DD SYSOUT=*                                                 
+//SYSPRINT DD SYSOUT=*                                                 
+//SYSUDUMP DD SYSOUT=Z                                                 
+//SYSOUT   DD SYSOUT=*                                                 
+//SYSDBOUT DD SYSOUT=*                                                 
+//SYSABOUT DD SYSOUT=*                                                 
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(VG0040B),DISP=SHR                      
+//SYSIN    DD DUMMY                                                    
+//         ENDIF
+//*                                                                    
+//********************************************************************
+//         IF E0070040.RC NE 0 THEN
+//E007CRIA EXEC PPCRIA,ARQ=HOM.VG.DDATA_MOVIMENTO.VG0040B.ABEND
+//         ENDIF
+//********************************************************************
+//E008LIST EXEC PPEXIST,ARQ=HOM.VG.DDATA_MOVIMENTO.VG0020B.ABEND
+//********************************************************************
+//         IF E008LIST.E001LIST.RC = 02 THEN
+//E0080020 EXEC PGM=IKJEFT01,DYNAMNBR=20                                
+//SYSTSPRT DD SYSOUT=*                                                  
+//SYSPRINT DD SYSOUT=*                                                  
+//SYSUDUMP DD SYSOUT=Z                                                  
+//SYSOUT   DD SYSOUT=*                                                  
+//SYSDBOUT DD SYSOUT=*                                                  
+//SYSABOUT DD SYSOUT=*                                                  
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(VG0020B),DISP=SHR                       
+//SYSIN    DD DUMMY                                                     
+//         ENDIF
+//*                                                                     
+//********************************************************************
+//         IF E0080020.RC NE 0 THEN
+//E018CRIA EXEC PPCRIA,ARQ=HOM.VG.DDATA_MOVIMENTO.VG0020B.ABEND
+//         ENDIF
+//********************************************************************
+//E009LIST EXEC PPEXIST,ARQ=HOM.VG.DDATA_MOVIMENTO.VG0030B.ABEND
+//********************************************************************
+//         IF E009LIST.E001LIST.RC = 02 THEN
+//E0090030 EXEC PGM=IKJEFT01,DYNAMNBR=20                                
+//SYSTSPRT DD SYSOUT=*                                                  
+//SYSPRINT DD SYSOUT=*                                                  
+//SYSUDUMP DD SYSOUT=Z                                                  
+//SYSOUT   DD SYSOUT=*                                                  
+//SYSDBOUT DD SYSOUT=*                                                  
+//SYSABOUT DD SYSOUT=*                                                  
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(VG0030B),DISP=SHR                       
+//SYSIN    DD DUMMY                                                     
+//         ENDIF
+//********************************************************************
+//         IF E0090030.RC NE 0 THEN
+//E009CRIA EXEC PPCRIA,ARQ=HOM.VG.DDATA_MOVIMENTO.VG0030B.ABEND
+//         ENDIF
+//*********************************************************************
+//*********************************************************************
+//** STEP DE ENVIO DE MENSAGEM SOBRE JOB COM  ERRO NO ZEKE.          **
+//*********************************************************************
+//*   IF (ABEND | RC EQ 99 | RC EQ 09 | RC EQ 08 | RC EQ 12) THEN
+//* ABEND EXEC PPSEND,N=JPVED03
+//*   ENDIF
+//*

@@ -1,0 +1,108 @@
+//VHEMD04  JOB (00,PN),'ID_EXECUTOR',TIME=1440,
+//         CLASS=A,MSGCLASS=T,MSGLEVEL=(1,1)
+//*
+/*ROUTE PRINT JES2PRD1
+//*
+//*DIARIA JV1. DATA:DATA_MOVIMENTO
+//*DIARIA JV1. PERIODO:PERIODO_MOVIMENTO
+//*DIARIA JV1. ANO MES:ANOMES_MOVIMENTO
+//*DIARIA JV1. DIA:DIA_MOVIMENTO
+//*DIARIA JV1. DATA ANTERIOR:DATA_ANTERIOR 
+//*
+//JOBLIB   DD DISP=SHR,DSN=DSNC10.DB2H.SDSNLOAD
+//         DD DISP=SHR,DSN=HOM.JV1.LOAD
+//*
+//*********************************************************************
+//**      ROTINA DE CADASTRAMENTO DE PROPOSTAS   ********************
+//*******************************************************************
+//*****  -CASO STEP001 TERMINE COM "RC=999" CONSIDERAR NORMAL.   ****
+//*****  -NESTE CASO DEMAIS STEPS NAO SERAO EXECUTADOS.          ****
+//*****   (SIGNIFICA QUE NAO EXISTE MOVIMENTO P/CADASTRAMENTO)   ****
+//*******************************************************************
+//*
+//*------------------------------------------------------------------
+//* VERIFICAR SE ARQUIVO DE CADASTRAMENTO DE PROPOSTAS TEM MOVIMENTO
+//*------------------------------------------------------------------
+//E001VZ01 EXEC PGM=ACMVZ01
+//TRANS    DD DSN=HOM.DEL.AU.PROPOSTA,DISP=SHR
+//*------------------------------------------------------------------
+//*   COPIA DO ARQUIVO DE PROPOSTAS ENVIADO PELAS FILIAIS
+//*------------------------------------------------------------------
+//E002ENER EXEC PGM=ICEGENER,COND=(00,NE)
+//SYSPRINT DD SYSOUT=*
+//SYSUT1   DD DISP=OLD,DSN=HOM.DEL.AU.PROPOSTA
+//SYSUT2   DD DSN=HOM.AU.DDATA_MOVIMENTO.PROPOSTA,DISP=(,CATLG),
+//         SPACE=(TRK,(10,50),RLSE),UNIT=SYSDA,
+//         DCB=*.SYSUT1
+//SYSIN    DD DUMMY
+//*
+//**********************************************************************
+//* AU6800B - CRITICAR CADASTRAMENTO DE PROPOSTAS                      *
+//********************************************************************
+//* NAO PODE TIRAR O DUMMY DO ARQSTAT POIS ELE GERA TAMBEM NA PFD00   *
+//* E VAI PARA A PFD02 - PROGRAMA PF0708B                            *
+//********************************************************************
+//E0036800 EXEC PGM=IKJEFT01,DYNAMNBR=20,COND=(00,NE)
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//ARQFITA  DD DSN=HOM.AU.DDATA_MOVIMENTO.PROPOSTA,DISP=SHR
+//RAU6800B DD DSN=HOM.REL.DDATA_MOVIMENTO.AU6800B.L1VZ6,
+//         UNIT=SYSDA,DISP=(,CATLG),
+//         SPACE=(TRK,(10,050),RLSE),
+//         DCB=(RECFM=FB,LRECL=210,BLKSIZE=0,DSORG=PS)
+//ARQREJE  DD DSN=HOM.AU.DDATA_MOVIMENTO.AU6800B.RETORNO,
+//         UNIT=SYSDA,DISP=(,CATLG),
+//         SPACE=(TRK,(10,050),RLSE),
+//         DCB=(RECFM=FB,LRECL=38,BLKSIZE=0,DSORG=PS)
+//ARQSTAT  DD DUMMY,DSN=HOM.AU.DDATA_MOVIMENTO.AU6800B.ARQSTAT,
+//         UNIT=SYSDA,DISP=(,CATLG),
+//         SPACE=(TRK,(10,050),RLSE),
+//         DCB=(RECFM=FB,LRECL=100,BLKSIZE=0,DSORG=PS)
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(AU6800B),DISP=SHR
+//SYSIN    DD DUMMY
+//*
+//*
+//**********************************************************
+//***--------** RESET DE ARQUIVOS (LIMPEZA)  ------------***
+//**********************************************************
+//E005D045 EXEC PGM=PPRD045,COND=(00,NE)
+//STEPLIB  DD DISP=SHR,DSN=HOM.DEL.PPP.LINKLIB
+//SYSRST01 DD DISP=OLD,DSN=HOM.DEL.AU.PROPOSTA
+//*
+//*********************************************************************
+//** STEP DE ENVIO DE MENSAGEM SOBRE JOB COM  ERRO NO ZEKE.          **
+//*********************************************************************
+//*   IF (ABEND | RC EQ 99 | RC EQ 09 | RC EQ 08 | RC EQ 12) THEN
+//* ABEND EXEC PPSEND,N=JPEMD04
+//*   ENDIF
+//*
+//*
+//*
+//*
+//*
+//F001LIST EXEC  PGM=IKJEFT01,
+//       PARM=('PRDFULL HOM.REL.DDATA_MOVIMENTO.AU6800B.L1VZ6')
+//SYSPROC  DD DSN=HOM.JV1.CLIST,DISP=SHR
+//SYSTSIN  DD DUMMY
+//SYSPRINT DD SYSOUT=*
+//SYSTSPRT DD SYSOUT=*
+//*
+//F002FTP  EXEC PGM=FTP,REGION=4096K,TIME=NOLIMIT,
+//         PARM='10.100.2.144',COND=(00,NE,E001LIST)
+//*STEPLIB DD DSN=TCPIP.SEZALOAD,DISP=SHR
+//SYSTCPD  DD DSN=HOM1.TCPPARMS(TCPDATA),DISP=SHR
+//SYSFTPD  DD DSN=HOM1.TCPPARMS(FTPSDATA),DISP=SHR
+//SYSMDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//INPUT    DD *
+USERPROD USRPRD
+PUT 'HOM.REL.DDATA_MOVIMENTO.AU6800B.L1VZ6' + 
+ AU6800B_EMD04_DDATA_MOVIMENTO.TXT
+quit
+//*
+//*

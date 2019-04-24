@@ -1,0 +1,82 @@
+//VHVGD16  JOB (00,PN),'PRODUCAO-MVS',TIME=1440,
+//         CLASS=A,MSGCLASS=T,MSGLEVEL=(1,1)
+//*
+//*********************************************************************
+//JOBLIB   DD DISP=SHR,DSN=DSNC10.DB2H.SDSNLOAD
+//         DD DISP=SHR,DSN=HOM.JV1.LOAD
+//*********************************************************************
+//**       CAPTURA DO ARQUIVO - RM017116-0211
+//*****************************************************************
+//E001GET  EXEC PGM=FTP,REGION=0M,
+//         PARM='FTP.CAIXASEGUROS.COM.BR'
+//STEPLIB  DD DSN=TCPIP.SEZALOAD,DISP=SHR
+//SYSTCPD  DD DSN=HOM1.TCPPARMS(TCPDATA),DISP=SHR
+//SYSFTPD  DD DSN=HOM1.TCPPARMS(FTPSDATA),DISP=SHR
+//SYSMDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//INPUT    DD *
+usr_bsbassist bsb0901
+LS
+LOCSITE UNIT=SYSDA
+LOCSITE TRACKS
+LOCSITE PRIMARY=500
+LOCSITE SECONDARY=500
+LOCSITE LRECL=500 BLKSIZE=0 RECFM=FB
+GET D$(ODATE)_SEGUROVIAGEM.TXT +
+   'HOM.VG.D$(ODATE).MSVIAGEM'
+QUIT
+//*
+//*****************************************************************
+//**       TESTA DE O ARQUIVO EXISTE E TEM DADOS                  *
+//*****************************************************************
+//E002LIST EXEC  PGM=IKJEFT01,
+//         PARM=('PRDFULL HOM.VG.D$(ODATE).MSVIAGEM')
+//SYSPROC  DD DSN=HOM.JV1.CLIST,DISP=SHR
+//SYSTSIN  DD DUMMY
+//SYSPRINT DD SYSOUT=*
+//SYSTSPRT DD SYSOUT=*
+//*
+//*****************************************************************
+//** EXECUCAO DO VG0140B                                          *
+//** FUNCAO .................  MANUTENCAO DE SEGURADOS DE SEGURO  *
+//**                           VIAGEM   VIA INTERFACE ARQUIVO DE  *
+//**                           PROPOSTAS BRASIL ASSISTENCIA.      *
+//*****************************************************************
+//         IF E002LIST.RC = 00 THEN
+//E0030140 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//MSVIAGEM DD DISP=SHR,
+//         DSN=HOM.VG.D$(ODATE).MSVIAGEM
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(VG0140B),DISP=SHR
+//SYSIN    DD DUMMY
+//         ENDIF
+//*
+//*****************************************************************
+//** EXECUCAO DO VG0145B                                          *
+//** FUNCAO .................  FATURAMENTO DO PRODUTO SEGURO VIA- *
+//**                           GEM DESTINADO A BRASIL ASSISTENCIA.*
+//*****************************************************************
+//         IF E0030140.RC = 00 THEN
+//E0040145 EXEC PGM=IKJEFT01,DYNAMNBR=20
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=Z
+//SYSOUT   DD SYSOUT=*
+//SYSDBOUT DD SYSOUT=*
+//SYSABOUT DD SYSOUT=*
+//SYSTSIN  DD DSN=HOM.JV1.SYSIN(VG0145B),DISP=SHR
+//SYSIN    DD DUMMY
+//         ENDIF
+//*
+//*********************************************************************
+//** STEP DE ENVIO DE MENSAGEM SOBRE JOB COM  ERRO NO ZEKE.          **
+//*********************************************************************
+//  IF (ABEND | RC EQ 99 | RC EQ 09 | RC EQ 08 | RC EQ 12) THEN
+//ABEND EXEC PPSEND,N=JPVGD16
+//  ENDIF
