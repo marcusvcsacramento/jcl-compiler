@@ -68,18 +68,46 @@ FileName=$[Project-Path]diaria_validacao.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node4]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]submissao.py
+FileName=$[Project-Path]entrega_prd.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node5]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]validacao.py
+FileName=$[Project-Path]gerador.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node6]
 ClassName=TProjectFileNode
+FileName=$[Project-Path]arquivos\properties
+
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node7]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]recupera-jobs.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node8]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]recupera-jobs.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node9]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]recupera-sysout.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node10]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]submissao.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node11]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]validacao.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node12]
+ClassName=TProjectFileNode
 FileName=$[Project-Path]validacao-job.py
 
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node13]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]validacao-pds.py
+
 [Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes]
-Count=7
+Count=14
 
 [Project\ChildNodes\Node0\ChildNodes]
 Count=1
@@ -144,7 +172,7 @@ ScriptName=D:\JCL\diaria_validacao.py
 Description=Execução da Diária SMART - HOM
 EngineType=peRemote
 ReinitializeBeforeRun=TRUE
-Parameters=SMART DIARIA_HOM 190401 2019-04-012019-04-30 190403
+Parameters=SMART DIARIA_HOM 190514 2019-05-012019-05-31 190513 190531 190430
 WorkingDir=$[ActiveScript-Dir]
 WriteOutputToFile=FALSE
 OutputFileName=$[ActiveScript-NoExt].log
@@ -188,10 +216,10 @@ ClassName=TProjectRunConfiguationNode
 Name=VALIDACAO
 
 [Project\ChildNodes\Node1\ChildNodes\Node4\RunConfig]
-ScriptName=D:\JCL\validacao-job.py
+ScriptName=D:\JCL\validacao.py
 EngineType=peRemote
 ReinitializeBeforeRun=TRUE
-Parameters=SIAS DIARIA_HOM2 PRD
+Parameters=SMART HOM PRD JHDEVOPS
 WorkingDir=$[ActiveScript-Dir]
 WriteOutputToFile=FALSE
 OutputFileName=$[ActiveScript-NoExt].log

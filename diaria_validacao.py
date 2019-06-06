@@ -22,8 +22,15 @@ try:
     data_movimento=sys.argv[3]
     periodo_movimento=sys.argv[4]
     data_anterior=sys.argv[5]
+    ultimo_dia_do_mes=sys.argv[6]
+    ultimo_dia_do_mes_anterior=sys.argv[7]
     anomes_movimento=data_movimento[:4]
-    dia_movimento=data_movimento[-2:]
+    ano_movimento=data_movimento[:4]
+    dia_movimento=data_movimento[4:]
+    ano_data_movimento_ano='20'+anomes_movimento
+    hora_minuto=datetime.datetime.now().strftime("%H%M")
+    mes_movimento=anomes_movimento[2:]
+
 except:
     print("\n\n\033[101mParâmetros inválidos ou não encontrados no arquivo arquivos/properties\n\n\tFavor ler o README.md do projeto\033[0m \n\n")
 
@@ -63,14 +70,22 @@ with open('arquivos/DIARIA', 'rt') as f:
         job = submissao[0]
         job_modelo='arquivos/cartao/'+sistema+'/'+ambiente+'/'+job+'.model'
         job_final='arquivos/cartao/'+sistema+'/JOB'+sistema+job
-        sub_string_file(job_modelo,'arquivos/cartao/'+sistema+'/'+ambiente+'/JOBJCL.tmp','ID_EXECUTOR',id_executor)
-        sub_string_file('arquivos/cartao/'+sistema+'/'+ambiente+'/JOBJCL.tmp','arquivos/cartao/'+sistema+'/'+ambiente+'/JOBJCLI.tmp','DATA_MOVIMENTO',data_movimento)
-        sub_string_file('arquivos/cartao/'+sistema+'/'+ambiente+'/JOBJCLI.tmp','arquivos/cartao/'+sistema+'/'+ambiente+'/JOBJCLII.tmp','ANOMES_MOVIMENTO',anomes_movimento)
-        sub_string_file('arquivos/cartao/'+sistema+'/'+ambiente+'/JOBJCLII.tmp','arquivos/cartao/'+sistema+'/'+ambiente+'/JOBJCLIII.tmp','DIA_MOVIMENTO',dia_movimento)
-        sub_string_file('arquivos/cartao/'+sistema+'/'+ambiente+'/JOBJCLIII.tmp','arquivos/cartao/'+sistema+'/'+ambiente+'/JOBJCLIV.tmp','DATA_ANTERIOR',data_anterior)
-        sub_string_file('arquivos/cartao/'+sistema+'/'+ambiente+'/JOBJCLIV.tmp',job_final,'PERIODO_MOVIMENTO',periodo_movimento)
-        cartao_job=open(job_final,'rb')
-        result = ftp.storlines('STOR JOB'+sistema,cartao_job)
+        model=open(job_modelo,'rt')
+        job=sub_string(model,'ID_EXECUTOR',id_executor)
+        job=sub_string(job,'ANO_DATA_MOVIMENTO_ANO',ano_data_movimento_ano)
+        job=sub_string(job,'ANOMES_MOVIMENTO',anomes_movimento)
+        job=sub_string(job,'MES_MOVIMENTO',mes_movimento)
+        job=sub_string(job,'DIA_MOVIMENTO',dia_movimento)
+        job=sub_string(job,'MESDIA_MOVIMENTO',mes_movimento+dia_movimento)
+        job=sub_string(job,'DATA_ANTERIOR',data_anterior)
+        job=sub_string(job,'ULTIMO_DIA_DO_MES_ANTERIOR',ultimo_dia_do_mes_anterior)
+        job=sub_string(job,'ULTIMO_DIA_DO_MES',ultimo_dia_do_mes)
+        job=sub_string(job,'HORA_MINUTO',hora_minuto)
+        final=open(job_final,'w+',encoding='latin-1')
+        final.write(job.read())
+        final.close()
+        job_file=open(job_final,'rb')
+        result = ftp.storlines('STOR JOB'+sistema,job_file)
         job_number= re.search(r'(JOB[0-9]{5})',result)
         if job_number:
             saida.write("{};{}\n".format(job,job_number.group(1)))

@@ -7,7 +7,7 @@ import io
 
 config = configparser.ConfigParser()
 config.read('arquivos/properties')
-"""Carrega configuraÃ§Ãµes do arquivo properties"""
+"""Carrega configuraç;oeses do arquivo properties"""
 
 sistema=sys.argv[1]
 ambiente=sys.argv[2]
@@ -40,6 +40,6 @@ with open('arquivos/CPJOB', 'rt') as f:
                 ftp.retrlines('RETR ' + job, lambda s: cartao_job.write(re.sub('[ \t]+$','\n',s )))
             cartao_job.close()
         except:
-            print('Job NÃ£o encontrado:'+job)
+            print('Job Não encontrado:'+job)
             print(sys.exc_info()[1])
 ftp.quit()

@@ -1,90 +1,87 @@
-## Configuraï¿½ï¿½o do Jazz para Carregamento de Repositï¿½rio
+## Configuração do Jazz para Carregamento de Repositório
 [JAZZ]
 url = https://clm.caixaseguros.intranet/ccm
-user = TER89323
-password= #9COnk8F
-## Local onde os arquivos do Worspace serï¿½o carregados. Deve ser criado antes da execuï¿½ï¿½o do programa
-fonte=arquivos/fonte
+user =
+password =
+## Local onde os arquivos do Worspace serão carregados. Deve ser criado antes da execução do programa
+fonte=arquivos/fonte_gcs_dev
 ## Nome do Workspace pessoal criado no IDZ
-workspace=TER89323.GCS.DEV.JV1
-#workspace=SCRIPT.DEV.COBOL
+workspace=SCRIPT.DEV.COBOL
 
-## Configuraï¿½ï¿½o do ZOS de desenvolvimento
+## Configuração do ZOS de desenvolvimento
 [ZOS.DEV]
 host = zosdev
 port = 21
 
-## Configuraï¿½ï¿½o do FTP no ZOS de desenvolvimento
+## Configuração do FTP no ZOS de desenvolvimento
 [ZOS.FTP.DEV]
-user = TE89323
-password = 1983cs
+user =
+password =
 
-## Configuraï¿½ï¿½o do ZOS de Homologaï¿½ï¿½o
+## Configuração do ZOS de Homologação
 [ZOS.HOM]
 host = zoshom
 port = 21
+tom=TOM.PRD1
 
-## Configuraï¿½ï¿½o do FTP no ZOS de Homologaï¿½ï¿½o
+## Configuração do FTP no ZOS de Homologação
 [ZOS.FTP.HOM]
-user = RSSDPLY
-password = 1212QW
+user =
+password =
 
-## Configuraï¿½ï¿½o do ZOS de Homologaï¿½ï¿½o2(SIAS)
+## Configuração do ZOS de Homologação2(SIAS)
 [ZOS.HOM2]
 host = zoshom
 port = 21
 
-## Configuraï¿½ï¿½o do FTP no ZOS de Homologaï¿½ï¿½o2(SIAS)
+## Configuração do FTP no ZOS de Homologação2(SIAS)
 [ZOS.FTP.HOM2]
-user = RSSDPLY
-password = 1212QW
+user =
+password =
 
-## Configuraï¿½ï¿½o do ZOS de Produï¿½ï¿½o
+## Configuração do ZOS de Produção
 [ZOS.PRD]
 host = zosprd
 port = 21
-## Inï¿½cio do PDS para o TOM
 tom=TOM.PRD1
 
-## Configuraï¿½ï¿½o do FTP no ZOS de Produï¿½ï¿½o
+## Configuração do FTP no ZOS de Produção
 [ZOS.FTP.PRD]
-user = te00479
-password = 1212qaz
+user =
+password =
 
-# Configuraï¿½ï¿½o do ZOS de execuÃ§Ã£o de diÃ¡ria em Homologaï¿½ï¿½o
+# Configuração do ZOS de execução de diária em Homologação
 [ZOS.DIARIA_HOM]
 host = zoshom
 port = 21
 
-## Configuraï¿½ï¿½o do FTP no ZOS de execuÃ§Ã£o de diÃ¡ria emHomologaï¿½ï¿½o2(SIAS)
+## Configuração do FTP no ZOS de execução de diária Homologação2(SIAS)
 [ZOS.FTP.DIARIA_HOM]
-user = SISUPD1H
-password = 2019jv
-##user = RSSDPLY
-##password = 1212QW
+user =
+password =
 
-# Configuraï¿½ï¿½o do ZOS de execuÃ§Ã£o de diÃ¡ria em Homologaï¿½ï¿½o
+# Configuração do ZOS de execução de diária em Homologação
 [ZOS.DIARIA_HOM2]
 host = zoshom
 port = 21
 
-## Configuraï¿½ï¿½o do FTP no ZOS de execuÃ§Ã£o de diÃ¡ria emHomologaï¿½ï¿½o2(SIAS)
+## Configuração do FTP no ZOS de execução de diária Homologação2(SIAS)
 [ZOS.FTP.DIARIA_HOM2]
-user = SISUPD1H
-password = 2019jv
+user =
+password =
 
 
-# Configuraï¿½ï¿½o do ZOS de execuÃ§Ã£o de diÃ¡ria em Homologaï¿½ï¿½o
+# Configuração do ZOS de execução de diária em Homologação
 [ZOS.DIARIA_DEV]
 host = zosdev
 port = 21
 
-## Configuraï¿½ï¿½o do FTP no ZOS de execuÃ§Ã£o de diÃ¡ria emHomologaï¿½ï¿½o2(SIAS)
+## Configuração do FTP no ZOS de execução de diária Homologação(SIAS)
 [ZOS.FTP.DIARIA_DEV]
-user = TE89323
-password = 1983cs
+user =
+password =
 
-###### Configuraï¿½ï¿½es para Upload de cï¿½digo para os PDS's Mainframe ######
+###### Configuração para Upload de código para os PDS's Mainframe ######
 
 ## PDS e libs para o ambiente de Desenvolvimento do SIAS
 [SIAS.DEV]
@@ -92,19 +89,27 @@ lib_batch=VERTQS.GE.A.PGMLIB.COB2.JV1
 lib_booklib=VERTQS.GE.A.PGMLIB.COB2.JV1
 lib_cics=VERTQS.GE.A.PGMLIB.COB2.JV1
 
-## PDS e libs para o ambiente de Homologaï¿½ï¿½o do SIAS
+## PDS e libs para o ambiente de Homologação do SIAS
 [SIAS.HOM]
 lib_batch=HOM.GE.A.PGMLIB.COB2H
 lib_booklib=SHRHOM.GE.A.BOOKLIB
-lib_cics=VERTQS.GE.A.PGMLIB.COB2.JV1
+lib_cics=VERTQS.GE.A.PGMLIB.COB2
 lib_load=HOM.V01.LOAD
+lib_validacao=HOM.V01.GCM.SYSOUT.OK.NOK
 
-## PDS e libs para o ambiente de Homologaï¿½ï¿½o2 do SIAS
+## PDS e libs para o ambiente de Homologação2 do SIAS
 [SIAS.HOM2]
 lib_batch=HOM.GE.A.PGMLIB.COB2H.JV1
 lib_booklib=SHRHOM.GE.A.JV1.BOOKLIB
 lib_cics=HOM.JV1.GE.A.PGMLIB.COB2H.CICS
 lib_load=HOM.JV1.LOAD
+
+[SIAS.PRD]
+lib_batch=PRD.GE.A.PGMLIB.COB2P
+lib_booklib=SHRHOM.GE.A.JV1.BOOKLIB
+lib_cics=PRD.GE.A.PGMLIB.COB2P.CICS
+lib_load=HOM.JV1.LOAD
+
 
 ## PDS e libs para o ambiente de Desenvolvimento do SMART
 [SMART.DEV]
@@ -118,7 +123,7 @@ lib_batch=HOM.GE.A.PGMLIB.COB2H
 lib_booklib=SHRHOM.GE.A.BOOKLIB
 lib_cics=VERTQS.GE.A.PGMLIB.COB2.JV1
 lib_load=HOM.V01.LOAD
-
+lib_validacao=HOM.V01.GCM.SYSOUT.OK.NOK
 
 
 #######
@@ -127,9 +132,10 @@ lib_load=HOM.V01.LOAD
 #######/*ISR@PRIM*/
 #######ISPEXEC SELECT PANEL(ISR@PRIM) NEWAPPL(ISR)
 #######SET XRC = &LASTCC                      /*                            /*
-#######IF &LASTCC ¬= 0 THEN    /* RETURN CODES                          */ +
+#######IF &LASTCC ó= 0 THEN    /* RETURN CODES                          */ +
 #######DO                    /*  4 - RETURN COMMAND ENTERED FROM      */
 #######  WRITE *** PROBLEMAS NO SELECT ***
 #######  WRITE *** &ZERRLM ***
 #######END                   /*      SELECTION MENU OR LOWER LEVEL    */
 #######
+##HOM.V01.GCM.SYSOUT.OK.NOK

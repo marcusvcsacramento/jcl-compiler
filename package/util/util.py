@@ -1,4 +1,6 @@
-﻿
+﻿import sys
+import io
+
 def sub_string_file(input_file,output_file,original_string,replace_string):
     """Realiza a substituição de uma string em arquivo e tem como output um novo arquivo
 
@@ -16,3 +18,8 @@ def sub_string_file(input_file,output_file,original_string,replace_string):
     except:
         result = False
     return result
+
+def sub_string(input_file,original_string,replace_string):
+    return io.StringIO(input_file.read().replace(original_string,replace_string))
+
+
