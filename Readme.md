@@ -84,7 +84,9 @@ Após a execução dos Jobs basta executar em linha de comando:`python validacao
   1. «NOME_JOB»
     * Deve correspondere ao nome do arquivo model no diretório _arquivos/cartao_
 
-Executar em linha de comando: `python submissao.py «SISTEMA» «DIARIA_AMBIENTE» «DATA_MOVIMENTO» «PERIODO_MOVIMENTO» «DIA_ANTERIOR»`
+Executar em linha de comando: `python diaria_validacao.py «SISTEMA» «DIARIA_AMBIENTE» «DATA_MOVIMENTO» «PERIODO_MOVIMENTO» «DIA_ANTERIOR» «ULTIMO_DIA_DO_MES» «ULTIMO_DIA_MES_ANTERIOR»`
+
+Após a execução é exibido um menu questionando se é desejado validar a execução para poder submeter o próximo JOB ou parar toda a execução. **Evite Submeter JOBs concorrentemente**
 
 #### Validação
 
