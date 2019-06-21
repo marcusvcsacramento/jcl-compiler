@@ -121,7 +121,7 @@ with open('arquivos/PROGRAMAS', 'rt') as f:
                 ftp.pwd()
                 ftp.cwd('..')
                 ftp.cwd(lib_booklib)
-                result = ftp.storlines('STOR '+programa,job)
+                result = ftp.storlines('STOR '+programa,arquivo)
                 ftp.close()
                 print('{};{}\n'.format(programa,classe))
             except:

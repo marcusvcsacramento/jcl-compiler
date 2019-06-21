@@ -162,7 +162,7 @@
            LIB('HOM.V01.LOAD')             -
            PARMS('/ABTERMENC(ABEND)')
 //**==================================================================
-//**       DISPONIBILIZA√á√ÉO DOS ARQUIVOS DE SAIDA NA REDE
+//**       DISPONIBILIZA«√O DOS ARQUIVOS DE SAIDA NA REDE
 //**==================================================================
 //E005FTP  EXEC PGM=FTP,REGION=4096K,TIME=NOLIMIT,
 //         PARM='10.100.2.144'
