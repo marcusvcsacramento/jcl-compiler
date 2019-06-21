@@ -74,7 +74,7 @@ with open(arquivo_jobs,'r') as job:
                 for linha in arquivo.read().split('\n'):
                     if len(linha)==0:
                         continue
-                max_rc = re.search(r''+job_name+' ENDED.*RC=([0-9]{4})',linha)
+                max_rc = re.search(r''+job_name+'[ ]{1,}ENDED.*RC=([0-9]{4})',linha)
                 jcl_error = re.search(r'(JCL ERROR)',linha)
                 abend = re.search(r'(ABEND=[A-Z0-9]{3,5})',linha)
             try:
