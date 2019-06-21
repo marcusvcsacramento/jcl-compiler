@@ -15,6 +15,10 @@ arquivos/fonte
 arquivos/tom
 arquivos/log
 arquivos/load
+arquivos/fonte*
+arquivos/properties
+arquivos/cartao/SIAS/JOBSIAS*
+arquivos/cartao/SIAS/JOBSMART**
 
 
 

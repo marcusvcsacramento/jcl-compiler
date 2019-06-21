@@ -29,7 +29,7 @@ try:
 
     arquivolog = 'arquivos/log/'+datetime.datetime.now().strftime("%Y-%m-%d_%H-%M")+'.'+sistema+'.'+ambiente+'.log'
     """Determina o arquivo de log geral"""
-    id_executor = 'MS'+datetime.datetime.now().strftime("%y%m%d")
+    id_executor = 'MS'+datetime.datetime.now().strftime("%Y%m%d")
     lib_batch=config.get(sistema+'.'+ambiente,'lib_batch')
     lib_booklib=config.get(sistema+'.'+ambiente,'lib_booklib')
     lib_cics=config.get(sistema+'.'+ambiente,'lib_cics')
@@ -44,9 +44,7 @@ arquivo_job=open('arquivos/JOBS','w')
 """Determina o arquivo onde serão gravados os JOB ID's após a submissão do JCL"""
 saida = open(arquivolog,'w')
 saida.write('######################  Carregamento de fontes ######################\n')
-print('######################  Carregamento de fontes ######################\n')
-#saida.write(carrega_workspace(workspace,diretorio_fonte).decode('latin-1')+'\n')
-job_final='arquivos/cartao/GERADO/JOB'+sistema+tipo
+
 saida.write('######################     SUBMISSÃO DE JOBS   ######################\n')
 print('######################     SUBMISSÃO DE JOBS   ######################\n')
 with open('arquivos/PROGRAMAS', 'rt') as f:
@@ -60,6 +58,8 @@ with open('arquivos/PROGRAMAS', 'rt') as f:
         try:
             if(classe=='BATCH' or classe=='CICS'):
                 tipo = compilacao[2]
+                job_modelo='arquivos/cartao/'+sistema+'/'+ambiente+'/'+tipo+'.model'
+                job_final='arquivos/cartao/'+sistema+'/GERADO/JOB'+programa
                 model=open(job_modelo,'rt')
                 job=sub_string(model,'ID_EXECUTOR',id_executor)
                 job=sub_string(job,'ID_PROGRAMA',programa)
@@ -68,11 +68,10 @@ with open('arquivos/PROGRAMAS', 'rt') as f:
                 job=sub_string(job,'WLM_PROGRAMA','DES_SP'+programa[:4]+'01')
                 final=open(job_final,'w+',encoding='latin-1')
                 final.write(job.read())
+                final.close()
         except:
             print("Erro ao Gerar cartão:"+programa)
-
-
-
+            print(sys.exc_info()[1])
             saida.flush()
 arquivo_job.close()
 saida.write('###################### Encerramento compilação  ######################\n')
