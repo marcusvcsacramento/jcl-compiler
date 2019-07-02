@@ -23,6 +23,7 @@ try:
     print(sistema+'-'+ambiente)
     diretorio_fonte=config.get('JAZZ','fonte')
     workspace=config.get('JAZZ','workspace')
+    load_scm=config.get('JAZZ','load_scm')
     hostname = config.get('ZOS.'+ambiente,'host')
     port = int(config.get('ZOS.'+ambiente,'port'))
     ftp_user = config.get('ZOS.FTP.'+ambiente,'user')
@@ -33,6 +34,7 @@ try:
     lib_batch=config.get(sistema+'.'+ambiente,'lib_batch')
     lib_booklib=config.get(sistema+'.'+ambiente,'lib_booklib')
     lib_cics=config.get(sistema+'.'+ambiente,'lib_cics')
+    
 except:
     print("\n\n\033[101mParametros invalidos ou nao encontrados no arquivo arquivos/properties\n\n\tFavor ler o README.md do projeto\033[0m \n\n")
 
@@ -43,11 +45,12 @@ arquivo_job=open('arquivos/JOBS','w')
 saida = open(arquivolog,'w')
 saida.write('######################  Carregamento de fontes ######################\n')
 saida.write('WORKSPACE:'+workspace+'. AMBIENTE:'+sistema+'/'+ambiente+'\n')
-print('#############################  Login RTC ############################\n')
-saida.write(login_rtc().decode('latin-1')+'\n')
-print('######################  Carregamento de fontes ######################\n')
-saida.write(carrega_workspace(workspace,diretorio_fonte).decode('latin-1')+'\n')
-saida.write('######################  Upload de codigo fonte ######################\n')
+if load_scm:
+    print('#############################  Login RTC ############################\n')
+    saida.write(login_rtc().decode('latin-1')+'\n')
+    print('######################  Carregamento de fontes ######################\n')
+    saida.write(carrega_workspace(workspace,diretorio_fonte).decode('latin-1')+'\n')
+
 print('######################  Upload de codigo fonte ######################\n')
 
 with open('arquivos/PROGRAMAS', 'rt') as f:
