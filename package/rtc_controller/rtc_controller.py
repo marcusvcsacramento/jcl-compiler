@@ -28,7 +28,17 @@ class Changeset(object):
 ##class Changes(object):
 ##    def __init__(self,alteracao)
 
+def login_rtc():
+    """Realiza Login no RTC
 
+    Parâmetros:
+    """
+    cmd='login -u '+user+' -P "'+password+'" -r "'+jazz_url+'"'
+    'scm load -f -s --all '+workspace+' -d '+diretorio_local+' --allow -u '+user+' -P '+password+' -r '+jazz_url
+    process = subprocess.Popen(shlex.split(cmd), stdout=subprocess.PIPE, shell=True)
+    out, err = process.communicate()
+    print(out)
+    return out
 
 def carrega_workspace(workspace,diretorio_local):
     """Carrega o worspace JAZZ para um diretório local
@@ -39,7 +49,7 @@ def carrega_workspace(workspace,diretorio_local):
     """
     if not os.path.exists(diretorio_local):
         os.makedirs(diretorio_local)
-    cmd='lscm load -f -s --all '+workspace+' -d '+diretorio_local+' --allow -u '+user+' -P '+password+' -r '+jazz_url
+    cmd='scm load -f -s --all '+workspace+' -d '+diretorio_local+' --allow -u '+user+' -P '+password+' -r '+jazz_url
     process = subprocess.Popen(shlex.split(cmd), stdout=subprocess.PIPE, shell=True)
     out, err = process.communicate()
     print(out)
