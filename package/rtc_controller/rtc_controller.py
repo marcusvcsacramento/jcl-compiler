@@ -48,7 +48,7 @@ def carrega_workspace(workspace,diretorio_local):
     """
     if not os.path.exists(diretorio_local):
         os.makedirs(diretorio_local)
-    cmd='scm load -f --all '+workspace+' -d '+diretorio_local+' --allow -u '+user+' -P '+password+' -r '+jazz_url
+    cmd='scm load -f --all '+workspace+' -d '+diretorio_local+' -u '+user+' -P "'+password+'" -r '+jazz_url
     process = subprocess.Popen(shlex.split(cmd), stdout=subprocess.PIPE, shell=True)
     out, err = process.communicate()
     print(out)
