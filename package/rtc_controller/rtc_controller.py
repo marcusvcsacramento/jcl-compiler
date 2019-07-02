@@ -34,7 +34,6 @@ def login_rtc():
     Parâmetros:
     """
     cmd='login -u '+user+' -P "'+password+'" -r "'+jazz_url+'"'
-    'scm load -f -s --all '+workspace+' -d '+diretorio_local+' --allow -u '+user+' -P '+password+' -r '+jazz_url
     process = subprocess.Popen(shlex.split(cmd), stdout=subprocess.PIPE, shell=True)
     out, err = process.communicate()
     print(out)
