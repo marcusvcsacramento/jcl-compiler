@@ -23,7 +23,7 @@ try:
     print(sistema+'-'+ambiente)
     diretorio_fonte=config.get('JAZZ','fonte')
     workspace=config.get('JAZZ','workspace')
-    load_scm=config.get('JAZZ','load_scm')
+    load_scm=config.getboolean('JAZZ','load_scm')
     hostname = config.get('ZOS.'+ambiente,'host')
     port = int(config.get('ZOS.'+ambiente,'port'))
     ftp_user = config.get('ZOS.FTP.'+ambiente,'user')
