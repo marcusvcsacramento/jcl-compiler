@@ -19,6 +19,7 @@ try:
     sistema=sys.argv[1]
     ambiente=sys.argv[2]
     job_name=sys.argv[3]
+    demanda=sys.argv[4]
     """Carrega parametros passados na linha de comando"""
     print(sistema+'-'+ambiente)
     diretorio_fonte=config.get('JAZZ','fonte')
@@ -159,6 +160,7 @@ with open('arquivos/SUBMETER', 'rt') as f:
             job_final='arquivos/cartao/'+sistema+'/JOB'+sistema+tipo
             model=open(job_modelo,'rt')
             job=sub_string(model,'ID_EXECUTOR',id_executor)
+            job=sub_string(job,'DEMANDA_COMPILACAO',demanda)
             job=sub_string(job,'ID_PROGRAMA',programa)
             job=sub_string(job,'JOB_NAME',job_name)
             job=sub_string(job,'DATA_HORA',datetime.datetime.now().strftime("%d/%m/%Y %H:%M"))
