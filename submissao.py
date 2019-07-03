@@ -38,6 +38,7 @@ try:
     
 except:
     print("\n\n\033[101mParametros invalidos ou nao encontrados no arquivo arquivos/properties\n\n\tFavor ler o README.md do projeto\033[0m \n\n")
+    print(sys.exc_info())
 
 arquivo_submeter=open('arquivos/SUBMETER','w')
 """Determina o arquivo onde sera gravado o Programa a que sera submetido apos o upload para o PDS Mainframe"""
