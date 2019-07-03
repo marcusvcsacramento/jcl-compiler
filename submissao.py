@@ -20,6 +20,7 @@ try:
     ambiente=sys.argv[2]
     job_name=sys.argv[3]
     demanda=sys.argv[4]
+    id_executor=sys.argv[5]
     """Carrega parametros passados na linha de comando"""
     print(sistema+'-'+ambiente)
     diretorio_fonte=config.get('JAZZ','fonte')
@@ -31,7 +32,6 @@ try:
     ftp_pass = config.get('ZOS.FTP.'+ambiente,'password')
     arquivolog = 'arquivos/log/'+datetime.datetime.now().strftime("%Y-%m-%d_%H-%M")+'.'+sistema+'.'+ambiente+'.log'
     """Determina o arquivo de log geral"""
-    id_executor = 'MS'+datetime.datetime.now().strftime("%y%m%d")
     lib_batch=config.get(sistema+'.'+ambiente,'lib_batch')
     lib_booklib=config.get(sistema+'.'+ambiente,'lib_booklib')
     lib_cics=config.get(sistema+'.'+ambiente,'lib_cics')
