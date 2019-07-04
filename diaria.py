@@ -19,7 +19,11 @@ data_movimento=sys.argv[3]
 periodo_movimento=sys.argv[4]
 data_anterior=sys.argv[5]
 anomes_movimento=data_movimento[:4]
-dia_movimento=data_movimento[-2:]
+ano_movimento=data_movimento[:4]
+dia_movimento=data_movimento[4:]
+ano_data_movimento_ano='20'+anomes_movimento
+hora_minuto=datetime.datetime.now().strftime("%H%M")
+mes_movimento=anomes_movimento[2:]
 
 
 """Carrega parâmetros passados na linha de comando"""
