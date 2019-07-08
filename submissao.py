@@ -93,9 +93,15 @@ with open('arquivos/PROGRAMAS', 'rt') as f:
             try:
                 fp=None
                 try:
-                    fp=codecs.open(diretorio_fonte+'/COBOL.GCS/CICS/'+programa+'.cics','r',encoding='utf-8')
+                    try:
+                        fp=codecs.open(diretorio_fonte+'/COBOL.GCS/CICS/'+programa+'.cics','r',encoding='utf-8')
+                    except:
+                        fp=codecs.open(diretorio_fonte+'/COBOL.GCS/CICS/'+programa+'.cbl','r',encoding='utf-8')
                 except:
-                    fp=codecs.open(diretorio_fonte+'/COBOL.GCS/CICS/'+programa+'.cics','r')
+                    try:
+                        fp=codecs.open(diretorio_fonte+'/COBOL.GCS/CICS/'+programa+'.cics','r')
+                    except:
+                        fp=codecs.open(diretorio_fonte+'/COBOL.GCS/CICS/'+programa+'.cbl','r')
                 arquivo=io.BytesIO(codecs.encode(fp.read(),'iso8859-1','ignore'))
                 ftp = ftplib.FTP()
                 ftp.connect(hostname, port)
