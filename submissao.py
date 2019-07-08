@@ -166,6 +166,7 @@ with open('arquivos/SUBMETER', 'rt') as f:
             job=sub_string(job,'JOB_NAME',job_name)
             job=sub_string(job,'DATA_HORA',datetime.datetime.now().strftime("%d/%m/%Y %H:%M"))
             job=sub_string(job,'WLM_PROGRAMA','DES_SP'+programa[:4]+'01')
+            job=sub_string(job,'CICS_CEMT',programa[:4])
             final=open(job_final,'w+',encoding='latin-1')
             final.write(job.read())
             final.close()
