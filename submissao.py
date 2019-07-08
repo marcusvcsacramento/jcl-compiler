@@ -35,7 +35,7 @@ try:
     lib_batch=config.get(sistema+'.'+ambiente,'lib_batch')
     lib_booklib=config.get(sistema+'.'+ambiente,'lib_booklib')
     lib_cics=config.get(sistema+'.'+ambiente,'lib_cics')
-    
+
 except:
     print("\n\n\033[101mParametros invalidos ou nao encontrados no arquivo arquivos/properties\n\n\tFavor ler o README.md do projeto\033[0m \n\n")
     print(sys.exc_info())
@@ -142,6 +142,9 @@ with open('arquivos/PROGRAMAS', 'rt') as f:
             except:
                 print("{};{}\n".format(programa,sys.exc_info()[1]))
                 saida.write("{};{}\n".format(programa,result))
+        if(classe=='VISUALAGE'):
+            tipo = compilacao[2]
+            arquivo_submeter.write('{};{};{}\n'.format(programa,classe,tipo))
     arquivo_submeter.close()
     f.close()
 ftp = ftplib.FTP()
@@ -161,7 +164,7 @@ with open('arquivos/SUBMETER', 'rt') as f:
         compilacao = linha.split(';')
         programa = compilacao[0]
         classe  = compilacao[1]
-        if(classe=='BATCH' or classe=='CICS'):
+        if(classe=='BATCH' or classe=='CICS' or classe=='VISUALAGE'):
             tipo = compilacao[2]
             job_modelo='arquivos/cartao/'+sistema+'/'+ambiente+'/'+tipo+'.model'
             job_final='arquivos/cartao/'+sistema+'/JOB'+sistema+tipo
