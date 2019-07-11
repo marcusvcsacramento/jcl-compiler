@@ -69,9 +69,9 @@ with open('arquivos/PROGRAMAS', 'rt') as f:
             try:
                 fp=None
                 try:
-                    fp=codecs.open(diretorio_fonte+'/COBOL.GCS/BATCH/'+programa+'.cbl','r',encoding='utf-8')
+                    fp=codecs.open(diretorio_fonte+'/COBOL.GCS/BATCH/'+programa.strip()+'.cbl','r',encoding='utf-8')
                 except:
-                    fp=codecs.open(diretorio_fonte+'/COBOL.GCS/BATCH/'+programa+'.cbl','r')
+                    fp=codecs.open(diretorio_fonte+'/COBOL.GCS/BATCH/'+programa.strip()+'.cbl','r')
                 arquivo=io.BytesIO(codecs.encode(fp.read(),'iso8859-1','ignore'))
                 ftp = ftplib.FTP()
                 ftp.connect(hostname, port)
@@ -81,10 +81,10 @@ with open('arquivos/PROGRAMAS', 'rt') as f:
                 ftp.pwd()
                 ftp.cwd('..')
                 ftp.cwd(lib_batch)
-                result = ftp.storlines('STOR '+programa, arquivo)
+                result = ftp.storlines('STOR '+programa.strip(), arquivo)
                 ftp.close()
-                print('{};{};{}\n'.format(programa,classe,tipo))
-                arquivo_submeter.write('{};{};{}\n'.format(programa,classe,tipo))
+                print('{};{};{}\n'.format(programa.strip(),classe,tipo))
+                arquivo_submeter.write('{};{};{}\n'.format(programa.strip(),classe,tipo))
             except:
                 print("{};{}\n".format(programa,sys.exc_info()[1]))
                 saida.write("{};{}\n".format(programa,sys.exc_info()[1]))
@@ -94,14 +94,14 @@ with open('arquivos/PROGRAMAS', 'rt') as f:
                 fp=None
                 try:
                     try:
-                        fp=codecs.open(diretorio_fonte+'/COBOL.GCS/CICS/'+programa+'.cics','r',encoding='utf-8')
+                        fp=codecs.open(diretorio_fonte+'/COBOL.GCS/CICS/'+programa.strip()+'.cics','r',encoding='utf-8')
                     except:
-                        fp=codecs.open(diretorio_fonte+'/COBOL.GCS/CICS/'+programa+'.cbl','r',encoding='utf-8')
+                        fp=codecs.open(diretorio_fonte+'/COBOL.GCS/CICS/'+programa.strip()+'.cbl','r',encoding='utf-8')
                 except:
                     try:
-                        fp=codecs.open(diretorio_fonte+'/COBOL.GCS/CICS/'+programa+'.cics','r')
+                        fp=codecs.open(diretorio_fonte+'/COBOL.GCS/CICS/'+programa.strip()+'.cics','r')
                     except:
-                        fp=codecs.open(diretorio_fonte+'/COBOL.GCS/CICS/'+programa+'.cbl','r')
+                        fp=codecs.open(diretorio_fonte+'/COBOL.GCS/CICS/'+programa.strip()+'.cbl','r')
                 arquivo=io.BytesIO(codecs.encode(fp.read(),'iso8859-1','ignore'))
                 ftp = ftplib.FTP()
                 ftp.connect(hostname, port)
@@ -112,20 +112,20 @@ with open('arquivos/PROGRAMAS', 'rt') as f:
                 ftp.pwd()
                 ftp.cwd('..')
                 ftp.cwd(lib_cics)
-                result = ftp.storlines('STOR '+programa,arquivo)
+                result = ftp.storlines('STOR '+programa.strip(),arquivo)
                 ftp.close()
-                print('{};{};{}\n'.format(programa,classe,tipo))
-                arquivo_submeter.write('{};{};{}\n'.format(programa,classe,tipo))
+                print('{};{};{}\n'.format(programa.strip(),classe,tipo))
+                arquivo_submeter.write('{};{};{}\n'.format(programa.strip(),classe,tipo))
             except:
-                print("{};{}\n".format(programa,sys.exc_info()[1]))
-                saida.write("{};{}\n".format(programa,sys.exc_info()[1]))
+                print("{};{}\n".format(programa.strip(),sys.exc_info()[1]))
+                saida.write("{};{}\n".format(programa.strip(),sys.exc_info()[1]))
         if(classe=='BOOKLIB'):
             try:
                 fp=None
                 try:
-                    fp=codecs.open(diretorio_fonte+'/COBOL.GCS/BOOKLIB/'+programa+'.bkl','r',encoding='utf-8')
+                    fp=codecs.open(diretorio_fonte+'/COBOL.GCS/BOOKLIB/'+programa.strip()+'.bkl','r',encoding='utf-8')
                 except:
-                    fp=codecs.open(diretorio_fonte+'/COBOL.GCS/BOOKLIB/'+programa+'.bkl','r')
+                    fp=codecs.open(diretorio_fonte+'/COBOL.GCS/BOOKLIB/'+programa.strip()+'.bkl','r')
                 arquivo=io.BytesIO(codecs.encode(fp.read(),'iso8859-1','ignore'))
                 ftp = ftplib.FTP()
                 ftp.connect(hostname, port)
@@ -136,15 +136,15 @@ with open('arquivos/PROGRAMAS', 'rt') as f:
                 ftp.pwd()
                 ftp.cwd('..')
                 ftp.cwd(lib_booklib)
-                result = ftp.storlines('STOR '+programa,arquivo)
+                result = ftp.storlines('STOR '+programa.strip(),arquivo)
                 ftp.close()
-                print('{};{}\n'.format(programa,classe))
+                print('{};{}\n'.format(programa.strip(),classe))
             except:
-                print("{};{}\n".format(programa,sys.exc_info()[1]))
-                saida.write("{};{}\n".format(programa,result))
+                print("{};{}\n".format(programa.strip(),sys.exc_info()[1]))
+                saida.write("{};{}\n".format(programa.strip(),result))
         if(classe=='VISUALAGE'):
             tipo = compilacao[2]
-            arquivo_submeter.write('{};{};{}\n'.format(programa,classe,tipo))
+            arquivo_submeter.write('{};{};{}\n'.format(programa.strip(),classe,tipo))
     arquivo_submeter.close()
     f.close()
 ftp = ftplib.FTP()
@@ -166,8 +166,8 @@ with open('arquivos/SUBMETER', 'rt') as f:
         classe  = compilacao[1]
         if(classe=='BATCH' or classe=='CICS' or classe=='VISUALAGE'):
             tipo = compilacao[2]
-            job_modelo='arquivos/cartao/'+sistema+'/'+ambiente+'/'+tipo+'.model'
-            job_final='arquivos/cartao/'+sistema+'/JOB'+sistema+tipo
+            job_modelo='arquivos/cartao/'+sistema+'/'+ambiente+'/'+tipo.strip()+'.model'
+            job_final='arquivos/cartao/'+sistema+'/JOB'+sistema+tipo.strip()
             model=open(job_modelo,'rt')
             job=sub_string(model,'ID_EXECUTOR',id_executor)
             job=sub_string(job,'DEMANDA_COMPILACAO',demanda)
@@ -183,12 +183,12 @@ with open('arquivos/SUBMETER', 'rt') as f:
             result = ftp.storlines('STOR JOB'+sistema,job_file)
             job_number= re.search(r'(JOB[0-9]{5})',result)
             if job_number:
-                print("{};{}\n".format(programa,job_number.group(1)))
-                saida.write("{};{}\n".format(programa,job_number.group(1)))
-                arquivo_job.write("{};{}\n".format(programa,job_number.group(1)))
+                print("{};{}\n".format(programa.strip(),job_number.group(1)))
+                saida.write("{};{}\n".format(programa.strip(),job_number.group(1)))
+                arquivo_job.write("{};{}\n".format(programa.strip(),job_number.group(1)))
             else:
-                print("{};{}\n".format(programa,'Erro submissão'))
-                saida.write("{};{}\n".format(programa,'Erro submissão'))
+                print("{};{}\n".format(programa.strip(),'Erro submissão'))
+                saida.write("{};{}\n".format(programa.strip(),'Erro submissão'))
             saida.flush()
 arquivo_job.close()
 saida.write('###################### Encerramento compilacao  ######################\n')
