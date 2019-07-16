@@ -87,7 +87,6 @@ with open('arquivos/DIARIA', 'rt') as f:
             final=open(job_final,'w+',encoding='iso8859-1')
         except:
             final=open(job_final,'w+',encoding='utf-8')
-        final.write(job_temp.read())
         final.close()
         job_file=open(job_final,'rb')
         result = ftp.storlines('STOR JOB'+sistema,job_file)
