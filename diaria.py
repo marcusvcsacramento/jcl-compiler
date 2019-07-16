@@ -83,7 +83,10 @@ with open('arquivos/DIARIA', 'rt') as f:
         job_temp=sub_string(job_temp,'HORA_MINUTO',hora_minuto)
         job_temp=sub_string(job_temp,'DATA_MOVIMENTO',data_movimento)
         job_temp=sub_string(job_temp,'PERIODO_MOVIMENTO',periodo_movimento)
-        final=open(job_final,'w+',encoding='latin-1')
+        try:
+            final=open(job_final,'w+',encoding='iso8859-1')
+        except:
+            final=open(job_final,'w+',encoding='utf-8')
         final.write(job_temp.read())
         final.close()
         job_file=open(job_final,'rb')
