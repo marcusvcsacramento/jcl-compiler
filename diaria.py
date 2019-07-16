@@ -30,7 +30,7 @@ hora_minuto=datetime.datetime.now().strftime("%H%M")
 mes_movimento=anomes_movimento[2:]
 
 
-"""Carrega parâmetros passados na linha de comando"""
+"""Carrega parãmetros passados na linha de comando"""
 print(sistema+'-'+ambiente)
 
 hostname = config.get('ZOS.'+ambiente,'host')
@@ -51,7 +51,6 @@ ftp = ftplib.FTP()
 ftp.connect(hostname, port)
 ftp.set_debuglevel(0)
 ftp.login(ftp_user, ftp_pass)
-ftp.sendcmd("site sbd=(IBM-1047,ISO8859-1)")
 ftp.voidcmd('site filetype=jes')
 
 saida.write('######################     SUBMISSÃO DE JOBS   ######################\n')
@@ -65,12 +64,7 @@ with open('arquivos/DIARIA', 'rt') as f:
         job = submissao[0]
         job_modelo='arquivos/cartao/'+sistema+'/'+ambiente+'/'+job+'.model'
         job_final='arquivos/cartao/'+sistema+'/JOB'+sistema+job
-        
-        try:
-            model=codecs.open(job_modelo,'rt',encoding='iso8859-1')
-        except:
-            model=codecs.open(job_modelo,'rt')
-       
+        model=open(job_modelo,'r',encoding='latin-1')
         job_temp=sub_string(model,'ID_EXECUTOR',responsavel)
         job_temp=sub_string(job_temp,'ANO_DATA_MOVIMENTO_ANO',ano_data_movimento_ano)
         job_temp=sub_string(job_temp,'ANOMES_MOVIMENTO',anomes_movimento)
@@ -83,13 +77,13 @@ with open('arquivos/DIARIA', 'rt') as f:
         job_temp=sub_string(job_temp,'HORA_MINUTO',hora_minuto)
         job_temp=sub_string(job_temp,'DATA_MOVIMENTO',data_movimento)
         job_temp=sub_string(job_temp,'PERIODO_MOVIMENTO',periodo_movimento)
-        try:
-            final=open(job_final,'w+',encoding='iso8859-1')
-        except:
-            final=open(job_final,'w+',encoding='utf-8')
+        final=open(job_final,'w+',encoding='latin-1')
+        final.write(job_temp.read())
         final.close()
         job_file=open(job_final,'rb')
+
         result = ftp.storlines('STOR JOB'+sistema,job_file)
+
         job_number= re.search(r'(JOB[0-9]{5})',result)
         if job_number:
             print("{};{}\n".format(job,job_number.group(1)))
@@ -98,6 +92,7 @@ with open('arquivos/DIARIA', 'rt') as f:
         else:
             print("{};{}\n".format(job,'Erro submissão'))
             saida.write("{};{}\n".format(job,'Erro submissão'))
+            print(sys.exc_info()[1])
         saida.flush()
 arquivo_job.close()
 saida.write('###################### Encerramento compilação  ######################\n')
