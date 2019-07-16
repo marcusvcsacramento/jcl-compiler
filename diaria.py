@@ -20,6 +20,7 @@ periodo_movimento=sys.argv[4]
 data_anterior=sys.argv[5]
 ultimo_dia_do_mes=sys.argv[6]
 ultimo_dia_do_mes_anterior=sys.argv[7]
+responsavel=sys.argv[8]
 anomes_movimento=data_movimento[:4]
 ano_movimento=data_movimento[:4]
 dia_movimento=data_movimento[4:]
@@ -64,7 +65,7 @@ with open('arquivos/DIARIA', 'rt') as f:
         job_modelo='arquivos/cartao/'+sistema+'/'+ambiente+'/'+job+'.model'
         job_final='arquivos/cartao/'+sistema+'/JOB'+sistema+job
         model=open(job_modelo,'rt')
-        job_temp=sub_string(model,'ID_EXECUTOR',id_executor)
+        job_temp=sub_string(model,'ID_EXECUTOR',responsavel)
         job_temp=sub_string(job_temp,'ANO_DATA_MOVIMENTO_ANO',ano_data_movimento_ano)
         job_temp=sub_string(job_temp,'ANOMES_MOVIMENTO',anomes_movimento)
         job_temp=sub_string(job_temp,'MES_MOVIMENTO',mes_movimento)
