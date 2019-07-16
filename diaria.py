@@ -67,11 +67,11 @@ with open('arquivos/DIARIA', 'rt') as f:
         job_final='arquivos/cartao/'+sistema+'/JOB'+sistema+job
         
         try:
-            model=codecs.open(job_modelo,'rt',encoding='utf-8')
+            model=codecs.open(job_modelo,'rt',encoding='iso8859-1')
         except:
             model=codecs.open(job_modelo,'rt')
        
-        job_temp=sub_string(io.BytesIO(codecs.encode(model.read(),'utf-8','ignore')),'ID_EXECUTOR',responsavel)
+        job_temp=sub_string(io.BytesIO(codecs.encode(model.read(),'iso8859-1','ignore')),'ID_EXECUTOR',responsavel)
         job_temp=sub_string(job_temp,'ANO_DATA_MOVIMENTO_ANO',ano_data_movimento_ano)
         job_temp=sub_string(job_temp,'ANOMES_MOVIMENTO',anomes_movimento)
         job_temp=sub_string(job_temp,'MES_MOVIMENTO',mes_movimento)
